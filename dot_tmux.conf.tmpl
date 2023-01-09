@@ -1,3 +1,7 @@
+#############################################################
+# This file is managed by chezmoi, don't edit it directly !!!
+#############################################################
+
 # Fix terminal colour setting
 set -g default-terminal "screen-256color"
 set -g terminal-overrides "putty-256color"
@@ -67,7 +71,7 @@ set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-yank'
-set -g @plugin 'seebi/tmux-colors-solarized'
+set -g @plugin 'dracula/tmux'
 set -g @plugin 'tmux-plugins/tmux-sessionist'
 
 run '~/.tmux/plugins/tpm/tpm'
@@ -75,6 +79,3 @@ run '~/.tmux/plugins/tpm/tpm'
 # Plugin specific
 run-shell {{ .chezmoi.homeDir }}/.tmux/plugins/tmux-resurrect/resurrect.tmux
 set -g @continuum-restore 'on'
-
-set -g @colors-solarized 'dark'
-
