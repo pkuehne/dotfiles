@@ -1,0 +1,80 @@
+# Fix terminal colour setting
+set -g default-terminal "screen-256color"
+set -g terminal-overrides "putty-256color"
+
+# Make function keys behave
+setw -g xterm-keys on
+
+# More history
+set -g history-limit 20000
+
+# Automatically renumber tmux windows
+set -g renumber-windows on
+
+# Always show London time
+set -g status-right ' #(TZ="Europe/London" date +%%H:%%M:%%S) [#H]'
+
+# Remap the prefix key
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+
+# Make reloading configs easier
+bind r source-file ~/.tmux.conf
+
+# Create new windows with N
+bind N new-window
+
+# Make split commands saner
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+unbind '"'
+unbind %
+
+# Make ESC available quicker
+set-option escape-time 5
+
+# Switch panes using Alt-arrow
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Switch panes using Alt-arrow
+bind -n M-h select-pane -L
+bind -n M-l select-pane -R
+bind -n M-k select-pane -U
+bind -n M-j select-pane -D
+
+# Enable the mouse
+set -g mouse on
+
+# Allow me to set the name
+set-option -g allow-rename off
+
+# Number from 1 for windows and panes
+set -g base-index 1
+setw -g pane-base-index 1
+
+### Formatting ###
+##################
+setw -g window-status-format "#I)#W"
+setw -g window-status-current-format "[#W]"
+
+### Plugins ###
+###############
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'seebi/tmux-colors-solarized'
+set -g @plugin 'tmux-plugins/tmux-sessionist'
+
+run '~/.tmux/plugins/tpm/tpm'
+
+# Plugin specific
+run-shell {{ .chezmoi.homeDir }}/.tmux/plugins/tmux-resurrect/resurrect.tmux
+set -g @continuum-restore 'on'
+
+set -g @colors-solarized 'dark'
+
