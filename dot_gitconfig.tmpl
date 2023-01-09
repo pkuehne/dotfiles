@@ -1,11 +1,38 @@
+#############################################################
+# This file is managed by chezmoi, don't edit it directly !!!
+#############################################################
+
 [user]
 	name = Peter Kuehne
-	email = {{ .email | quote }}
+	email = {{ .email }}
+{{- if ne .chezmoi.osRelease.id "rhel" }}
 	signingkey = 170A75E31F2F8DE3
+{{ end }}
 [core]
 	editor = vim
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+	autocrlf = input
+[color]
+	ui = true
+[alias]
+	logdog = log --decorate --oneline --graph
+	logdogsimple = log --decorate --oneline --graph --simplify-by-decoration
+	d = difftool
+[diff]
+        tool = vimdiff
+[difftool]
+        prompt = false
+[push]
+	default = current
+[pull]
+	rebase = false
+{{- if eq .chezmoi.osRelease.id "rhel" }}
+[http]
+	sslVerify = false
+{{ else }}
 [commit]
 	gpgsign = true
 [gpg]
 	#program = /mnt/c/Program Files (x86)/GnuPG/bin/gpg.exe
 	program = gpg
+{{ end }}

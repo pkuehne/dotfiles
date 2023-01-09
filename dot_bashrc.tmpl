@@ -1,0 +1,19 @@
+#############################################################
+# This file is managed by chezmoi, don't edit it directly !!!
+#############################################################
+
+BASHRC_FILES="
+{{ .chezmoi.homeDir }}/.bashrc_custom
+{{ .chezmoi.homeDir }}/.bashrc_local
+{{ .chezmoi.homeDir }}/.bashrc_alias
+{{ .chezmoi.homeDir }}/.bashrc_ps1
+"
+
+for FILE in $BASHRC_FILES
+do
+    if [[ -a "$FILE" ]]; then
+        . "$FILE"
+    fi
+done
+
+# clear

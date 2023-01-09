@@ -1,0 +1,51 @@
+#############################################################
+# This file is managed by chezmoi, don't edit it directly !!!
+#############################################################
+
+function prompt_command {
+    local rcode=$?  # Must be first!
+
+    # Set up colours
+    local cg="\[\e[01;38;5;82m\]"   # Good
+    local cb="\[\e[01;38;5;196m\]"  # Bad
+    local cl="\[\e[01;38;5;208m\]"  # Line colour
+    local ch="\[\e[01;38;5;28m\]"   # Host colour
+    local cp="\[\e[01;38;5;226m\]"  # PWD colour
+    local ce="\[\e[0m\]"            # Clear everything
+
+    # Set up git branch
+    local branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+    if [[ ! -z $branch ]]; then
+        local opt_branch="|${branch}"
+        PS1_BRANCH="${branch}"
+    else
+        local opt_branch=""
+        PS1_BRANCH=""
+    fi
+
+    # Calculate the number of - we need to fill to the end of the screen
+    local term_size=$(tput cols)
+    # Keep this line in synch width=wise with everything before \n in PS1
+    local prompt_size=$(echo "|-<${HOSTNAME}>-[${PWD##*/}]-${opt_branch}-| x |--" | wc -c)
+    local fill_size=$(($term_size - $prompt_size))
+
+    # Iterate to create a fill of unicode dashes
+    PS1_FILL=""
+    while [[ $fill_size > 0 ]]; do
+        PS1_FILL="${PS1_FILL}─"
+        fill_size=$(($fill_size-1))
+    done
+
+    # Set up coloured exit code indicator
+    if [[ ${rcode} > 0 ]]; then
+        PS1_RC="${cb}✕${ce}"
+    else
+        PS1_RC="${cg}✓${ce}"
+    fi
+
+    # Colour host and working directory info
+    PS1_HOST="${ch}${HOSTNAME}${ce}"
+    PS1_PWD="${cp}${PWD##*/}${ce}"
+    export PS1="${cl}┌─<${PS1_HOST}${cl}>─[${PS1_PWD}${cl}]─${PS1_BRANCH}─${PS1_FILL}${cl}─╢ ${PS1_RC}${cl} ╟──\n└>${ce} "
+}
+export PROMPT_COMMAND=prompt_command
