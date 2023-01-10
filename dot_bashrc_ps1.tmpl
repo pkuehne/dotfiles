@@ -38,9 +38,9 @@ function prompt_command {
 
     # Set up coloured exit code indicator
     if [[ ${rcode} > 0 ]]; then
-        PS1_RC="${cb}✕${ce}"
+        PS1_RC="${cb}${ce}"
     else
-        PS1_RC="${cg}✓${ce}"
+        PS1_RC="${cg}${ce}"
     fi
 
     # Colour host and working directory info
