@@ -2,5 +2,6 @@
 
 [data]
     email = {{ $email | quote }}
+    work_server = {{ eq (index .chezmoi.osRelease "id") "rhel" }}
 [diff]
     command = "vimdiff"
