@@ -24,7 +24,7 @@ function prompt_command {
     fi
 
     # Calculate the number of - we need to fill to the end of the screen
-    local term_size=$(tput cols)
+    local term_size=$COLUMNS # Not applicable to all shells, but this is bash!
     # Keep this line in synch width=wise with everything before \n in PS1
     local prompt_size=$(echo "|-<${HOSTNAME}>-[${PWD##*/}]-${opt_branch}-| x |--" | wc -c)
     local fill_size=$(($term_size - $prompt_size))
