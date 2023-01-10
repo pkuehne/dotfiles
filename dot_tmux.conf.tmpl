@@ -2,21 +2,11 @@
 # This file is managed by chezmoi, don't edit it directly !!!
 #############################################################
 
-# Fix terminal colour setting
-set -g default-terminal "screen-256color"
-set -g terminal-overrides "putty-256color"
-
 # Make function keys behave
 setw -g xterm-keys on
 
-# More history
-set -g history-limit 20000
-
 # Automatically renumber tmux windows
 set -g renumber-windows on
-
-# Always show London time
-set -g status-right ' #(TZ="Europe/London" date +%%H:%%M:%%S) [#H]'
 
 # Remap the prefix key
 unbind C-b
@@ -68,11 +58,19 @@ setw -g window-status-current-format "[#W]"
 ### Plugins ###
 ###############
 set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
 set -g @plugin 'tmux-plugins/tmux-resurrect'
 set -g @plugin 'tmux-plugins/tmux-continuum'
 set -g @plugin 'tmux-plugins/tmux-yank'
 set -g @plugin 'dracula/tmux'
 set -g @plugin 'tmux-plugins/tmux-sessionist'
+
+set -g @dracula-plugins "battery cpu-usage time weather"
+set -g @dracula-battery-label ""
+set -g @dracula-day-month true
+set -g @dracula-military-time true
+set -g @dracula-show-fahrenheit false
+set -g @dracula-fixed-location "Redhill"
 
 run '~/.tmux/plugins/tpm/tpm'
 
