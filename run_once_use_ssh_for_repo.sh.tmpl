@@ -1,0 +1,7 @@
+#! /bin/bash
+
+if [[ -a ~/.ssh/github_rsa ]]
+then
+    cd {{ .chezmoi.sourceDir }}
+    git remote set-url origin git@github.com:pkuehne/dotfiles.git
+fi
