@@ -47,5 +47,7 @@ return require('packer').startup(function(use)
         require('nvim-autopairs').setup{}
       end
   }
+  use { 'tpope/vim-commentary' }                    -- comment toggle
+  use { 'tpope/vim-surround' }                      -- easily surround text
 end)
 
