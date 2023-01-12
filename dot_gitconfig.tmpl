@@ -36,3 +36,9 @@
 	#program = /mnt/c/Program Files (x86)/GnuPG/bin/gpg.exe
 	program = gpg
 {{ end }}
+{{ with (index . "proxy") }}
+[http "https://github.com"]
+    proxy = {{ . }}
+[url "https://"]
+    insteadOf = git://
+{{ end }}

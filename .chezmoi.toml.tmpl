@@ -1,7 +1,9 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $proxy := promptStringOnce . "proxy" "Proxy Server" -}}
 
 [data]
     email = {{ $email | quote }}
+    proxy = {{ $proxy | quote }}
     work_server = {{ ne (index .chezmoi "username") "peter" }}
 [diff]
     command = "vimdiff"

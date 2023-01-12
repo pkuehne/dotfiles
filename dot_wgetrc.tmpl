@@ -1,0 +1,9 @@
+#############################################################
+# This file is managed by chezmoi, don't edit it directly !!!
+#############################################################
+
+{{- with (index . "proxy") }}
+use_proxy=yes
+http_proxy={{ . }}
+https_proxy={{ . }}
+{{ end }}

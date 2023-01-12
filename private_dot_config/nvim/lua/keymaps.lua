@@ -4,7 +4,7 @@ map('n', '<F9>',            ':NvimTreeToggle<CR>', {})
 map('n', '<F10>',           ':TagbarToggle<CR>', {})
 
 -- Basic leader commands
-map('n', '<Leader>l',       ':IndentLinesToggle<CR>', {})
+map('n', '<Leader>l',       ':lua require("lint").try_lint()<CR>', {})
 map('n', '<Leader>f',       ':Telescope find_files<CR>', {})
 map('n', '<Leader>b',       ':Telescope buffers<CR>', {})
 map('n', '<Leader>g',       ':Git<CR>', {})
