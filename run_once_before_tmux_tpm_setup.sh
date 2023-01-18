@@ -12,6 +12,9 @@ fi
 
 echo "-- Installing tmux plugin manager"
 git clone https://github.com/tmux-plugins/tpm "$HOME"/.tmux/plugins/tpm
+GIT_EXIT_CODE=$?
+if [[ $GIT_EXIT_CODE -eq 128 ]]; then
+    GIT_EXIT_CODE=0
+fi
 
-echo "-- Installing tmux plugins"
-"$HOME"/.tmux/plugins/tpm/bin/install_plugins
+exit $GIT_EXIT_CODE
