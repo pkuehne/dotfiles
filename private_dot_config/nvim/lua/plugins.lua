@@ -3,21 +3,32 @@
 -- Only required if you have packer configured as `opt`
 -- vim.cmd [[packadd packer.nvim]]
 
+local function empty_config()
+
+end
 
 return require('packer').startup(function(use)
-    -- Packer can manage itself
-    use { 'wbthomason/packer.nvim' }
-    use {
-        'kyazdani42/nvim-tree.lua', -- filesystem navigation
+    use { -- Packer can manage itself
+        'wbthomason/packer.nvim',
+        config = empty_config,
+    }
+    use { -- filesystem navigation
+        'kyazdani42/nvim-tree.lua',
         requires = 'kyazdani42/nvim-web-devicons', -- filesystem icons
         config = function()
             require('nvim-tree').setup()
         end
     }
-    use { 'mhinz/vim-startify' } -- start screen
-    use { 'DanilaMihailov/beacon.nvim' } -- cursor jump
-    use {
-        'nvim-lualine/lualine.nvim', -- statusline
+    use { -- start screen
+        'mhinz/vim-startify',
+        config = empty_config,
+    }
+    use { -- cursor jump
+        'DanilaMihailov/beacon.nvim',
+        config = empty_config,
+    }
+    use { -- statusline
+        'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true },
         config = function()
             require('lualine').setup {
@@ -27,34 +38,64 @@ return require('packer').startup(function(use)
             }
         end
     }
-    use {
-        'Mofiqul/dracula.nvim', -- colorscheme
+    use { -- colorscheme
+        'Mofiqul/dracula.nvim',
         config = function()
-            local cmd = vim.api.nvim_command
-            cmd('colorscheme dracula') -- Set colorscheme
+            vim.api.nvim_command('colorscheme dracula') -- Set colorscheme
         end
     }
-    use {
-        'nvim-telescope/telescope.nvim', -- fuzzy finder
-        requires = { 'nvim-lua/plenary.nvim' }
+    use { -- fuzzy finder
+        'nvim-telescope/telescope.nvim',
+        requires = { 'nvim-lua/plenary.nvim' },
+        config = empty_config,
     }
-    use { 'majutsushi/tagbar' } -- code structure
-    use { 'Yggdroot/indentLine' } -- see indentation
-    use { 'junegunn/gv.vim' } -- commit history
-    use {
-        'windwp/nvim-autopairs', -- auto close brackets, etc.
+    use { -- code structure
+        'majutsushi/tagbar',
+        config = empty_config,
+    }
+    use { -- see indentation
+        'Yggdroot/indentLine',
+        config = empty_config,
+    }
+    use { -- commit history
+        'junegunn/gv.vim',
+        config = empty_config,
+    }
+    use { -- auto close brackets, etc.
+        'windwp/nvim-autopairs',
         config = function()
             require('nvim-autopairs').setup {}
         end
     }
-    use { 'tpope/vim-fugitive' } -- git integration
-    use { 'tpope/vim-commentary' } -- comment toggle
-    use { 'tpope/vim-surround' } -- easily surround text
-    use { 'tpope/vim-dispatch' } -- Make support
-    use { 'tpope/vim-obsession' } -- Session management
-    use { "williamboman/mason.nvim" }
-    use { "williamboman/mason-lspconfig.nvim" }
-    use {
+    use { -- giT integration
+        'tpope/vim-fugitive',
+        config = empty_config,
+    }
+    use { -- comment toggle
+        'tpope/vim-commentary',
+        config = empty_config,
+    }
+    use { -- easily surround text
+        'tpope/vim-surround',
+        config = empty_config,
+    }
+    use { -- Make support
+        'tpope/vim-dispatch',
+        config = empty_config,
+    }
+    use { -- Session management
+        'tpope/vim-obsession',
+        config = empty_config,
+    }
+    use { -- LSP install manager
+        "williamboman/mason.nvim",
+        config = empty_config,
+    }
+    use { -- Mason/LSP integration
+        "williamboman/mason-lspconfig.nvim",
+        config = empty_config,
+    }
+    use { -- LSP Configuration and setup
         "neovim/nvim-lspconfig",
         config = function()
             require("mason").setup()
@@ -102,7 +143,7 @@ return require('packer').startup(function(use)
             }
         end
     }
-    use {
+    use { -- Linter using LSP
         "mfussenegger/nvim-lint",
         config = function()
             require('lint').linters_by_ft = {
@@ -115,21 +156,17 @@ return require('packer').startup(function(use)
             })
         end
     }
-    use {
+    use { -- Runs common tasks
         'stevearc/overseer.nvim',
         config = function() require('overseer').setup() end
     }
-    use {
+    use { -- Tabs for buffers!
         'akinsho/bufferline.nvim',
         tag = "v3.*",
         requires = 'nvim-tree/nvim-web-devicons',
         config = function() require("bufferline").setup() end
     }
-    use {
-        'ms-jpq/coq_nvim',
-        config = function() end
-    }
-    use {
+    use { -- Nicer notifications
         'rcarriga/nvim-notify',
         config = function()
             vim.notify = require("notify")
