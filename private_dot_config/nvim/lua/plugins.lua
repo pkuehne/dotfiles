@@ -3,10 +3,11 @@
 -- Only required if you have packer configured as `opt`
 -- vim.cmd [[packadd packer.nvim]]
 
-function empty_config()
+function Empty_config()
 end
 
-function lsp_on_attach(client, bufnr)
+function Lsp_on_attach(_, bufnr)
+    -- First parameter is unused 'client'
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -40,7 +41,7 @@ end
 return require('packer').startup(function(use)
     use { -- Packer can manage itself
         'wbthomason/packer.nvim',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- filesystem navigation
         'kyazdani42/nvim-tree.lua',
@@ -51,11 +52,11 @@ return require('packer').startup(function(use)
     }
     use { -- start screen
         'mhinz/vim-startify',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- cursor jump
         'DanilaMihailov/beacon.nvim',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- statusline
         'nvim-lualine/lualine.nvim',
@@ -77,19 +78,19 @@ return require('packer').startup(function(use)
     use { -- fuzzy finder
         'nvim-telescope/telescope.nvim',
         requires = { 'nvim-lua/plenary.nvim' },
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- code structure
         'majutsushi/tagbar',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- see indentation
         'Yggdroot/indentLine',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- commit history
         'junegunn/gv.vim',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- auto close brackets, etc.
         'windwp/nvim-autopairs',
@@ -99,23 +100,23 @@ return require('packer').startup(function(use)
     }
     use { -- giT integration
         'tpope/vim-fugitive',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- comment toggle
         'tpope/vim-commentary',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- easily surround text
         'tpope/vim-surround',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- Make support
         'tpope/vim-dispatch',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- Session management
         'tpope/vim-obsession',
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- Rust LSP support
         'simrat39/rust-tools.nvim',
@@ -124,11 +125,11 @@ return require('packer').startup(function(use)
     }
     use { -- LSP install manager
         "williamboman/mason.nvim",
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- Mason/LSP integration
         "williamboman/mason-lspconfig.nvim",
-        config = empty_config,
+        config = Empty_config,
     }
     use { -- LSP Configuration and setup
         "neovim/nvim-lspconfig",
@@ -147,22 +148,22 @@ return require('packer').startup(function(use)
                 -- default handler.
                 function(server_name)
                     require("lspconfig")[server_name].setup {
-                        on_attach = lsp_on_attach,
+                        on_attach = Lsp_on_attach,
                     }
                 end,
                 -- Dedicated handlers
                 ["rust_analyzer"] = function()
-                    require("rust-tools").setup ({
+                    require("rust-tools").setup({
                         server = {
-                            on_attach = lsp_on_attach
+                            on_attach = Lsp_on_attach
                         }
                     })
                 end,
                 ["sumneko_lua"] = function()
                     require("lspconfig")["sumneko_lua"].setup {
-                        on_attach = lsp_on_attach,
+                        on_attach = Lsp_on_attach,
                         settings = {
-                            LUA = {
+                            Lua = {
                                 diagnostics = {
                                     globals = { "vim" }
                                 }
