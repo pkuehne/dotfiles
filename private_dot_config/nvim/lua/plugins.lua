@@ -252,9 +252,7 @@ return require('packer').startup(function(use)
     }
     use { -- Nicer notifications
         'rcarriga/nvim-notify',
-        config = function()
-            vim.notify = require("notify")
-        end
+        config = function() vim.notify = require("notify") end
     }
     use { -- Autocomplete
         'hrsh7th/nvim-cmp',
@@ -268,5 +266,16 @@ return require('packer').startup(function(use)
             'hrsh7th/vim-vsnip',
         },
         config = Autocomplete_config,
+    }
+    use {
+        "folke/trouble.nvim",
+        requires = "nvim-tree/nvim-web-devicons",
+        config = function()
+            require("trouble").setup {}
+            local opts = { silent = true, noremap = true }
+            vim.keymap.set("n", "<leader>tt", "<cmd>TroubleToggle<cr>", opts)
+            vim.keymap.set("n", "<leader>tw", "<cmd>TroubleToggle workspace_diagnostics<cr>", opts)
+            vim.keymap.set("n", "<leader>tl", "<cmd>TroubleToggle loclist<cr>", opts)
+        end
     }
 end)
