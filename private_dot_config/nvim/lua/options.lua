@@ -1,4 +1,5 @@
 local opt = vim.opt
+local api = vim.api
 
 opt.colorcolumn = '80' -- Highlight column 80
 opt.number = true -- Show line numbers
@@ -20,7 +21,11 @@ opt.splitright = true -- Place new windows to the right
 opt.splitbelow = true -- Place new windows to the bottom
 opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
 opt.shortmess = vim.opt.shortmess + { c = true }
-vim.api.nvim_set_option('updatetime', 300)
+api.nvim_set_option('updatetime', 300)
+
+opt.completeopt = { 'menuone', 'noselect', 'noinsert' }
+opt.shortmess = vim.opt.shortmess + { c = true }
+api.nvim_set_option('updatetime', 300)
 
 vim.cmd([[
 set signcolumn=yes

@@ -27,14 +27,67 @@ function Lsp_on_attach(_, bufnr)
     vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
     vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
     vim.api.nvim_create_autocmd("BufWritePre", {
         buffer = bufnr,
         callback = function()
-            -- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
             vim.lsp.buf.format({ bufnr = bufnr })
         end,
+    })
+end
+
+function Autocomplete_config()
+    local cmp = require 'cmp'
+    cmp.setup({
+        -- Enable LSP snippets
+        snippet = {
+            expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body)
+            end,
+        },
+        mapping = {
+            ['<C-p>'] = cmp.mapping.select_prev_item(),
+            ['<C-n>'] = cmp.mapping.select_next_item(),
+            -- Add tab support
+            ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+            ['<Tab>'] = cmp.mapping.select_next_item(),
+            ['<C-S-f>'] = cmp.mapping.scroll_docs(-4),
+            ['<C-f>'] = cmp.mapping.scroll_docs(4),
+            ['<C-Space>'] = cmp.mapping.complete(),
+            ['<C-e>'] = cmp.mapping.close(),
+            ['<CR>'] = cmp.mapping.confirm({
+                behavior = cmp.ConfirmBehavior.Insert,
+                select = true,
+            })
+        },
+        -- Installed sources:
+        sources = {
+            { name = 'path' }, -- file paths
+            { name = 'nvim_lsp', keyword_length = 3 }, -- from language server
+            { name = 'nvim_lsp_signature_help' }, -- display function signatures with current parameter emphasized
+            { name = 'nvim_lua', keyword_length = 2 }, -- complete neovim's Lua runtime API such vim.lsp.*
+            { name = 'buffer', keyword_length = 2 }, -- source current buffer
+            { name = 'vsnip', keyword_length = 2 }, -- nvim-cmp source for vim-vsnip
+            { name = 'calc' }, -- source for math calculation
+        },
+        window = {
+            completion = cmp.config.window.bordered(),
+            documentation = cmp.config.window.bordered(),
+        },
+        formatting = {
+            fields = { 'menu', 'abbr', 'kind' },
+            format = function(entry, item)
+                local menu_icon = {
+                    nvim_lsp = 'λ',
+                    vsnip = '⋗',
+                    buffer = 'Ω',
+                    path = '🖫',
+                }
+                item.menu = menu_icon[entry.source.name]
+                return item
+            end,
+        },
     })
 end
 
@@ -202,5 +255,18 @@ return require('packer').startup(function(use)
         config = function()
             vim.notify = require("notify")
         end
+    }
+    use { -- Autocomplete
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-nvim-lua',
+            'hrsh7th/cmp-nvim-lsp-signature-help',
+            'hrsh7th/cmp-vsnip',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/vim-vsnip',
+        },
+        config = Autocomplete_config,
     }
 end)
