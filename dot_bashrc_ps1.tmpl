@@ -6,12 +6,13 @@ function prompt_command {
     local rcode=$?  # Must be first!
 
     # Set up colours
-    local cg="\[\e[01;38;5;82m\]"   # Good
-    local cb="\[\e[01;38;5;196m\]"  # Bad
-    local cl="\[\e[01;38;5;208m\]"  # Line colour
-    local ch="\[\e[01;38;5;28m\]"   # Host colour
-    local cp="\[\e[01;38;5;226m\]"  # PWD colour
-    local ce="\[\e[0m\]"            # Clear everything
+
+    local cg="\[\e[01;38;5;002m\]" # Good
+    local cb="\[\e[01;38;5;001m\]" # Bad
+    local cl="\[\e[01;38;5;004m\]" # Line colour
+    local ch="\[\e[01;38;5;008m\]" # Host colour
+    local cp="\[\e[01;38;5;011m\]" # PWD colour
+    local ce="\[\e[0m\]"           # Clear everything
 
     # Set up git branch
     local branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
