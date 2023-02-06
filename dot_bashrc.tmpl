@@ -3,10 +3,11 @@
 #############################################################
 
 BASHRC_FILES="
-{{ .chezmoi.homeDir }}/.bashrc_custom
-{{ .chezmoi.homeDir }}/.bashrc_local
+{{ .chezmoi.homeDir }}/.bashrc_path
 {{ .chezmoi.homeDir }}/.bashrc_alias
 {{ .chezmoi.homeDir }}/.bashrc_ps1
+{{ .chezmoi.homeDir }}/.bashrc_custom
+{{ .chezmoi.homeDir }}/.bashrc_local
 "
 
 for FILE in $BASHRC_FILES
