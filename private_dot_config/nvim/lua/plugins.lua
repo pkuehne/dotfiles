@@ -6,8 +6,7 @@
 function Empty_config()
 end
 
-function Lsp_on_attach(_, bufnr)
-    -- First parameter is unused 'client'
+function Lsp_on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
@@ -29,12 +28,14 @@ function Lsp_on_attach(_, bufnr)
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', '<leader>cr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format { async = true } end, bufopts)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = bufnr,
-        callback = function()
-            vim.lsp.buf.format({ bufnr = bufnr })
-        end,
-    })
+    if client.server_capabilities.document_formatting then
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.buf.format({ bufnr = bufnr })
+            end,
+        })
+    end
 end
 
 function Autocomplete_config()

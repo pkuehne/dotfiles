@@ -27,7 +27,7 @@ map('n', '<Leader>or', ':OverseerRun<CR>', opts)
 map('n', '<Leader>ot', ':OverseerToggle<CR>', opts)
 
 -- Trouble - <leader>t?
-map("n", "<leader>tt", "<cmd>TroubleToggle<cr>", opts)
+map("n", "<leader>tt", "<cmd>TroubleToggle document_diagnostics<cr>", opts)
 map("n", "<leader>tw", "<cmd>TroubleToggle workspace_diagnostics<cr>", opts)
 map("n", "<leader>tl", "<cmd>TroubleToggle loclist<cr>", opts)
 
