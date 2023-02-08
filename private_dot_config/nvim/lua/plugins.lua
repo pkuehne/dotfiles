@@ -92,6 +92,18 @@ function Autocomplete_config()
     })
 end
 
+function Treesitter_config()
+    require('nvim-treesitter.configs').setup {
+        ensure_installed = { "bash", "lua", "vim", "help", "comment", "python", "vue", "rust", "typescript" },
+        sync_install = false,
+        auto_install = false,
+        highlight = {
+            -- `false` will disable the whole extension
+            enable = true,
+        }
+    }
+end
+
 return require('packer').startup(function(use)
     use { -- Packer can manage itself
         'wbthomason/packer.nvim',
@@ -152,7 +164,7 @@ return require('packer').startup(function(use)
             require('nvim-autopairs').setup {}
         end
     }
-    use { -- giT integration
+    use { -- git integration
         'tpope/vim-fugitive',
         config = Empty_config,
     }
@@ -162,10 +174,6 @@ return require('packer').startup(function(use)
     }
     use { -- easily surround text
         'tpope/vim-surround',
-        config = Empty_config,
-    }
-    use { -- Make support
-        'tpope/vim-dispatch',
         config = Empty_config,
     }
     use { -- Session management
@@ -272,5 +280,13 @@ return require('packer').startup(function(use)
         "folke/trouble.nvim",
         requires = "nvim-tree/nvim-web-devicons",
         config = function() require("trouble").setup {} end
+    }
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = function()
+            local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+            ts_update()
+        end,
+        config = Treesitter_config,
     }
 end)
