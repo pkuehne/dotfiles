@@ -12,6 +12,7 @@ function prompt_command {
     local cl="\[\e[01;38;5;004m\]" # Line colour
     local ch="\[\e[01;38;5;008m\]" # Host colour
     local cp="\[\e[01;38;5;011m\]" # PWD colour
+    local cv="\[\e[01;38;5;032m\]" # venv colour
     local ce="\[\e[0m\]"           # Clear everything
 
     # Set up git branch
@@ -24,10 +25,20 @@ function prompt_command {
         PS1_BRANCH=""
     fi
 
+    # Set up venv indicator
+    local venv=${VIRTUAL_ENV##*/}
+    if [[ ! -z $venv ]]; then
+        local opt_venv="/${venv}/"
+        PS1_VENV="/${cv}${venv}${cl}/"
+    else
+        local opt_venv=""
+        PS1_VENV=""
+    fi
+
     # Calculate the number of - we need to fill to the end of the screen
     local term_size=$COLUMNS # Not applicable to all shells, but this is bash!
     # Keep this line in synch width=wise with everything before \n in PS1
-    local prompt_size=$(echo "|-<${HOSTNAME}>-[${PWD##*/}]-${opt_branch}-| x |--" | wc -c)
+    local prompt_size=$(echo "|-<${HOSTNAME}>-[${PWD##*/}]-${opt_branch}-${opt_venv}-| x |--" | wc -c)
     local fill_size=$(($term_size - $prompt_size))
 
     # Iterate to create a fill of unicode dashes
@@ -47,6 +58,6 @@ function prompt_command {
     # Colour host and working directory info
     PS1_HOST="${ch}${HOSTNAME}${ce}"
     PS1_PWD="${cp}${PWD##*/}${ce}"
-    export PS1="${cl}┌─<${PS1_HOST}${cl}>─[${PS1_PWD}${cl}]─${PS1_BRANCH}─${PS1_FILL}${cl}─╢ ${PS1_RC}${cl} ╟──\n└>${ce} "
+    export PS1="${cl}┌─<${PS1_HOST}${cl}>─[${PS1_PWD}${cl}]─${PS1_BRANCH}─${PS1_VENV}─${PS1_FILL}${cl}─╢ ${PS1_RC}${cl} ╟──\n└>${ce} "
 }
 export PROMPT_COMMAND=prompt_command
