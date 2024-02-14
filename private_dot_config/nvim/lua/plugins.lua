@@ -221,8 +221,8 @@ return require('packer').startup(function(use)
                         }
                     })
                 end,
-                ["sumneko_lua"] = function()
-                    require("lspconfig")["sumneko_lua"].setup {
+                ["lua_ls"] = function()
+                    require("lspconfig")["lua_ls"].setup {
                         on_attach = Lsp_on_attach,
                         settings = {
                             Lua = {
