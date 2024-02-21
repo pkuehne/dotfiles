@@ -10,13 +10,3 @@ then
 else
   echo "-- neovim is installed"
 fi
-
-echo "-- Installing neovim plugin manager"
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-   "${HOME}/.local/share/nvim/site/pack/packer/start/packer.nvim"
-GIT_EXIT_CODE=$?
-if [[ $GIT_EXIT_CODE -eq 128 ]]; then
-    GIT_EXIT_CODE=0
-fi
-
-exit $GIT_EXIT_CODE
