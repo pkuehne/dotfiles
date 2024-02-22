@@ -19,9 +19,9 @@
 	logdogsimple = log --decorate --oneline --graph --simplify-by-decoration
 	d = difftool
 [diff]
-        tool = vimdiff
+  tool = vimdiff
 [difftool]
-        prompt = false
+  prompt = false
 [push]
 	default = current
 [pull]
@@ -42,3 +42,6 @@
 [url "https://"]
     insteadOf = git://
 {{ end }}
+
+[credential]
+  helper = store
