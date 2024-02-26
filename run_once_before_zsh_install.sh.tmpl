@@ -1,0 +1,37 @@
+#! /usr/bin/bash
+
+function install_repo {
+  local REPO=$1
+  local DEST_DIR=$2
+
+  if [ -d ${DEST_DIR} ]; then
+    echo " * ${REPO} already installed"
+    return 0
+  fi
+
+  git clone https://github.com/${REPO}.git ${DEST_DIR}
+}
+
+if ! which zsh; then
+  echo "zsh needs to be installed"
+  sudo apt install -y zsh
+fi
+
+# Install oh-my-zsh
+ZSH_DIR=$HOME/.config/oh-my-zsh/
+if [ ! -d ${ZSH_DIR} ]; then
+  echo "Installing oh-my-zsh"
+  ZSH=${ZSH_DIR} sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+OMZ_PLUGINS=${ZSH_DIR}/custom/plugins
+OMZ_THEMES=${ZSH_DIR}/custom/themes
+
+echo "Installing plugins"
+install_repo "zsh-users/zsh-autosuggestions" ${OMZ_PLUGINS}/zsh-autosuggestions
+install_repo "zsh-users/zsh-syntax-highlighting" ${OMZ_PLUGINS}/zsh-syntax-highlighting
+
+echo "Installing themes"
+install_repo "romkatv/powerlevel10k" ${OMZ_THEMES}/powerlevel10k
+
+exit 0
