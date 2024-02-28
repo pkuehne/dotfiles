@@ -2,6 +2,4 @@
 # This file is managed by chezmoi, don't edit it directly !!!
 #############################################################
 
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.local/bin/:$PATH"
-export PATH="$HOME/bin/:$PATH"
+path+=("${HOME}/bin/")
