@@ -16,7 +16,7 @@ return {
     "folke/which-key.nvim",
     opts = {
       defaults = {
-        ["<leader>t"] = { name = "ToggleTerm" },
+        -- ["<leader>t"] = { name = "ToggleTerm" },
       },
     },
   },
@@ -25,7 +25,7 @@ return {
     opts = {
       options = {
         mode = "tabs",
-        always_show_bufferline = true,
+        always_show_bufferline = false,
       },
     },
   },
