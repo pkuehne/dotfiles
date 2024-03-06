@@ -3,7 +3,9 @@
 #############################################################
 
 # Use neovim instead of vim
-alias vim="nvim"
+if type nvim &> /dev/null; then
+  alias vim='nvim'
+fi
 
 # Always enable Unicode and 256 colours
 alias tmux="tmux -u -2"

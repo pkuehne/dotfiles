@@ -3,7 +3,6 @@
 #############################################################
 
 alias vi='vim'
-alias vim='nvim'
 alias python='python3'
 alias tmux="tmux -2 -u"
 alias rm="pwd; rm -i"
@@ -11,6 +10,11 @@ alias bigfiles="du -ahk . | sort -n | tail -100"
 alias x="xterm &"
 alias csdiff="csdiff -D vimdiff"
 alias cdc="cd {{ .chezmoi.sourceDir }}"
+
+# Contingent aliases
+if type nvim &> /dev/null; then
+  alias vim='nvim'
+fi
 
 # useful ls aliases
 alias ll='ls -alF'
