@@ -6,6 +6,11 @@
     url = "https://github.com/FiloSottile/age/releases/download/v{{ $ageVersion }}/age-v{{ $ageVersion }}-{{ .chezmoi.os }}-{{ .chezmoi.arch }}.tar.gz"
     path = "age/age"
 
+[".local/bin/age-keygen"]
+    type = "archive-file"
+    url = "https://github.com/FiloSottile/age/releases/download/v{{ $ageVersion }}/age-v{{ $ageVersion }}-{{ .chezmoi.os }}-{{ .chezmoi.arch }}.tar.gz"
+    path = "age/age-keygen"
+
 {{ $ripgrepVersion := "14.1.0" -}}
 [".local/bin/rg"]
     type = "archive-file"
