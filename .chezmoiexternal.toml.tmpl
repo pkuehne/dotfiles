@@ -1,40 +1,66 @@
+# Tools
+# #####
 {{ $ageVersion := "1.1.1" -}}
-["bin/age"]
+[".local/bin/age"]
     type = "archive-file"
     url = "https://github.com/FiloSottile/age/releases/download/v{{ $ageVersion }}/age-v{{ $ageVersion }}-{{ .chezmoi.os }}-{{ .chezmoi.arch }}.tar.gz"
     path = "age/age"
 
 {{ $ripgrepVersion := "14.1.0" -}}
-["bin/rg"]
+[".local/bin/rg"]
     type = "archive-file"
     url = "https://github.com/BurntSushi/ripgrep/releases/download/{{ $ripgrepVersion }}/ripgrep-{{ $ripgrepVersion }}-x86_64-unknown-linux-musl.tar.gz"
     path = "ripgrep-{{ $ripgrepVersion }}-x86_64-unknown-linux-musl/rg"
 
 {{ $batVersion := "0.24.0" -}}
-["bin/bat"]
+[".local/bin/bat"]
     type = "archive-file"
     url = "https://github.com/sharkdp/bat/releases/download/v{{ $batVersion }}/bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu.tar.gz"
     path = "bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu/bat"
 
 {{ $exaVersion := "0.10.0" -}}
-["bin/exa"]
+[".local/bin/exa"]
     type = "archive-file"
     url = "https://github.com/ogham/exa/releases/download/v{{ $exaVersion }}/exa-linux-x86_64-v{{ $exaVersion }}.zip"
     path = "bin/exa"
 
 {{ $lazygitVersion := "0.40.2" -}}
-["bin/lazygit"]
+[".local/bin/lazygit"]
     type = "archive-file"
     url = "https://github.com/jesseduffield/lazygit/releases/download/v{{ $lazygitVersion }}/lazygit_{{ $lazygitVersion }}_Linux_x86_64.tar.gz"
     path = "lazygit"
 
 {{ $nvimVersion := "0.9.5" -}}
-["bin/nvim"]
+[".local/bin/nvim"]
     type = "file"
     url = "https://github.com/neovim/neovim/releases/download/v{{ $nvimVersion }}/nvim.appimage"
     executable = true
 
+# Plugins
+# #######
 [".tmux/plugins/tpm"]
     type = "git-repo"
     url = "https://github.com/tmux-plugis/tpm.git"
     refreshPeriod = "168h"
+
+[".config/oh-my-zsh/custom/plugins/zsh-autosuggestions"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-autosuggestions.git"
+    refreshPeriod = "168h"
+
+[".config/oh-my-zsh/custom/plugins/zsh-syntax-highlighting"]
+    type = "git-repo"
+    url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+    refreshPeriod = "168h"
+
+[".config/oh-my-zsh/custom/themes/powerlevel10k"]
+    type = "git-repo"
+    url = "https://github.com/romkatv/powerlevel10k.git"
+    refreshPeriod = "168h"
+
+[".config/oh-my-zsh/custom/exa-dracula.zsh"]
+    type = "archive-file"
+    url = "https://github.com/dracula/exa/archive/master.zip"
+    path = "exa-main/exa_colors.zshrc"
+
+
