@@ -5,9 +5,7 @@
 [user]
 	name = Peter Kuehne
 	email = {{ .email }}
-{{- if eq .work_server false }}
-	signingkey = 170A75E31F2F8DE3
-{{ end }}
+	signingkey = ~/.ssh/github_rsa
 [core]
 	editor = vim
 	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
@@ -22,26 +20,30 @@
   tool = vimdiff
 [difftool]
   prompt = false
+[init]
+  defaultBranch = main
 [push]
 	default = current
 [pull]
 	rebase = false
-{{- if eq .work_server true }}
-[http]
-	sslVerify = false
-{{ else }}
 [commit]
 	gpgsign = true
 [gpg]
-	#program = /mnt/c/Program Files (x86)/GnuPG/bin/gpg.exe
-	program = gpg
-{{ end }}
+  format = ssh
+[gpg "ssh"]
+	allowedSignersFile = /home/peter/.ssh/allowed_signers
+
 {{ with (index . "proxy") }}
+# Proxy configuration
 [http "https://github.com"]
     proxy = {{ . }}
 [url "https://"]
     insteadOf = git://
 {{ end }}
 
-[credential]
-  helper = store
+{{- if eq .work_server true }}
+# Ignore untrusted certificates
+[http]
+	sslVerify = false
+{{ end }}
+
