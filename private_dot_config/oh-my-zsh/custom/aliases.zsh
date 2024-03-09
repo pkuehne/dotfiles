@@ -12,12 +12,12 @@ if type bat &> /dev/null; then
   alias cat='bat'
 fi
 
-if type exa &> /dev/null; then
-  alias ls='exa --grid --time-style=long-iso --icons'
+if type eza &> /dev/null; then
+  alias ls='eza --grid --time-style=long-iso --icons'
   alias ll='ls --long'
   alias ll='ls --long --all'
   alias lg='ls --long --git'
-  alias tree='exa --tree'
+  alias tree='eza --tree'
 fi
 
 if type rg &> /dev/null; then

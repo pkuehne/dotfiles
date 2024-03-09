@@ -23,11 +23,11 @@
     url = "https://github.com/sharkdp/bat/releases/download/v{{ $batVersion }}/bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu.tar.gz"
     path = "bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu/bat"
 
-{{ $exaVersion := "0.10.0" -}}
-[".local/bin/exa"]
+{{ $ezaVersion := "0.18.6" -}}
+[".local/bin/eza"]
     type = "archive-file"
-    url = "https://github.com/ogham/exa/releases/download/v{{ $exaVersion }}/exa-linux-x86_64-v{{ $exaVersion }}.zip"
-    path = "bin/exa"
+    url = "https://github.com/eza-community/eza/releases/download/v{{ $ezaVersion }}/eza_x86_64-unknown-linux-musl.zip"
+    path = "eza"
 
 {{ $lazygitVersion := "0.40.2" -}}
 [".local/bin/lazygit"]
