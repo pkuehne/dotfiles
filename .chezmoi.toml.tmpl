@@ -8,3 +8,7 @@
     omz_dir = "{{ .chezmoi.homeDir }}/.config/oh-my-zsh"
 [diff]
     command = "vimdiff"
+encryption = "age"
+[age]
+    identity = "{{ .chezmoi.homeDir }}/chezmoi.key"
+    recipient = "age143rkv4de9a0ma4kq4mhgassl68cac8cvj88vm7w2mj8mvljn5asq4c2q2f"
