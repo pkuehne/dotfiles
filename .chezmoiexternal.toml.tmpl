@@ -41,6 +41,12 @@
     url = "https://github.com/neovim/neovim/releases/download/v{{ $nvimVersion }}/nvim.appimage"
     executable = true
 
+{{ $dustVersion := "0.9.0" -}}
+[".local/bin/dust"]
+    type = "archive-file"
+    url = "https://github.com/bootandy/dust/releases/download/v{{ $dustVersion }}/dust-v{{ $dustVersion }}-x86_64-unknown-linux-musl.tar.gz"
+    path = "dust-v{{ $dustVersion }}-x86_64-unknown-linux-musl/dust" 
+
 # Plugins
 # #######
 [".tmux/plugins/tpm"]
