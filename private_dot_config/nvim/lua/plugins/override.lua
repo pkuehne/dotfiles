@@ -10,6 +10,9 @@ return {
         "flake8",
         "markdownlint",
       },
+      ui = {
+        border = "rounded",
+      },
     },
   },
   {
