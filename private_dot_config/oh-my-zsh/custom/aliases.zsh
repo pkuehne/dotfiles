@@ -3,8 +3,11 @@
 #############################################################
 
 # Use neovim instead of vim
+export EDITOR="vim"
 if type nvim &> /dev/null; then
   alias vim='nvim'
+  alias vimdiff="nvim -d"
+  export EDITOR="nvim"
 fi
 
 # Use bat instead of cat
