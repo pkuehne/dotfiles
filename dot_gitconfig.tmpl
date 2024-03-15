@@ -26,8 +26,6 @@
 	default = current
 [pull]
 	rebase = false
-[commit]
-	gpgsign = true
 [gpg]
   format = ssh
 [gpg "ssh"]
@@ -45,6 +43,9 @@
 # Ignore untrusted certificates
 [http]
 	sslVerify = false
+{{- else }}
+[commit]
+	gpgsign = true
 {{ end }}
 
 [credential]
