@@ -20,8 +20,8 @@
 {{ $batVersion := "0.24.0" -}}
 [".local/bin/bat"]
     type = "archive-file"
-    url = "https://github.com/sharkdp/bat/releases/download/v{{ $batVersion }}/bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu.tar.gz"
-    path = "bat-v{{ $batVersion }}-x86_64-unknown-linux-gnu/bat"
+    url = "https://github.com/sharkdp/bat/releases/download/v{{ $batVersion }}/bat-v{{ $batVersion }}-x86_64-unknown-linux-musl.tar.gz"
+    path = "bat-v{{ $batVersion }}-x86_64-unknown-linux-musl/bat"
 
 {{ $ezaVersion := "0.18.6" -}}
 [".local/bin/eza"]
@@ -47,6 +47,12 @@
     url = "https://github.com/bootandy/dust/releases/download/v{{ $dustVersion }}/dust-v{{ $dustVersion }}-x86_64-unknown-linux-musl.tar.gz"
     path = "dust-v{{ $dustVersion }}-x86_64-unknown-linux-musl/dust" 
 
+{{ $deltaVersion := "0.16.5" -}}
+[".local/bin/delta"]
+  type = "archive-file"
+  url = "https://github.com/dandavison/delta/releases/download/{{ $deltaVersion }}/delta-{{ $deltaVersion }}-x86_64-unknown-linux-musl.tar.gz"
+  path = "delta-{{ $deltaVersion}}-x86_64-unknown-linux-musl/delta"
+
 # Plugins
 # #######
 [".tmux/plugins/tpm"]
@@ -69,7 +75,7 @@
     url = "https://github.com/romkatv/powerlevel10k.git"
     refreshPeriod = "168h"
 
-[".config/oh-my-zsh/custom/exa-dracula.zsh"]
+[".config/oh-my-zsh/custom/eza-dracula.zsh"]
     type = "archive-file"
     url = "https://github.com/dracula/exa/archive/master.zip"
     path = "exa-main/exa_colors.zshrc"

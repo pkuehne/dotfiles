@@ -3,19 +3,40 @@
 #############################################################
 
 [user]
-	name = Peter Kuehne
-	email = {{ .email }}
-	signingkey = ~/.ssh/github_rsa
+  name = Peter Kuehne
+  email = {{ .email }}
+  signingkey = ~/.ssh/github_rsa
 [core]
-	editor = vim
-	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
-	autocrlf = input
+  editor = vim
+  excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+  autocrlf = input
+{{ if findExecutable "delta" (list ".local/bin") }}
+  pager = delta
+
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+
+[delta]
+  features = decorations
+
+[delta "interactive"]
+  keep-plus-minus-markers = false
+
+[delta "decorations"]
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = omit
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = red
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
+{{ end }}
 [color]
-	ui = true
+  ui = true
 [alias]
-	logdog = log --decorate --oneline --graph
-	logdogsimple = log --decorate --oneline --graph --simplify-by-decoration
-	d = difftool
+  logdog = log --decorate --oneline --graph
+  logdogsimple = log --decorate --oneline --graph --simplify-by-decoration
+  d = difftool
 [diff]
   tool = vimdiff
 [difftool]
@@ -23,13 +44,13 @@
 [init]
   defaultBranch = main
 [push]
-	default = current
+  default = current
 [pull]
-	rebase = false
+  rebase = false
 [gpg]
   format = ssh
 [gpg "ssh"]
-	allowedSignersFile = /home/peter/.ssh/allowed_signers
+  allowedSignersFile = /home/peter/.ssh/allowed_signers
 
 {{ with (index . "proxy") -}}
 # Proxy configuration
@@ -42,12 +63,12 @@
 {{- if eq .work_server true }}
 # Ignore untrusted certificates
 [http]
-	sslVerify = false
+  sslVerify = false
 {{- else }}
 [commit]
-	gpgsign = true
+  gpgsign = true
 {{ end }}
 
 [credential]
-	helper = store
+  helper = store
 

@@ -4,6 +4,7 @@
 
 path+=("${HOME}/bin")
 path+=("${HOME}/.local/bin")
-if [[ -d "${HOME}/.cargo/bin" ]]; then
+
+{{ if findExecutable "cargo" (list ".cargo/bin") }}
   path+=("${HOME}/.cargo/bin")
-fi
+{{ end }}
