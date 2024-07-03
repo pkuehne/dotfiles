@@ -8,3 +8,4 @@ path+=("${HOME}/.local/bin")
 {{ if findExecutable "cargo" (list ".cargo/bin") }}
   path+=("${HOME}/.cargo/bin")
 {{ end }}
+

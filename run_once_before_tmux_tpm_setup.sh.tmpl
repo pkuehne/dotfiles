@@ -11,7 +11,12 @@ else
 fi
 
 echo "-- Installing tmux plugin manager"
-git clone https://github.com/tmux-plugins/tpm "$HOME"/.tmux/plugins/tpm
+TMUX_PLUGIN_DIR="{{ .chezmoi.homeDir }}/.tmux/plugins"
+if [[ -d "${TMUX_PLUGIN_DIR}" ]]; then
+  echo "-- Removing old install"
+  rm -fr "${TMUX_PLUGIN_DIR}"
+fi
+git clone https://github.com/tmux-plugins/tpm "${TMUX_PLUGIN_DIR}/tpm"
 GIT_EXIT_CODE=$?
 if [[ $GIT_EXIT_CODE -eq 128 ]]; then
     GIT_EXIT_CODE=0
