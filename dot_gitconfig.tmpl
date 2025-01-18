@@ -52,22 +52,8 @@
 [gpg "ssh"]
   allowedSignersFile = /home/peter/.ssh/allowed_signers
 
-{{ with (index . "proxy") -}}
-# Proxy configuration
-[http "https://github.com"]
-    proxy = {{ . }}
-[url "https://"]
-    insteadOf = git://
-{{ end -}}
-
-{{- if eq .work_server true }}
-# Ignore untrusted certificates
-[http]
-  sslVerify = false
-{{- else }}
 [commit]
   gpgsign = true
-{{ end }}
 
 [credential]
   helper = store
