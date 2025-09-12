@@ -1,0 +1,9 @@
+result
+result-*
+*.old
+*.bak
+*.swap
+*~
+.DS_Store
+Thumbs.db
+/home.nix
