@@ -1,13 +1,9 @@
 { config, pkgs, ... }:
 {
   home.file.".p10k.zsh".text = ''
-    # Minimal, fast p10k with transient & instant prompt (Lean, two-line)
-    # typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir vcs)
-    # typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time time)
 
-    # typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-    # typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-    # typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=""
+    typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always
+    typeset -g POWERLEVEL9K_INSTANT_PROMPT=verbose
 
     typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
       # =========================[ Line #1 ]=========================
@@ -95,6 +91,8 @@
     typeset -g POWERLEVEL9K_ICON_PADDING=none
     typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
 
+    typeset -g POWERLEVEL9K_ICON_BEFORE_CONTENT=
+
     typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
     typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=
     typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=
@@ -120,22 +118,148 @@
     typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=""
     typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
 
-    typeset -g POWERLEVEL9K_DIR_SHORTEN_STRATEGY=truncate_to_last
+    #################################[ os_icon: os identifier ]##################################
+    typeset -g POWERLEVEL9K_OS_ICON_FOREGROUND=232
+    typeset -g POWERLEVEL9K_OS_ICON_BACKGROUND=7
+
+    ################################[ prompt_char: prompt symbol ]################################
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_BACKGROUND=
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=76
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_{VIINS,VICMD,VIVIS,VIOWR}_FOREGROUND=196
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIINS_CONTENT_EXPANSION='❯'
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VICMD_CONTENT_EXPANSION='❮'
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIVIS_CONTENT_EXPANSION='V'
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_{OK,ERROR}_VIOWR_CONTENT_EXPANSION='▶'
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_OVERWRITE_STATE=true
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
+    typeset -g POWERLEVEL9K_PROMPT_CHAR_LEFT_{LEFT,RIGHT}_WHITESPACE=
+
+    ##################################[ dir: current directory ]##################################
+    typeset -g POWERLEVEL9K_DIR_BACKGROUND=4
+    typeset -g POWERLEVEL9K_DIR_FOREGROUND=254
+    typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
+    typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
+    typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=250
+    typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=255
+    typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+    local anchor_files=(
+      .bzr
+      .citc
+      .git
+      .hg
+      .node-version
+      .python-version
+      .go-version
+      .ruby-version
+      .lua-version
+      .java-version
+      .perl-version
+      .php-version
+      .tool-versions
+      .shorten_folder_marker
+      .svn
+      .terraform
+      CVS
+      Cargo.toml
+      composer.json
+      go.mod
+      package.json
+      stack.yaml
+    )
+    typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(''${(j:|:)anchor_files})"
+    typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=false
     typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-    typeset -g POWERLEVEL9K_DIR_SHOW_WRITABLE=true
-    typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=1          # only one segment
-    typeset -g POWERLEVEL9K_DIR_TRUNCATE_BEFORE_MARKER=               # disable markers
-    typeset -g POWERLEVEL9K_DIR_OMIT_FIRST_CHARACTER=true             # don’t prepend …/
+    typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=80
+    typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS=40
+    typeset -g POWERLEVEL9K_DIR_MIN_COMMAND_COLUMNS_PCT=50
+    typeset -g POWERLEVEL9K_DIR_HYPERLINK=false
+    typeset -g POWERLEVEL9K_DIR_SHOW_WRITABLE=v3
 
-    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=2
-    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_PRECISION=1
+    #####################################[ vcs: git status ]######################################
+    typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=2
+    typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=3
+    typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=2
+    typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=3
+    typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=8
+    typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\UE0A0 '
+    typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
 
-    typeset -g POWERLEVEL9K_CONTEXT_DEFAULT_CONTENT_EXPANSION=""
-    typeset -g POWERLEVEL9K_CONTEXT_REMOTE_SSH_CONTENT_EXPANSION="%n@%m"
+    typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=-1
+    typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~'
+    typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED,CONFLICTED,COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=-1
+    typeset -g POWERLEVEL9K_VCS_BACKENDS=(git)
+    # typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
+    # typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION="''${$((my_git_formatter()))+''${my_git_format}}"
 
+    ##########################[ status: exit code of the last command ]###########################
+    typeset -g POWERLEVEL9K_STATUS_EXTENDED_STATES=true
+    typeset -g POWERLEVEL9K_STATUS_OK=false
+    typeset -g POWERLEVEL9K_STATUS_OK_VISUAL_IDENTIFIER_EXPANSION='✔'
+    typeset -g POWERLEVEL9K_STATUS_OK_FOREGROUND=2
+    typeset -g POWERLEVEL9K_STATUS_OK_BACKGROUND=0
+    typeset -g POWERLEVEL9K_STATUS_OK_PIPE=true
+    typeset -g POWERLEVEL9K_STATUS_OK_PIPE_VISUAL_IDENTIFIER_EXPANSION='✔'
+    typeset -g POWERLEVEL9K_STATUS_OK_PIPE_FOREGROUND=2
+    typeset -g POWERLEVEL9K_STATUS_OK_PIPE_BACKGROUND=0
+    typeset -g POWERLEVEL9K_STATUS_ERROR=false
+    typeset -g POWERLEVEL9K_STATUS_ERROR_VISUAL_IDENTIFIER_EXPANSION='✘'
+    typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=3
+    typeset -g POWERLEVEL9K_STATUS_ERROR_BACKGROUND=1
+    typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL=true
+    typeset -g POWERLEVEL9K_STATUS_VERBOSE_SIGNAME=false
+    typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_VISUAL_IDENTIFIER_EXPANSION='✘'
+    typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_FOREGROUND=3
+    typeset -g POWERLEVEL9K_STATUS_ERROR_SIGNAL_BACKGROUND=1
+    typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE=true
+    typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_VISUAL_IDENTIFIER_EXPANSION='✘'
+    typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_FOREGROUND=3
+    typeset -g POWERLEVEL9K_STATUS_ERROR_PIPE_BACKGROUND=1
 
-    typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always
-    typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+    ###################[ command_execution_time: duration of the last command ]###################
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND=0
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND=3
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=3
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_PRECISION=0
+    typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_FORMAT='d h m s'
+
+    #######################[ background_jobs: presence of background jobs ]#######################
+    typeset -g POWERLEVEL9K_BACKGROUND_JOBS_FOREGROUND=6
+    typeset -g POWERLEVEL9K_BACKGROUND_JOBS_BACKGROUND=0
+    typeset -g POWERLEVEL9K_BACKGROUND_JOBS_VERBOSE=false
+
+    #######################[ direnv: direnv status (https://direnv.net/) ]########################
+    typeset -g POWERLEVEL9K_DIRENV_FOREGROUND=3
+    typeset -g POWERLEVEL9K_DIRENV_BACKGROUND=0
+
+    ###########################[ nix shell: nix shell indicator  ]###########################
+    typeset -g POWERLEVEL9K_NIX_SHELL_FOREGROUND=0
+    typeset -g POWERLEVEL9K_NIX_SHELL_BACKGROUND=4
+
+    ##################################[ context: user@hostname ]##################################
+    typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=1
+    typeset -g POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND=0
+    typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=3
+    typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_BACKGROUND=0
+    typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=3
+    typeset -g POWERLEVEL9K_CONTEXT_BACKGROUND=0
+    typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n@%m'
+    typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n@%m'
+    typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
+    typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
+  
+    ###[ virtualenv: python virtual environment (https://docs.python.org/3/library/venv.html) ]###
+    typeset -g POWERLEVEL9K_VIRTUALENV_FOREGROUND=0
+    typeset -g POWERLEVEL9K_VIRTUALENV_BACKGROUND=4
+    typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=false
+    typeset -g POWERLEVEL9K_VIRTUALENV_SHOW_WITH_PYENV=false
+    typeset -g POWERLEVEL9K_VIRTUALENV_{LEFT,RIGHT}_DELIMITER=
+
+    ####################################[ time: current time ]####################################
+    typeset -g POWERLEVEL9K_TIME_FOREGROUND=0
+    typeset -g POWERLEVEL9K_TIME_BACKGROUND=7
+    typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
+    typeset -g POWERLEVEL9K_TIME_UPDATE_ON_COMMAND=false
   '';
 }
 

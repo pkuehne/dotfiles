@@ -18,25 +18,33 @@ It works on Ubuntu (WSL2) with flakes enabled.
 2.  **Clone repo into Home Manager config dir**:
 
     ``` bash
-    git clone https://github.com/<your-username>/dotfiles-flake.git ~/.config/home-manager
-    cd ~/.config/home-manager
+    git clone https://github.com/pkuehne/dotfiles-flake.git ~/.config/home-manager
     ```
 
-3.  **Activate** (choose profile):
+3. **Install Home Manager**:
+
+    ```bash
+    nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+    nix-channel --update
+    nix-shell '<home-manager>' -A install
+    ```
+
+4.  **Activate** (choose profile):
 
     ``` bash
-    home-manager switch --flake .#home
+    home-manager switch --flake ~/.config/home-manager#home
     # or
-    home-manager switch --flake .#work
+    home-manager switch --flake ~/.config/home-manager#work
     ```
 
-4.  **Set Zsh as login shell**:
+5.  **Set Zsh as login shell**:
 
     ``` bash
+    echo "$HOME/.nix-profile/bin/zsh" | sudo tee -a /etc/shells
     chsh -s "$HOME/.nix-profile/bin/zsh"
     ```
 
-5.  **Restart WSL / shell**:
+6.  **Restart WSL / shell**:
 
     ``` bash
     exec zsh -l
@@ -59,13 +67,12 @@ It works on Ubuntu (WSL2) with flakes enabled.
 ## Notes
 
 -   **Secrets** are *not* in this repo (`.ssh/config`, proxies, corp
-    repos, etc.).\
+    repos, etc.).
 -   Profiles:
-    -   `home` = personal config\
-    -   `work` = minimal safe config for corp machines\
--   **Fonts**: use a Nerd Font (e.g. *MesloLGS NF*) in your terminal for
-    Powerlevel10k glyphs.\
--   **Garbage collection**: Nix GC won't break Zsh; we source from
+    -   `home` = personal config
+    -   `work` = minimal safe config for corp machines
+-   **Fonts**: use a Nerd Font (e.g. *FiraCode NF*) in your terminal for
+    Powerlevel10k glyphs.
     `~/.nix-profile`.
 
 ------------------------------------------------------------------------
@@ -76,7 +83,7 @@ Update inputs (nixpkgs, home-manager):
 
 ``` bash
 nix flake update
-home-manager switch --flake .#home
+home-manager switch --flake ~/.config/home-manager#home
 ```
 
 ------------------------------------------------------------------------
@@ -86,7 +93,7 @@ home-manager switch --flake .#home
 -   If `home-manager` command is missing:
 
     ``` bash
-    nix run github:nix-community/home-manager/release-<version> -- switch --flake .#home
+    nix run github:nix-community/home-manager/release-<version> -- switch --flake ~/.config/home-manager#home
     ```
 
 -   If Zsh doesn't start automatically in WSL, set the shell in Windows
