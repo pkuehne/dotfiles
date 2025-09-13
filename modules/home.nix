@@ -1,5 +1,12 @@
 { ... }: {
-  # Home-only tweaks go here (none yet).
-  # Assumption: OK to be identical to work for now.
+  imports = [ ./git.nix ];
+
+  programs = {
+    zsh = {
+      shellAliases = {
+        hms = "home-manager switch --flake ~/.config/home-manager#home";
+      };
+    };
+  };
 }
 
