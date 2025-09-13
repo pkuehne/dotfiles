@@ -23,15 +23,22 @@
 
   programs.ssh = {
     enable = true;
-
     extraConfig = ''
-      CanonicalizeHostname yes
-      CanonicalDomains prod.homelab.peterkuehne.com
-      CanonicalizeMaxDots 1
-      ControlMaster auto
-      ControlPersist 60s
+      User peter
+      IdentityFile ~/.ssh/id_peter
     '';
+    extraOptionOverrides = {
+      PreferredAuthentications = "publickey";
+      GSSAPIAuthentication = "no";
+      GSSAPIDelegateCredentials = "no";
+      CanonicalizeHostname = "yes";
+      CanonicalizeMaxDots = "1";
+      CanonicalDomains = "prod.homelab.peterkuehne.com";
+      AddKeysToAgent = "yes";
+      HashKnownHosts = "no";
+      UserKnownHostsFile = " ~/.ssh/known_hosts";
 
+    };
     matchBlocks = {
       "*.prod.homelab.peterkuehne.com" = {
         user = "peter";
@@ -42,15 +49,6 @@
           VerifyHostKeyDNS = "ask";
           PubkeyAuthentication = "no";
           PasswordAuthentication = "no";
-        };
-      };
-      "*" = {
-        user = "peter";
-        identityFile = [ "~/.ssh/id_peter" ];
-        extraOptions = {
-          PreferredAuthentications = "publickey";
-          GSSAPIAuthentication = "no";
-          GSSAPIDelegateCredentials = "no";
         };
       };
     };
