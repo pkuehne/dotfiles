@@ -1,5 +1,5 @@
 { pkgs, agenix, ... }: {
-  imports = [ ./zsh.nix ./p10k.nix ./nvim.nix ];
+  imports = [ ./zsh.nix ./p10k.nix ./nvim.nix ./tmux.nix ];
 
   news.display = "silent";
 
