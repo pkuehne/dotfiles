@@ -1,5 +1,5 @@
 { ... }: {
-  imports = [ ./git.nix ];
+  imports = [ ./git.nix ./ssh.nix ];
 
   programs = {
     zsh = {

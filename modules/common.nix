@@ -1,17 +1,12 @@
-{ pkgs, ... }: {
+{ pkgs, agenix, ... }: {
   imports = [ ./zsh.nix ./p10k.nix ./nvim.nix ];
 
   news.display = "silent";
 
   home = {
-    packages = with pkgs; [
-      ripgrep
-      dust
-      zsh-powerlevel10k
-      direnv
-      lazygit
-      python3
-    ];
+    packages = with pkgs;
+      [ direnv dust lazygit python3 ripgrep zsh-powerlevel10k ]
+      ++ [ agenix.packages.${pkgs.system}.default ];
     stateVersion = "24.05"; # do not bump blindly
   };
 
