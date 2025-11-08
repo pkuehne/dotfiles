@@ -26,7 +26,7 @@
     extraOptionOverrides = {
       user = "peter";
       IdentityFile = "~/.ssh/id_peter";
-      PreferredAuthentications = "publickey";
+      # PreferredAuthentications = "publickey";
       CanonicalizeHostname = "yes";
       CanonicalizeMaxDots = "1";
       CanonicalDomains = "prod.homelab.peterkuehne.com";
