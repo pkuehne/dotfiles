@@ -24,12 +24,6 @@
   programs.ssh = {
     enable = true;
     extraOptionOverrides = {
-      user = "peter";
-      IdentityFile = "~/.ssh/id_peter";
-      # PreferredAuthentications = "publickey";
-      CanonicalizeHostname = "yes";
-      CanonicalizeMaxDots = "1";
-      CanonicalDomains = "prod.homelab.peterkuehne.com";
       AddKeysToAgent = "yes";
       HashKnownHosts = "no";
       UserKnownHostsFile = " ~/.ssh/known_hosts";
@@ -38,12 +32,24 @@
       "*.prod.homelab.peterkuehne.com" = {
         user = "peter";
         extraOptions = {
+          CanonicalizeHostname = "yes";
+          CanonicalizeMaxDots = "1";
+          CanonicalDomains = "prod.homelab.peterkuehne.com";
           GSSAPIAuthentication = "yes";
           GSSAPIDelegateCredentials = "yes";
           PreferredAuthentications = "gssapi-with-mic";
           VerifyHostKeyDNS = "ask";
           PubkeyAuthentication = "no";
           PasswordAuthentication = "no";
+        };
+      };
+      "github.com github.com." = {
+        user = "git";
+        extraOptions = {
+          CanonicalizeHostname = "no";
+          PubkeyAuthentication = "yes";
+          PasswordAuthentication = "no";
+          IdentityFile = "~/.ssh/github_rsa";
         };
       };
     };
