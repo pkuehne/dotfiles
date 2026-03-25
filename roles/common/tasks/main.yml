@@ -1,0 +1,31 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: Install base packages
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - unzip
+      - tar
+      - xz-utils
+      - build-essential
+      - ca-certificates
+    state: present
+  become: true
+
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: "{{ local_bin }}"
+    state: directory
+    mode: "0755"
+
+- name: Ensure ~/.config exists
+  ansible.builtin.file:
+    path: "{{ config_dir }}"
+    state: directory
+    mode: "0755"

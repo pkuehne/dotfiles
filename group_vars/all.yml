@@ -1,0 +1,117 @@
+---
+# ── Paths ──────────────────────────────────────────────────────────────────
+home_dir: "{{ ansible_facts['env']['HOME'] }}"
+dotfiles_dir: "{{ playbook_dir }}"
+local_bin: "{{ home_dir }}/.local/bin"
+config_dir: "{{ home_dir }}/.config"
+zsh_plugins_dir: "{{ home_dir }}/.zsh/plugins"
+zsh_themes_dir: "{{ home_dir }}/.zsh/themes"
+
+# ── GitHub release tools ────────────────────────────────────────────────────
+# version: "latest" hits the GitHub API; or pin with e.g. "v0.18.9"
+# asset_pattern: regex matched against release asset filenames
+# binary: the executable name inside the archive (found recursively)
+github_tools:
+  - name: eza
+    repo: eza-community/eza
+    version: latest
+    asset_pattern: "eza_x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: eza
+
+  - name: fzf
+    repo: junegunn/fzf
+    version: latest
+    asset_pattern: "fzf-.*-linux_amd64\\.tar\\.gz"
+    binary: fzf
+
+  - name: rg
+    repo: BurntSushi/ripgrep
+    version: latest
+    asset_pattern: "ripgrep-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: rg
+
+  - name: dust
+    repo: bootandy/dust
+    version: latest
+    asset_pattern: "dust-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: dust
+
+  - name: just
+    repo: casey/just
+    version: latest
+    asset_pattern: "just-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: just
+
+  - name: bat
+    repo: sharkdp/bat
+    version: latest
+    asset_pattern: "bat-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: bat
+
+  - name: lazygit
+    repo: jesseduffield/lazygit
+    version: latest
+    asset_pattern: "lazygit_.*_linux_x86_64\\.tar\\.gz"
+    binary: lazygit
+
+# ── Zsh plugins ─────────────────────────────────────────────────────────────
+zsh_plugins:
+  - name: fzf-tab
+    repo: https://github.com/Aloxaf/fzf-tab.git
+    dest: "{{ zsh_plugins_dir }}/fzf-tab"
+
+  - name: zsh-autosuggestions
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "{{ zsh_plugins_dir }}/zsh-autosuggestions"
+
+  - name: zsh-syntax-highlighting
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ zsh_plugins_dir }}/zsh-syntax-highlighting"
+
+# ── Powerlevel10k ────────────────────────────────────────────────────────────
+p10k_repo: https://github.com/romkatv/powerlevel10k.git
+p10k_dest: "{{ zsh_themes_dir }}/powerlevel10k"
+
+# ── Tmux plugins ─────────────────────────────────────────────────────────────
+# Ansible clones these directly; TPM in tmux.conf handles interactive updates.
+# Plugin dir name = last component of the repo path (matches TPM convention).
+tmux_plugins_dir: "{{ home_dir }}/.tmux/plugins"
+tmux_plugins:
+  - name: tpm
+    repo: https://github.com/tmux-plugins/tpm.git
+  - name: tmux-sensible
+    repo: https://github.com/tmux-plugins/tmux-sensible.git
+  - name: tmux-yank
+    repo: https://github.com/tmux-plugins/tmux-yank.git
+  - name: tmux-resurrect
+    repo: https://github.com/tmux-plugins/tmux-resurrect.git
+  - name: tmux-sessionist
+    repo: https://github.com/tmux-plugins/tmux-sessionist.git
+  - name: tmux-suspend
+    repo: https://github.com/MunifTanjim/tmux-suspend.git
+  - name: tmux-continuum
+    repo: https://github.com/tmux-plugins/tmux-continuum.git
+  - name: tmux
+    repo: https://github.com/dracula/tmux.git
+
+# ── Neovim ───────────────────────────────────────────────────────────────────
+nvim_version: latest
+nvim_install_dir: "{{ home_dir }}/.local/share/nvim-bin"
+
+# ── nvim lua/config files to symlink ────────────────────────────────────────
+nvim_config_files:
+  - lazy.lua
+  - options.lua
+  - keymaps.lua
+  - autocmds.lua
+
+# ── nvim lua/plugins files to symlink ───────────────────────────────────────
+# Add new plugin spec files here as you create them in files/nvim/lua/plugins/
+nvim_plugin_files:
+  - colorscheme.lua
+  - example.lua
+
+# ── direnv ───────────────────────────────────────────────────────────────────
+direnv_repo: direnv/direnv
+direnv_version: latest
+direnv_asset_name: "direnv.linux-amd64"

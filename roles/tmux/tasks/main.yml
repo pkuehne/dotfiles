@@ -1,0 +1,52 @@
+---
+- name: Install tmux
+  ansible.builtin.apt:
+    name: tmux
+    state: present
+  become: true
+
+- name: Ensure ~/.config/tmux exists
+  ansible.builtin.file:
+    path: "{{ config_dir }}/tmux"
+    state: directory
+    mode: "0755"
+
+- name: Symlink tmux.conf
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/tmux/tmux.conf"
+    dest: "{{ config_dir }}/tmux/tmux.conf"
+    state: link
+    force: true
+
+- name: Ensure ~/.tmux/plugins dir exists
+  ansible.builtin.file:
+    path: "{{ tmux_plugins_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Check which tmux plugins are real git clones
+  ansible.builtin.stat:
+    path: "{{ tmux_plugins_dir }}/{{ item.name }}/.git"
+  loop: "{{ tmux_plugins }}"
+  register: tmux_plugin_stat
+  loop_control:
+    label: "{{ item.name }}"
+
+- name: Remove non-git plugin dests (e.g. leftover nix symlinks)
+  ansible.builtin.file:
+    path: "{{ tmux_plugins_dir }}/{{ item.item.name }}"
+    state: absent
+  loop: "{{ tmux_plugin_stat.results }}"
+  when: not item.stat.exists
+  loop_control:
+    label: "{{ item.item.name }}"
+
+- name: Clone tmux plugins
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ tmux_plugins_dir }}/{{ item.name }}"
+    version: HEAD
+    update: false
+  loop: "{{ tmux_plugins }}"
+  loop_control:
+    label: "{{ item.name }}"

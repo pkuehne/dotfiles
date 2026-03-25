@@ -1,0 +1,50 @@
+[alias]
+	d = "difftool"
+	logdog = "log --decorate --oneline --graph"
+	logdogs = "log --decorate --oneline --graph --simplify-by-decoration"
+
+[color]
+	ui = true
+
+[commit]
+	gpgSign = true
+
+[core]
+	autocrlf = "input"
+	editor = "nvim"
+	excludesfile = "/home/peter/.gitignore_global"
+
+[credential]
+	helper = "store"
+
+[diff]
+	tool = "vimdiff"
+
+[difftool]
+	prompt = false
+
+[gpg]
+	format = "ssh"
+
+[gpg "ssh"]
+	allowedSignersFile = "/home/peter/.ssh/allowed_signers"
+
+[http]
+	sslCAInfo = "/etc/ssl/certs/ca-certificates.crt"
+
+[init]
+	defaultBranch = "main"
+
+[pull]
+	rebase = false
+
+[push]
+	default = "current"
+
+[tag]
+	gpgSign = true
+
+[user]
+	email = "peter.kuehne@gmail.com"
+	name = "Peter Kuehne"
+	signingKey = "/home/peter/.ssh/id_peter.pub"

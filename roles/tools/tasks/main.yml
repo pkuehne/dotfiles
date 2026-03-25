@@ -1,0 +1,27 @@
+---
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: "{{ local_bin }}"
+    state: directory
+    mode: "0755"
+
+- name: Install GitHub release tools
+  ansible.builtin.include_tasks: install_tool.yml
+  loop: "{{ github_tools }}"
+  loop_control:
+    loop_var: tool
+    label: "{{ tool.name }}"
+
+- name: Symlink tools zshrc snippet
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/zsh/zshrc.d/50-fzf.zsh"
+    dest: "{{ home_dir }}/.zshrc.d/50-fzf.zsh"
+    state: link
+    force: true
+
+- name: Symlink tools aliases snippet
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/zsh/zshrc.d/70-tools.zsh"
+    dest: "{{ home_dir }}/.zshrc.d/70-tools.zsh"
+    state: link
+    force: true

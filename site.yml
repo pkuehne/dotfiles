@@ -1,0 +1,26 @@
+---
+- name: Configure localhost dotfiles
+  hosts: localhost
+  become: false
+
+  roles:
+    - role: common
+      tags: [common, apt]
+
+    - role: git
+      tags: [git]
+
+    - role: zsh
+      tags: [zsh, shell]
+
+    - role: tmux
+      tags: [tmux]
+
+    - role: nvim
+      tags: [nvim, neovim]
+
+    - role: tools
+      tags: [tools, bins]
+
+    - role: direnv
+      tags: [direnv]
