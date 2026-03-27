@@ -115,7 +115,6 @@ nvim_config_files:
 # Add new plugin spec files here as you create them in files/nvim/lua/plugins/
 nvim_plugin_files:
   - colorscheme.lua
-  - example.lua
 
 # ── direnv ───────────────────────────────────────────────────────────────────
 direnv_repo: direnv/direnv

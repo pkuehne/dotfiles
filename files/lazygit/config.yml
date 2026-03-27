@@ -1,0 +1,30 @@
+gui:
+  nerdFontsVersion: "3"
+  theme:
+    activeBorderColor:
+      - "#bd93f9"
+      - bold
+    inactiveBorderColor:
+      - "#6272a4"
+    searchingActiveBorderColor:
+      - "#8be9fd"
+      - bold
+    optionsTextColor:
+      - "#bd93f9"
+    selectedLineBgColor:
+      - "#44475a"
+    inactiveViewSelectedLineBgColor:
+      - "#44475a"
+    cherryPickedCommitFgColor:
+      - "#f1fa8c"
+    cherryPickedCommitBgColor:
+      - "#44475a"
+    unstagedChangesColor:
+      - "#ff5555"
+    defaultFgColor:
+      - "#f8f8f2"
+
+os:
+  edit: "nvim {{filename}}"
+  editAtLine: "nvim +{{line}} {{filename}}"
+  editAtLineAndWait: "nvim +{{line}} {{filename}}"

@@ -28,5 +28,8 @@
     - role: bat
       tags: [bat]
 
+    - role: lazygit
+      tags: [lazygit]
+
     - role: windows_terminal
       tags: [windows_terminal, wt]
