@@ -15,6 +15,18 @@
       register: win_username
       changed_when: false
 
+    - name: Ensure WT fragment directory exists
+      ansible.builtin.file:
+        path: "/mnt/c/Users/{{ win_username.stdout }}/AppData/Local/Microsoft/Windows Terminal/Fragments/dotfiles"
+        state: directory
+        mode: "0755"
+
+    - name: Install Dracula scheme fragment
+      ansible.builtin.copy:
+        src: "{{ dotfiles_dir }}/files/windows_terminal/dracula-fragment.json"
+        dest: "/mnt/c/Users/{{ win_username.stdout }}/AppData/Local/Microsoft/Windows Terminal/Fragments/dotfiles/dracula.json"
+        mode: "0644"
+
     - name: Stat Windows Terminal settings locations
       ansible.builtin.stat:
         path: "{{ item }}"

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 Apply the Dracula colour scheme to Windows Terminal settings.json.
-Adds the scheme to `schemes[]` if absent, then sets `colorScheme`
-on every profile whose name or source contains "ubuntu" (case-insensitive).
+Sets `colorScheme` on every profile whose name or source contains
+"ubuntu" (case-insensitive). Does not touch `schemes[]` — Windows
+Terminal manages that array itself and will strip foreign entries.
 
 Exits 0 and prints "changed" if the file was modified, "ok" if already correct.
 """
@@ -10,30 +11,6 @@ import json
 import shutil
 import sys
 from pathlib import Path
-
-DRACULA_SCHEME = {
-    "name": "Dracula",
-    "cursorColor": "#F8F8F2",
-    "selectionBackground": "#44475A",
-    "background": "#282A36",
-    "foreground": "#F8F8F2",
-    "black": "#21222C",
-    "blue": "#BD93F9",
-    "cyan": "#8BE9FD",
-    "green": "#50FA7B",
-    "purple": "#FF79C6",
-    "red": "#FF5555",
-    "white": "#F8F8F2",
-    "yellow": "#F1FA8C",
-    "brightBlack": "#6272A4",
-    "brightBlue": "#D6ACFF",
-    "brightCyan": "#A4FFFF",
-    "brightGreen": "#69FF94",
-    "brightPurple": "#FF92DF",
-    "brightRed": "#FF6E6E",
-    "brightWhite": "#FFFFFF",
-    "brightYellow": "#FFFFA5",
-}
 
 
 def strip_jsonc(text):
@@ -83,12 +60,6 @@ def main():
     settings = json.JSONDecoder(strict=False).decode(strip_jsonc(raw))
 
     changed = False
-
-    # Add Dracula to schemes if not already there
-    schemes = settings.setdefault('schemes', [])
-    if not any(s.get('name') == 'Dracula' for s in schemes):
-        schemes.append(DRACULA_SCHEME)
-        changed = True
 
     # Apply to Ubuntu profiles
     for profile in settings.get('profiles', {}).get('list', []):
