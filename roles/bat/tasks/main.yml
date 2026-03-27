@@ -1,9 +1,12 @@
 ---
-- name: Ensure bat config dir exists
+- name: Ensure bat config and syntaxes dirs exist
   ansible.builtin.file:
-    path: "{{ config_dir }}/bat"
+    path: "{{ item }}"
     state: directory
     mode: "0755"
+  loop:
+    - "{{ config_dir }}/bat"
+    - "{{ config_dir }}/bat/syntaxes"
 
 - name: Symlink bat config
   ansible.builtin.file:
@@ -11,6 +14,15 @@
     dest: "{{ config_dir }}/bat/config"
     state: link
     force: true
+
+- name: Symlink bat syntax definitions
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/bat/syntaxes/{{ item }}"
+    dest: "{{ config_dir }}/bat/syntaxes/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - Just.sublime-syntax
 
 - name: Rebuild bat syntax/theme cache
   ansible.builtin.command:
