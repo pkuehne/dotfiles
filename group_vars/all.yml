@@ -24,6 +24,12 @@ github_tools:
     asset_pattern: "fzf-.*-linux_amd64\\.tar\\.gz"
     binary: fzf
 
+  - name: fd
+    repo: sharkdp/fd
+    version: latest
+    asset_pattern: "fd-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    binary: fd
+
   - name: rg
     repo: BurntSushi/ripgrep
     version: latest
