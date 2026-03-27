@@ -17,6 +17,10 @@ check *args:
 role tag *args:
     {{venv}} -i {{inventory}} {{playbook}} --tags {{tag}} {{args}}
 
+# Force reinstall all tools and nvim (picks up new versions)
+upgrade *args:
+    {{venv}} -i {{inventory}} {{playbook}} --tags tools,nvim -e force_reinstall=true {{args}}
+
 # List available tags
 tags:
     {{venv}} -i {{inventory}} {{playbook}} --list-tags

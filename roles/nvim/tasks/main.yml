@@ -11,7 +11,7 @@
   register: nvim_bin_stat
 
 - name: Install neovim binary
-  when: not nvim_bin_stat.stat.exists
+  when: not nvim_bin_stat.stat.exists or (force_reinstall | default(false))
   block:
     - name: Get latest release tag
       ansible.builtin.uri:

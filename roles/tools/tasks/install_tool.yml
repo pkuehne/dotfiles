@@ -7,7 +7,7 @@
   register: tool_bin_stat
 
 - name: "{{ tool.name }} | Install"
-  when: not tool_bin_stat.stat.exists
+  when: not tool_bin_stat.stat.exists or (force_reinstall | default(false))
   block:
     - name: "{{ tool.name }} | Get latest release from GitHub API"
       ansible.builtin.uri:
