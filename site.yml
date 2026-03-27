@@ -24,3 +24,6 @@
 
     - role: direnv
       tags: [direnv]
+
+    - role: bat
+      tags: [bat]

@@ -1,0 +1,18 @@
+---
+- name: Ensure bat config dir exists
+  ansible.builtin.file:
+    path: "{{ config_dir }}/bat"
+    state: directory
+    mode: "0755"
+
+- name: Symlink bat config
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/bat/config"
+    dest: "{{ config_dir }}/bat/config"
+    state: link
+    force: true
+
+- name: Rebuild bat syntax/theme cache
+  ansible.builtin.command:
+    cmd: "{{ local_bin }}/bat cache --build"
+  changed_when: false
