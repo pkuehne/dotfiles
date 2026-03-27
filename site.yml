@@ -27,3 +27,6 @@
 
     - role: bat
       tags: [bat]
+
+    - role: windows_terminal
+      tags: [windows_terminal, wt]
