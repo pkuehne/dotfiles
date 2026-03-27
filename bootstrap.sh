@@ -14,8 +14,8 @@ echo "==> Installing/upgrading ansible"
 "${VENV_DIR}/bin/pip" install --quiet --upgrade ansible
 
 echo "==> Running playbook"
+# Pass -K if your sudo requires a password (e.g. on a fresh machine)
 "${VENV_DIR}/bin/ansible-playbook" \
-  --ask-become-pass \
   -i "${DOTFILES_DIR}/inventory/localhost.yml" \
   "${DOTFILES_DIR}/site.yml" \
   "$@"

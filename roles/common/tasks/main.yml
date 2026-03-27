@@ -18,6 +18,22 @@
     state: present
   become: true
 
+- name: Check if running in WSL
+  ansible.builtin.command:
+    cmd: grep -qi microsoft /proc/version
+  register: wsl_check
+  changed_when: false
+  failed_when: false
+
+- name: Enable passwordless sudo (WSL only)
+  ansible.builtin.copy:
+    content: "{{ ansible_facts['user_id'] }} ALL=(ALL) NOPASSWD: ALL\n"
+    dest: "/etc/sudoers.d/{{ ansible_facts['user_id'] }}-nopasswd"
+    mode: "0440"
+    validate: /usr/sbin/visudo -cf %s
+  become: true
+  when: wsl_check.rc == 0
+
 - name: Ensure ~/.local/bin exists
   ansible.builtin.file:
     path: "{{ local_bin }}"
