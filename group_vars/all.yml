@@ -7,6 +7,12 @@ config_dir: "{{ home_dir }}/.config"
 zsh_plugins_dir: "{{ home_dir }}/.zsh/plugins"
 zsh_themes_dir: "{{ home_dir }}/.zsh/themes"
 
+# ── Architecture mapping ─────────────────────────────────────────────────────
+# Maps ansible_architecture to the identifiers used in GitHub release filenames
+arch_musl:
+  x86_64: x86_64-unknown-linux-musl
+  aarch64: aarch64-unknown-linux-musl
+
 # ── GitHub release tools ────────────────────────────────────────────────────
 # version: "latest" hits the GitHub API; or pin with e.g. "v0.18.9"
 # asset_pattern: regex matched against release asset filenames
@@ -15,49 +21,49 @@ github_tools:
   - name: eza
     repo: eza-community/eza
     version: latest
-    asset_pattern: "eza_x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "eza_{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: eza
 
   - name: fzf
     repo: junegunn/fzf
     version: latest
-    asset_pattern: "fzf-.*-linux_amd64\\.tar\\.gz"
+    asset_pattern: "fzf-.*-linux_{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}\\.tar\\.gz"
     binary: fzf
 
   - name: fd
     repo: sharkdp/fd
     version: latest
-    asset_pattern: "fd-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "fd-.*-{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: fd
 
   - name: rg
     repo: BurntSushi/ripgrep
     version: latest
-    asset_pattern: "ripgrep-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "ripgrep-.*-{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: rg
 
   - name: dust
     repo: bootandy/dust
     version: latest
-    asset_pattern: "dust-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "dust-.*-{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: dust
 
   - name: just
     repo: casey/just
     version: latest
-    asset_pattern: "just-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "just-.*-{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: just
 
   - name: bat
     repo: sharkdp/bat
     version: latest
-    asset_pattern: "bat-.*-x86_64-unknown-linux-musl\\.tar\\.gz"
+    asset_pattern: "bat-.*-{{ arch_musl[ansible_architecture] }}\\.tar\\.gz"
     binary: bat
 
   - name: lazygit
     repo: jesseduffield/lazygit
     version: latest
-    asset_pattern: "lazygit_.*_linux_x86_64\\.tar\\.gz"
+    asset_pattern: "lazygit_.*_linux_{{ 'x86_64' if ansible_architecture == 'x86_64' else 'arm64' }}\\.tar\\.gz"
     binary: lazygit
 
 # ── Zsh plugins ─────────────────────────────────────────────────────────────
@@ -119,4 +125,4 @@ nvim_plugin_files:
 # ── direnv ───────────────────────────────────────────────────────────────────
 direnv_repo: direnv/direnv
 direnv_version: latest
-direnv_asset_name: "direnv.linux-amd64"
+direnv_asset_name: "direnv.linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
