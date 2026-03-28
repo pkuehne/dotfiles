@@ -13,6 +13,11 @@ arch_musl:
   x86_64: x86_64-unknown-linux-musl
   aarch64: aarch64-unknown-linux-musl
 
+# neovim and some tools use arm64 instead of aarch64
+arch_short:
+  x86_64: x86_64
+  aarch64: arm64
+
 # ── GitHub release tools ────────────────────────────────────────────────────
 # version: "latest" hits the GitHub API; or pin with e.g. "v0.18.9"
 # asset_pattern: regex matched against release asset filenames
@@ -27,7 +32,7 @@ github_tools:
   - name: fzf
     repo: junegunn/fzf
     version: latest
-    asset_pattern: "fzf-.*-linux_{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}\\.tar\\.gz"
+    asset_pattern: "fzf-.*-linux_{{ 'amd64' if ansible_architecture == 'x86_64' else arch_short[ansible_architecture] }}\\.tar\\.gz"
     binary: fzf
 
   - name: fd
@@ -63,7 +68,7 @@ github_tools:
   - name: lazygit
     repo: jesseduffield/lazygit
     version: latest
-    asset_pattern: "lazygit_.*_linux_{{ 'x86_64' if ansible_architecture == 'x86_64' else 'arm64' }}\\.tar\\.gz"
+    asset_pattern: "lazygit_.*_linux_{{ arch_short[ansible_architecture] }}\\.tar\\.gz"
     binary: lazygit
 
 # ── Zsh plugins ─────────────────────────────────────────────────────────────
@@ -125,4 +130,4 @@ nvim_plugin_files:
 # ── direnv ───────────────────────────────────────────────────────────────────
 direnv_repo: direnv/direnv
 direnv_version: latest
-direnv_asset_name: "direnv.linux-{{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }}"
+direnv_asset_name: "direnv.linux-{{ 'amd64' if ansible_architecture == 'x86_64' else arch_short[ansible_architecture] }}"

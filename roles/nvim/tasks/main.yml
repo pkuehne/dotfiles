@@ -34,13 +34,13 @@
 
     - name: Download tarball
       ansible.builtin.get_url:
-        url: "https://github.com/neovim/neovim/releases/download/{{ nvim_resolved_version }}/nvim-linux-{{ ansible_architecture }}.tar.gz"
-        dest: "/tmp/nvim-{{ nvim_resolved_version }}-{{ ansible_architecture }}.tar.gz"
+        url: "https://github.com/neovim/neovim/releases/download/{{ nvim_resolved_version }}/nvim-linux-{{ arch_short[ansible_architecture] }}.tar.gz"
+        dest: "/tmp/nvim-{{ nvim_resolved_version }}-{{ arch_short[ansible_architecture] }}.tar.gz"
         mode: "0644"
 
     - name: Extract tarball
       ansible.builtin.unarchive:
-        src: "/tmp/nvim-{{ nvim_resolved_version }}-{{ ansible_architecture }}.tar.gz"
+        src: "/tmp/nvim-{{ nvim_resolved_version }}-{{ arch_short[ansible_architecture] }}.tar.gz"
         dest: "{{ nvim_install_dir }}"
         remote_src: true
         extra_opts: ["--strip-components=1"]
