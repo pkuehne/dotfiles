@@ -34,7 +34,7 @@
     - name: "{{ tool.name }} | Download tarball"
       ansible.builtin.get_url:
         url: "{{ _tool_asset_url }}"
-        dest: "/tmp/{{ tool.name }}-{{ _tool_version }}.tar.gz"
+        dest: "/tmp/{{ tool.name }}-{{ _tool_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
         mode: "0644"
 
     - name: "{{ tool.name }} | Create temp extraction dir"
@@ -45,7 +45,7 @@
 
     - name: "{{ tool.name }} | Extract tarball"
       ansible.builtin.unarchive:
-        src: "/tmp/{{ tool.name }}-{{ _tool_version }}.tar.gz"
+        src: "/tmp/{{ tool.name }}-{{ _tool_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
         dest: "{{ tool_tmpdir.path }}"
         remote_src: true
 
