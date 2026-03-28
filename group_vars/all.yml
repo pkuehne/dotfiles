@@ -18,6 +18,11 @@ arch_short:
   x86_64: x86_64
   aarch64: arm64
 
+# tools that ship musl for x86_64 but only gnu for aarch64
+arch_linux:
+  x86_64: x86_64-unknown-linux-musl
+  aarch64: aarch64-unknown-linux-gnu
+
 # ── GitHub release tools ────────────────────────────────────────────────────
 # version: "latest" hits the GitHub API; or pin with e.g. "v0.18.9"
 # asset_pattern: regex matched against release asset filenames
@@ -26,7 +31,7 @@ github_tools:
   - name: eza
     repo: eza-community/eza
     version: latest
-    asset_pattern: "eza_{{ arch_musl[ansible_facts['architecture']] }}\\.tar\\.gz"
+    asset_pattern: "eza_{{ arch_linux[ansible_facts['architecture']] }}\\.tar\\.gz"
     binary: eza
 
   - name: fzf
@@ -38,13 +43,13 @@ github_tools:
   - name: fd
     repo: sharkdp/fd
     version: latest
-    asset_pattern: "fd-.*-{{ arch_musl[ansible_facts['architecture']] }}\\.tar\\.gz"
+    asset_pattern: "fd-.*-{{ arch_linux[ansible_facts['architecture']] }}\\.tar\\.gz"
     binary: fd
 
   - name: rg
     repo: BurntSushi/ripgrep
     version: latest
-    asset_pattern: "ripgrep-.*-{{ arch_musl[ansible_facts['architecture']] }}\\.tar\\.gz"
+    asset_pattern: "ripgrep-.*-{{ arch_linux[ansible_facts['architecture']] }}\\.tar\\.gz"
     binary: rg
 
   - name: dust
@@ -62,7 +67,7 @@ github_tools:
   - name: bat
     repo: sharkdp/bat
     version: latest
-    asset_pattern: "bat-.*-{{ arch_musl[ansible_facts['architecture']] }}\\.tar\\.gz"
+    asset_pattern: "bat-.*-{{ arch_linux[ansible_facts['architecture']] }}\\.tar\\.gz"
     binary: bat
 
   - name: lazygit
