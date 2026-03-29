@@ -1,0 +1,72 @@
+---
+- name: Check if dust binary exists
+  ansible.builtin.stat:
+    path: "{{ local_bin }}/dust"
+  register: dust_stat
+
+- name: Install dust
+  when: not dust_stat.stat.exists or (force_reinstall | default(false) | bool)
+  block:
+    - name: Get latest release from GitHub API
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/bootandy/dust/releases/latest"
+        return_content: true
+        headers:
+          Accept: "application/vnd.github.v3+json"
+      register: dust_release
+
+    - name: Set version and asset URL
+      ansible.builtin.set_fact:
+        _dust_version: "{{ dust_release.json.tag_name }}"
+        _dust_url: >-
+          {{
+            dust_release.json.assets
+            | selectattr('name', 'match', 'dust-.*-' + arch_musl[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | map(attribute='browser_download_url')
+            | list | first
+          }}
+
+    - name: Download tarball
+      ansible.builtin.get_url:
+        url: "{{ _dust_url }}"
+        dest: "/tmp/dust-{{ _dust_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
+        mode: "0644"
+
+    - name: Create temp extraction dir
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: _dust
+      register: dust_tmpdir
+
+    - name: Extract tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/dust-{{ _dust_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
+        dest: "{{ dust_tmpdir.path }}"
+        remote_src: true
+
+    - name: Find extracted binary
+      ansible.builtin.find:
+        paths: "{{ dust_tmpdir.path }}"
+        patterns: dust
+        recurse: true
+        file_type: file
+      register: dust_found
+
+    - name: Install binary to ~/.local/bin
+      ansible.builtin.copy:
+        src: "{{ dust_found.files[0].path }}"
+        dest: "{{ local_bin }}/dust"
+        mode: "0755"
+        remote_src: true
+
+    - name: Clean up temp dir
+      ansible.builtin.file:
+        path: "{{ dust_tmpdir.path }}"
+        state: absent
+
+- name: Symlink dust zshrc snippet
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/zsh/zshrc.d/73-dust.zsh"
+    dest: "{{ home_dir }}/.zshrc.d/73-dust.zsh"
+    state: link
+    force: true

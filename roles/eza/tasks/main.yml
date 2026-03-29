@@ -1,0 +1,72 @@
+---
+- name: Check if eza binary exists
+  ansible.builtin.stat:
+    path: "{{ local_bin }}/eza"
+  register: eza_stat
+
+- name: Install eza
+  when: not eza_stat.stat.exists or (force_reinstall | default(false) | bool)
+  block:
+    - name: Get latest release from GitHub API
+      ansible.builtin.uri:
+        url: "https://api.github.com/repos/eza-community/eza/releases/latest"
+        return_content: true
+        headers:
+          Accept: "application/vnd.github.v3+json"
+      register: eza_release
+
+    - name: Set version and asset URL
+      ansible.builtin.set_fact:
+        _eza_version: "{{ eza_release.json.tag_name }}"
+        _eza_url: >-
+          {{
+            eza_release.json.assets
+            | selectattr('name', 'match', 'eza_' + arch_linux[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | map(attribute='browser_download_url')
+            | list | first
+          }}
+
+    - name: Download tarball
+      ansible.builtin.get_url:
+        url: "{{ _eza_url }}"
+        dest: "/tmp/eza-{{ _eza_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
+        mode: "0644"
+
+    - name: Create temp extraction dir
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: _eza
+      register: eza_tmpdir
+
+    - name: Extract tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/eza-{{ _eza_version }}-{{ ansible_facts['architecture'] }}.tar.gz"
+        dest: "{{ eza_tmpdir.path }}"
+        remote_src: true
+
+    - name: Find extracted binary
+      ansible.builtin.find:
+        paths: "{{ eza_tmpdir.path }}"
+        patterns: eza
+        recurse: true
+        file_type: file
+      register: eza_found
+
+    - name: Install binary to ~/.local/bin
+      ansible.builtin.copy:
+        src: "{{ eza_found.files[0].path }}"
+        dest: "{{ local_bin }}/eza"
+        mode: "0755"
+        remote_src: true
+
+    - name: Clean up temp dir
+      ansible.builtin.file:
+        path: "{{ eza_tmpdir.path }}"
+        state: absent
+
+- name: Symlink eza zshrc snippet
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/files/zsh/zshrc.d/70-eza.zsh"
+    dest: "{{ home_dir }}/.zshrc.d/70-eza.zsh"
+    state: link
+    force: true
