@@ -5,7 +5,7 @@
 
   roles:
     - role: common
-      tags: [common, apt]
+      tags: [common]
 
     - role: git
       tags: [git]
@@ -42,6 +42,9 @@
 
     - role: lazygit
       tags: [lazygit, tools]
+
+    - role: cmake
+      tags: [cmake, tools]
 
     - role: direnv
       tags: [direnv]

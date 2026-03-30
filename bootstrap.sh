@@ -17,7 +17,6 @@ echo "==> Running playbook"
 "${VENV_DIR}/bin/ansible-playbook" \
   -i "${DOTFILES_DIR}/inventory/localhost.yml" \
   "${DOTFILES_DIR}/site.yml" \
-  -K \
   "$@"
 
 echo ""
