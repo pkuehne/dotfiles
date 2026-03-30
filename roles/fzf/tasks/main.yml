@@ -21,7 +21,7 @@
         _fzf_url: >-
           {{
             fzf_release.json.assets
-            | selectattr('name', 'match', 'fzf-.*-linux_' + ('amd64' if ansible_facts['architecture'] == 'x86_64' else arch_short[ansible_facts['architecture']]) + '\\.tar\\.gz')
+            | selectattr('name', 'match', 'fzf-.*-linux_' + ('amd64' if ansible_facts['architecture'] == 'x86_64' else arch_short[ansible_facts['architecture']]) + '\.tar\.gz')
             | map(attribute='browser_download_url')
             | list | first
           }}

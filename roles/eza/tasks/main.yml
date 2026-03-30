@@ -21,7 +21,7 @@
         _eza_url: >-
           {{
             eza_release.json.assets
-            | selectattr('name', 'match', 'eza_' + arch_linux[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | selectattr('name', 'match', 'eza_' + arch_linux[ansible_facts['architecture']] + '\.tar\.gz')
             | map(attribute='browser_download_url')
             | list | first
           }}

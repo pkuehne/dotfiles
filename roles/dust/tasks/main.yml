@@ -21,7 +21,7 @@
         _dust_url: >-
           {{
             dust_release.json.assets
-            | selectattr('name', 'match', 'dust-.*-' + arch_musl[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | selectattr('name', 'match', 'dust-.*-' + arch_musl[ansible_facts['architecture']] + '\.tar\.gz')
             | map(attribute='browser_download_url')
             | list | first
           }}

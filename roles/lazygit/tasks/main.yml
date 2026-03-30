@@ -21,7 +21,7 @@
         _lazygit_url: >-
           {{
             lazygit_release.json.assets
-            | selectattr('name', 'match', 'lazygit_.*_linux_' + arch_short[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | selectattr('name', 'match', 'lazygit_.*_linux_' + arch_short[ansible_facts['architecture']] + '\.tar\.gz')
             | map(attribute='browser_download_url')
             | list | first
           }}

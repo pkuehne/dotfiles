@@ -21,7 +21,7 @@
         _just_url: >-
           {{
             just_release.json.assets
-            | selectattr('name', 'match', 'just-.*-' + arch_musl[ansible_facts['architecture']] + '\\.tar\\.gz')
+            | selectattr('name', 'match', 'just-.*-' + arch_musl[ansible_facts['architecture']] + '\.tar\.gz')
             | map(attribute='browser_download_url')
             | list | first
           }}
