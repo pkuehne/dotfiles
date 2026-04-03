@@ -46,6 +46,9 @@
     - role: cmake
       tags: [cmake, tools]
 
+    - role: docker
+      tags: [docker]
+
     - role: zoxide
       tags: [zoxide, tools]
 
