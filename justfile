@@ -21,6 +21,12 @@ role tag *args:
 upgrade *args:
     {{venv}} -i {{inventory}} {{playbook}} --tags tools,nvim -e force_reinstall=true {{args}}
 
+# Pull latest changes and run the full playbook
+update:
+    git pull
+    just run
+    @echo "Done! Run: source ~/.zshrc"
+
 # List available tags
 tags:
     {{venv}} -i {{inventory}} {{playbook}} --list-tags
