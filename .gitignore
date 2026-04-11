@@ -1,4 +1,2 @@
-.venv/
-*.retry
-files/nvim/lazy-lock.json
+__pycache__/
 .claude/settings.local.json

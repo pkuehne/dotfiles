@@ -1,7 +1,0 @@
----
-- name: Symlink docker zshrc snippet
-  ansible.builtin.file:
-    src: "{{ dotfiles_dir }}/files/zsh/zshrc.d/75-docker.zsh"
-    dest: "{{ home_dir }}/.zshrc.d/75-docker.zsh"
-    state: link
-    force: true

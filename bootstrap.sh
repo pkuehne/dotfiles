@@ -2,22 +2,21 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VENV_DIR="${DOTFILES_DIR}/.venv"
 
-echo "==> Ensuring Python venv at ${VENV_DIR}"
-if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
-  python3 -m venv "${VENV_DIR}"
+# Install dots if not available
+if ! command -v dots &>/dev/null; then
+  echo "==> Installing dots"
+  python3 -m pip install --user git+https://github.com/peterkuehne/dots.git
 fi
 
-echo "==> Installing/upgrading ansible"
-"${VENV_DIR}/bin/pip" install --quiet --upgrade pip
-"${VENV_DIR}/bin/pip" install --quiet --upgrade ansible
+echo "==> Deploying dotfiles"
+dots --repo "${DOTFILES_DIR}" apply "$@"
 
-echo "==> Running playbook"
-"${VENV_DIR}/bin/ansible-playbook" \
-  -i "${DOTFILES_DIR}/inventory/localhost.yml" \
-  "${DOTFILES_DIR}/site.yml" \
-  "$@"
+echo "==> Installing tools"
+dots --repo "${DOTFILES_DIR}" tools install
+
+echo "==> Cloning repos"
+dots --repo "${DOTFILES_DIR}" repos clone
 
 echo ""
 echo "==> Done! To apply changes in future, run:"

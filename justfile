@@ -1,32 +1,24 @@
-# Dotfiles playbook runner
+# Dotfiles manager
 # Usage: just [recipe] [args]
 
-venv := ".venv/bin/ansible-playbook"
-inventory := "inventory/localhost.yml"
-playbook := "site.yml"
-
-# Run the full playbook
+# Deploy files and clone repos
 run *args:
-    {{venv}} -i {{inventory}} {{playbook}} {{args}}
+    dots --repo {{justfile_directory()}} apply {{args}}
 
 # Dry-run showing what would change
 check *args:
-    {{venv}} -i {{inventory}} {{playbook}} --check --diff {{args}}
+    dots --repo {{justfile_directory()}} preview {{args}}
 
-# Run a specific role by tag (e.g. just role zsh)
-role tag *args:
-    {{venv}} -i {{inventory}} {{playbook}} --tags {{tag}} {{args}}
+# Install configured tools
+tools *args:
+    dots --repo {{justfile_directory()}} tools install {{args}}
 
-# Force reinstall all tools and nvim (picks up new versions)
-upgrade *args:
-    {{venv}} -i {{inventory}} {{playbook}} --tags tools,nvim -e force_reinstall=true {{args}}
+# Show deployment status
+status:
+    dots --repo {{justfile_directory()}} status
 
-# Pull latest changes and run the full playbook
+# Pull latest changes and apply
 update:
     git pull
     just run
     @echo "Done! Run: source ~/.zshrc"
-
-# List available tags
-tags:
-    {{venv}} -i {{inventory}} {{playbook}} --list-tags
