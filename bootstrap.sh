@@ -4,6 +4,13 @@ set -euo pipefail
 DOTFILES_REPO="https://gitea.apps.peterkuehne.com/peter/dotfiles.git"
 DOTFILES_DIR="${HOME}/.config/dotfiles"
 
+# Ensure python3, pipx, and git are available
+if ! command -v pipx &>/dev/null || ! command -v git &>/dev/null; then
+  echo "==> Installing python3, pipx, and git"
+  sudo apt-get update -qq
+  sudo apt-get install -y python3 pipx git
+fi
+
 # When piped via curl | bash, BASH_SOURCE is not set — clone the repo first
 if [[ -z "${BASH_SOURCE[0]:-}" || "${BASH_SOURCE[0]}" == "bash" ]]; then
   if [[ ! -d "${DOTFILES_DIR}/.git" ]]; then
@@ -14,13 +21,6 @@ if [[ -z "${BASH_SOURCE[0]:-}" || "${BASH_SOURCE[0]}" == "bash" ]]; then
 fi
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Ensure python3, pipx, and git are available
-if ! command -v pipx &>/dev/null || ! command -v git &>/dev/null; then
-  echo "==> Installing python3, pipx, and git"
-  sudo apt-get update -qq
-  sudo apt-get install -y python3 pipx git
-fi
 
 # Install dots if not available
 if ! command -v dots &>/dev/null; then
