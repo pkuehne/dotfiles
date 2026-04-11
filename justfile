@@ -22,3 +22,8 @@ update:
     git pull
     just run
     @echo "Done! Run: source ~/.zshrc"
+
+# Upgrade dots itself, then update
+upgrade:
+    pipx install --force git+https://github.com/pkuehne/dots.git
+    just update
