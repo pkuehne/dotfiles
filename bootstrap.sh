@@ -4,6 +4,9 @@ set -euo pipefail
 DOTFILES_REPO="https://gitea.apps.peterkuehne.com/peter/dotfiles.git"
 DOTFILES_DIR="${HOME}/.config/dotfiles"
 
+# Ensure ~/.local/bin is on PATH (pipx installs there)
+export PATH="${HOME}/.local/bin:${PATH}"
+
 # Ensure python3, pipx, and git are available
 if ! command -v pipx &>/dev/null || ! command -v git &>/dev/null; then
   echo "==> Installing python3, pipx, and git"
