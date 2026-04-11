@@ -146,7 +146,7 @@ install = [
     { method = "github", repo = "ajeetdsouza/zoxide", asset = "zoxide-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "zoxide" },
 ]
 [tool.shell]
-init = 'eval "$(zoxide init zsh)"'
+init = 'eval "$(zoxide init {shell})"'
 
 [[tool]]
 name = "direnv"
@@ -157,7 +157,7 @@ install = [
     { method = "github", repo = "direnv/direnv", asset = "direnv.linux-{goarch}", binary = "direnv" },
 ]
 [tool.shell]
-init = 'eval "$(direnv hook zsh)"'
+init = 'eval "$(direnv hook {shell})"'
 
 [[tool]]
 name = "nvim"

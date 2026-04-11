@@ -21,6 +21,10 @@ tools *args:
 status:
     dots --repo {{justfile_directory()}} status
 
+# Clean generated files
+clean:
+    dots --repo {{justfile_directory()}} shell clean
+
 # Pull latest changes and apply
 update:
     git pull
@@ -30,4 +34,5 @@ update:
 # Upgrade dots itself, then update
 upgrade:
     pipx install --force git+https://github.com/pkuehne/dots.git
+    just clean
     just update
