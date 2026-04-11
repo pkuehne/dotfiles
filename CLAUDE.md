@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-Personal dotfiles managed by [dots](https://github.com/peterkuehne/dots), a custom Python-based dotfile manager. All machine configuration is declared in `dots.toml`. The dots tool handles file deployment (symlinks), tool installation, shell init generation, and git repo cloning.
+Personal dotfiles managed by [dots](https://github.com/pkuehne/dots), a custom Python-based dotfile manager. All machine configuration is declared in `dots.toml`. The dots tool handles file deployment (symlinks), tool installation, shell init generation, and git repo cloning.
 
 ## Common Commands
 

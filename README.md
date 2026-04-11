@@ -9,7 +9,7 @@ curl -fsSL https://gitea.apps.peterkuehne.com/peter/dotfiles/raw/branch/main/boo
 ```
 
 This will:
-1. Install the [dots](https://github.com/peterkuehne/dots) dotfile manager via pip
+1. Install the [dots](https://github.com/pkuehne/dots) dotfile manager via pip
 2. Symlink all dotfiles from the repo into `~`
 3. Install configured CLI tools
 4. Clone zsh and tmux plugins
