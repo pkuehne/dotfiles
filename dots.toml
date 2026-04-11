@@ -83,7 +83,7 @@ desc = "Fast grep replacement"
 check = "rg --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "BurntSushi/ripgrep", asset = "ripgrep-{version}-{arch}-unknown-linux-gnu.tar.gz", binary = "rg" },
+    { method = "github", repo = "BurntSushi/ripgrep", asset = "ripgrep-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "rg" },
 ]
 [tool.shell]
 init = "alias grep='rg --hidden --smart-case'"
@@ -125,7 +125,7 @@ desc = "Git TUI"
 check = "lazygit --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_Linux_{goarch}.tar.gz", binary = "lazygit" },
+    { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_linux_{goarch}.tar.gz", binary = "lazygit" },
 ]
 
 [[tool]]
@@ -165,7 +165,7 @@ desc = "Neovim editor"
 check = "nvim --version"
 tags = ["editor"]
 install = [
-    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{goarch}.tar.gz", binary = "nvim", strip = 2 },
+    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", strip = 2 },
 ]
 
 # ── Git repos ────────────────────────────────────────────────────────────────
