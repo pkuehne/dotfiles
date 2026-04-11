@@ -3,7 +3,7 @@
 
 # List available recipes
 help:
-    just --list
+    @just --list
 
 # Deploy files and clone repos
 run *args:
