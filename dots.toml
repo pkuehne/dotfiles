@@ -134,7 +134,7 @@ desc = "Build system"
 check = "cmake --version"
 tags = ["tools"]
 install = [
-    { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "cmake", strip = 2 },
+    { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "bin/cmake", strip = 1 },
 ]
 
 [[tool]]
