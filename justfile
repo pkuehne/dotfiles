@@ -1,6 +1,10 @@
 # Dotfiles manager
 # Usage: just [recipe] [args]
 
+# List available recipes
+help:
+    just --list
+
 # Deploy files and clone repos
 run *args:
     dots --repo {{justfile_directory()}} apply {{args}}
