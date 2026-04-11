@@ -125,7 +125,7 @@ desc = "Git TUI"
 check = "lazygit --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_linux_{arch}.tar.gz", binary = "lazygit" },
+    { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_linux_{arch}.tar.gz", binary = "lazygit", arch_map = { aarch64 = "arm64" } },
 ]
 
 [[tool]]
@@ -165,7 +165,7 @@ desc = "Neovim editor"
 check = "nvim --version"
 tags = ["editor"]
 install = [
-    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", strip = 2 },
+    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", strip = 2, arch_map = { aarch64 = "arm64" } },
 ]
 
 # ── Git repos ────────────────────────────────────────────────────────────────
