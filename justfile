@@ -1,9 +1,11 @@
 # Dotfiles manager
 # Usage: just [recipe] [args]
 
-# Deploy files and clone repos
+# Deploy files, install tools, and clone repos
 run *args:
     dots --repo {{justfile_directory()}} apply {{args}}
+    dots --repo {{justfile_directory()}} tools install
+    dots --repo {{justfile_directory()}} repos clone
 
 # Dry-run showing what would change
 check *args:
