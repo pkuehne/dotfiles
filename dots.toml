@@ -129,6 +129,15 @@ install = [
 ]
 
 [[tool]]
+name = "gh"
+desc = "GitHub CLI"
+check = "gh --version"
+tags = ["core"]
+install = [
+    { method = "github", repo = "cli/cli", asset = "gh_{version}_linux_{goarch}.tar.gz", binary = "gh", strip = 2 },
+]
+
+[[tool]]
 name = "cmake"
 desc = "Build system"
 check = "cmake --version"
