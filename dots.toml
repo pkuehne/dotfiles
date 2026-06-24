@@ -129,12 +129,21 @@ install = [
 ]
 
 [[tool]]
+name = "lazydocker"
+desc = "Docker TUI"
+check = "lazydocker --version"
+tags = ["core"]
+install = [
+    { method = "github", repo = "jesseduffield/lazydocker", asset = "lazydocker_*_Linux_{arch}.tar.gz", binary = "lazydocker", arch_map = { aarch64 = "arm64" } },
+]
+
+[[tool]]
 name = "gh"
 desc = "GitHub CLI"
 check = "gh --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "cli/cli", asset = "gh_{version}_linux_{goarch}.tar.gz", binary = "gh", strip = 2 },
+    { method = "github", repo = "cli/cli", asset = "gh_{version}_linux_{goarch}.tar.gz", binary = "gh" },
 ]
 
 [[tool]]
@@ -143,7 +152,7 @@ desc = "Build system"
 check = "cmake --version"
 tags = ["tools"]
 install = [
-    { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "cmake", strip = 2 },
+    { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "cmake" },
 ]
 
 [[tool]]
@@ -174,7 +183,7 @@ desc = "Neovim editor"
 check = "nvim --version"
 tags = ["editor"]
 install = [
-    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", strip = 2, arch_map = { aarch64 = "arm64" } },
+    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", arch_map = { aarch64 = "arm64" } },
 ]
 
 # ── Git repos ────────────────────────────────────────────────────────────────
