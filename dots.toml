@@ -47,7 +47,7 @@ install = [
 [[tool]]
 name = "smug"
 desc = "tmux session manager"
-check = "smug version"
+check = "smug --help"
 tags = ["core"]
 install = [
     { method = "github", repo = "ivaaaan/smug", asset = "smug_{version}_Linux_{arch}.tar.gz", binary = "smug", arch_map = { aarch64 = "arm64" } },

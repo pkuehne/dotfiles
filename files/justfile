@@ -1,0 +1,14 @@
+# Global recipes — invoke from anywhere with `just -g <recipe>`
+
+# Start/attach a smug 'dev' session named after the current directory
+[no-cd]
+dev:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    root="$PWD"
+    name="$(basename "$root" | tr '.: ' '___')"
+    if [ -n "${TMUX:-}" ]; then
+        smug start dev session="$name" root="$root" --attach
+    else
+        smug start dev session="$name" root="$root"
+    fi

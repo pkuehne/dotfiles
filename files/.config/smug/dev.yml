@@ -1,0 +1,17 @@
+session: ${session}
+root: ${root}
+
+windows:
+  - name: editor
+    commands:
+      - nvim
+  - name: claude
+    commands:
+      - claude
+  - name: run
+    layout: tiled
+    panes:
+      - ""
+      - ""
+      - ""
+      - ""
