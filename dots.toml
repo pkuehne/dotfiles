@@ -192,7 +192,7 @@ desc = "Neovim editor"
 check = "nvim --version"
 tags = ["editor"]
 install = [
-    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", arch_map = { aarch64 = "arm64" } },
+    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", install_dir = "~/.local/nvim", arch_map = { aarch64 = "arm64" } },
 ]
 
 # ── Git repos ────────────────────────────────────────────────────────────────
