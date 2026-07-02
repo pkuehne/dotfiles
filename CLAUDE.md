@@ -9,7 +9,7 @@ Personal dotfiles managed by [dots](https://github.com/pkuehne/dots), a custom P
 ## Common Commands
 
 ```bash
-just run         # dots apply — deploy symlinks from files/ to ~
+just apply       # dots apply — deploy symlinks from files/ to ~
 just check       # dots preview — dry-run, show what would change
 just tools       # dots tools install — install all configured tools
 just status      # dots list — show deployment state of each file
@@ -53,7 +53,7 @@ Mirrors the home directory structure. `dots apply` symlinks each file from `file
 
 ### Adding a new tool
 
-Add a `[[tool]]` entry in `dots.toml` following the existing pattern. For GitHub releases, use `%arch%` as a placeholder (dots substitutes the current architecture). Run `just tools` to install and `just run` to regenerate shell init files.
+Add a `[[tool]]` entry in `dots.toml` following the existing pattern. For GitHub releases, use `%arch%` as a placeholder (dots substitutes the current architecture). Run `just tools` to install and `just apply` to regenerate shell init files.
 
 ## Notes
 

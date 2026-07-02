@@ -45,6 +45,15 @@ install = [
 ]
 
 [[tool]]
+name = "smug"
+desc = "tmux session manager"
+check = "smug version"
+tags = ["core"]
+install = [
+    { method = "github", repo = "ivaaaan/smug", asset = "smug_{version}_Linux_{arch}.tar.gz", binary = "smug", arch_map = { aarch64 = "arm64" } },
+]
+
+[[tool]]
 name = "fzf"
 desc = "Fuzzy finder"
 check = "fzf --version"
@@ -225,24 +234,9 @@ repo = "tmux-plugins/tmux-yank"
 dst = "~/.tmux/plugins/tmux-yank"
 
 [[repo]]
-name = "tmux-resurrect"
-repo = "tmux-plugins/tmux-resurrect"
-dst = "~/.tmux/plugins/tmux-resurrect"
-
-[[repo]]
-name = "tmux-sessionist"
-repo = "tmux-plugins/tmux-sessionist"
-dst = "~/.tmux/plugins/tmux-sessionist"
-
-[[repo]]
 name = "tmux-suspend"
 repo = "MunifTanjim/tmux-suspend"
 dst = "~/.tmux/plugins/tmux-suspend"
-
-[[repo]]
-name = "tmux-continuum"
-repo = "tmux-plugins/tmux-continuum"
-dst = "~/.tmux/plugins/tmux-continuum"
 
 [[repo]]
 name = "tmux-dracula"

@@ -25,7 +25,7 @@ exec zsh
 Once the repo is cloned, use `just` to manage updates:
 
 ```bash
-just run     # deploy symlinks
+just apply   # deploy symlinks
 just tools   # install/update tools
 just update  # pull latest and deploy
 ```

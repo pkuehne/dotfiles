@@ -6,7 +6,7 @@ help:
     @just --list
 
 # Deploy files and clone repos
-run *args:
+apply *args:
     dots --repo {{justfile_directory()}} apply {{args}}
 
 # Dry-run showing what would change
@@ -28,7 +28,7 @@ clean:
 # Pull latest changes and apply
 update:
     git pull
-    just run
+    just apply
     @echo "Done! Run: source ~/.zshrc"
 
 # Upgrade dots itself, then update

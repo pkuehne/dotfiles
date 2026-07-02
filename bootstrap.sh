@@ -42,4 +42,4 @@ dots --repo "${DOTFILES_DIR}" repos clone
 
 echo ""
 echo "==> Done! To apply changes in future, run:"
-echo "      exec zsh && just run"
+echo "      exec zsh && just apply"

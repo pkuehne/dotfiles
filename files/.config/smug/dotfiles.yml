@@ -1,0 +1,10 @@
+session: dotfiles
+root: ~/.config/dotfiles
+
+windows:
+  - name: editor
+    commands:
+      - nvim
+  - name: claude
+    commands:
+      - claude
