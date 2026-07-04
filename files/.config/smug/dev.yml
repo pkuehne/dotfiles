@@ -11,7 +11,11 @@ windows:
   - name: run
     layout: tiled
     panes:
-      - ""
-      - ""
-      - ""
-      - ""
+      - commands:
+          - ""
+      - commands:
+          - ""
+      - commands:
+          - ""
+      - commands:
+          - ""

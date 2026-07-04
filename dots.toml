@@ -5,7 +5,7 @@ version = 1
 
 [shell]
 managed = true
-path = ["~/.local/bin"]
+path = ["~/.local/bin", "~/go/bin"]
 
 # ── Environment ──────────────────────────────────────────────────────────────
 
@@ -22,27 +22,21 @@ name = "git"
 desc = "Version control"
 check = "git --version"
 tags = ["core"]
-install = [
-    { method = "apt", package = "git" },
-]
+install = [{ method = "apt", package = "git" }]
 
 [[tool]]
 name = "zsh"
 desc = "Z shell"
 check = "zsh --version"
 tags = ["core", "shell"]
-install = [
-    { method = "apt", package = "zsh" },
-]
+install = [{ method = "apt", package = "zsh" }]
 
 [[tool]]
 name = "tmux"
 desc = "Terminal multiplexer"
 check = "tmux -V"
 tags = ["core"]
-install = [
-    { method = "apt", package = "tmux" },
-]
+install = [{ method = "apt", package = "tmux" }]
 
 [[tool]]
 name = "smug"
@@ -50,7 +44,7 @@ desc = "tmux session manager"
 check = "smug --help"
 tags = ["core"]
 install = [
-    { method = "github", repo = "ivaaaan/smug", asset = "smug_{version}_Linux_{arch}.tar.gz", binary = "smug", arch_map = { aarch64 = "arm64" } },
+  { method = "github", repo = "ivaaaan/smug", asset = "smug_{version}_Linux_{arch}.tar.gz", binary = "smug", arch_map = { aarch64 = "arm64" } },
 ]
 
 [[tool]]
@@ -59,7 +53,7 @@ desc = "Fuzzy finder"
 check = "fzf --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "junegunn/fzf", asset = "fzf-{version}-linux_{goarch}.tar.gz", binary = "fzf" },
+  { method = "github", repo = "junegunn/fzf", asset = "fzf-{version}-linux_{goarch}.tar.gz", binary = "fzf" },
 ]
 
 [[tool]]
@@ -68,7 +62,7 @@ desc = "Modern ls replacement"
 check = "eza --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "eza-community/eza", asset = "eza_{arch}-unknown-linux-musl.tar.gz", binary = "eza" },
+  { method = "github", repo = "eza-community/eza", asset = "eza_{arch}-unknown-linux-musl.tar.gz", binary = "eza" },
 ]
 [tool.shell]
 init = """
@@ -83,7 +77,7 @@ desc = "Fast find replacement"
 check = "fd --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "sharkdp/fd", asset = "fd-v{version}-{arch}-unknown-linux-gnu.tar.gz", binary = "fd" },
+  { method = "github", repo = "sharkdp/fd", asset = "fd-v{version}-{arch}-unknown-linux-gnu.tar.gz", binary = "fd" },
 ]
 
 [[tool]]
@@ -92,7 +86,7 @@ desc = "Fast grep replacement"
 check = "rg --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "BurntSushi/ripgrep", asset = "ripgrep-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "rg" },
+  { method = "github", repo = "BurntSushi/ripgrep", asset = "ripgrep-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "rg" },
 ]
 [tool.shell]
 init = "alias grep='rg --hidden --smart-case'"
@@ -103,7 +97,7 @@ desc = "Cat with syntax highlighting"
 check = "bat --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "sharkdp/bat", asset = "bat-v{version}-{arch}-unknown-linux-gnu.tar.gz", binary = "bat" },
+  { method = "github", repo = "sharkdp/bat", asset = "bat-v{version}-{arch}-unknown-linux-gnu.tar.gz", binary = "bat" },
 ]
 [tool.shell]
 init = "alias cat='bat --paging=never'"
@@ -114,7 +108,7 @@ desc = "Disk usage viewer"
 check = "dust --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "bootandy/dust", asset = "dust-v{version}-{arch}-unknown-linux-musl.tar.gz", binary = "dust" },
+  { method = "github", repo = "bootandy/dust", asset = "dust-v{version}-{arch}-unknown-linux-musl.tar.gz", binary = "dust" },
 ]
 [tool.shell]
 init = "alias du='dust'"
@@ -125,7 +119,7 @@ desc = "Command runner"
 check = "just --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "casey/just", asset = "just-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "just" },
+  { method = "github", repo = "casey/just", asset = "just-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "just" },
 ]
 
 [[tool]]
@@ -134,7 +128,7 @@ desc = "Git TUI"
 check = "lazygit --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_linux_{arch}.tar.gz", binary = "lazygit", arch_map = { aarch64 = "arm64" } },
+  { method = "github", repo = "jesseduffield/lazygit", asset = "lazygit_*_linux_{arch}.tar.gz", binary = "lazygit", arch_map = { aarch64 = "arm64" } },
 ]
 
 [[tool]]
@@ -143,7 +137,7 @@ desc = "Docker TUI"
 check = "lazydocker --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "jesseduffield/lazydocker", asset = "lazydocker_*_Linux_{arch}.tar.gz", binary = "lazydocker", arch_map = { aarch64 = "arm64" } },
+  { method = "github", repo = "jesseduffield/lazydocker", asset = "lazydocker_*_Linux_{arch}.tar.gz", binary = "lazydocker", arch_map = { aarch64 = "arm64" } },
 ]
 
 [[tool]]
@@ -152,7 +146,7 @@ desc = "GitHub CLI"
 check = "gh --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "cli/cli", asset = "gh_{version}_linux_{goarch}.tar.gz", binary = "gh" },
+  { method = "github", repo = "cli/cli", asset = "gh_{version}_linux_{goarch}.tar.gz", binary = "gh" },
 ]
 
 [[tool]]
@@ -161,7 +155,7 @@ desc = "Build system"
 check = "cmake --version"
 tags = ["tools"]
 install = [
-    { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "cmake" },
+  { method = "github", repo = "Kitware/CMake", asset = "cmake-*-linux-{arch}.tar.gz", binary = "cmake" },
 ]
 
 [[tool]]
@@ -170,7 +164,7 @@ desc = "Smart cd replacement"
 check = "zoxide --version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "ajeetdsouza/zoxide", asset = "zoxide-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "zoxide" },
+  { method = "github", repo = "ajeetdsouza/zoxide", asset = "zoxide-{version}-{arch}-unknown-linux-musl.tar.gz", binary = "zoxide" },
 ]
 [tool.shell]
 init = 'eval "$(zoxide init {shell})"'
@@ -181,7 +175,7 @@ desc = "Per-directory env vars"
 check = "direnv version"
 tags = ["core"]
 install = [
-    { method = "github", repo = "direnv/direnv", asset = "direnv.linux-{goarch}", binary = "direnv" },
+  { method = "github", repo = "direnv/direnv", asset = "direnv.linux-{goarch}", binary = "direnv" },
 ]
 [tool.shell]
 init = 'eval "$(direnv hook {shell})"'
@@ -192,7 +186,7 @@ desc = "Neovim editor"
 check = "nvim --version"
 tags = ["editor"]
 install = [
-    { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", install_dir = "~/.local/nvim", arch_map = { aarch64 = "arm64" } },
+  { method = "github", repo = "neovim/neovim", asset = "nvim-linux-{arch}.tar.gz", binary = "nvim", install_dir = "~/.local/nvim", arch_map = { aarch64 = "arm64" } },
 ]
 
 # ── Git repos ────────────────────────────────────────────────────────────────
