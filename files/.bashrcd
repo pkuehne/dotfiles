@@ -1,0 +1,13 @@
+# Shared interactive Bash configuration.
+#
+# Source this from a local ~/.bashrc after any system-specific baseline. For
+# example: [[ -r ~/.bashrcd ]] && source ~/.bashrcd. Files in
+# ~/.config/bashrc.d are loaded in lexical order, so use numeric prefixes.
+[[ $- != *i* ]] && return
+
+for bashrc_fragment in "${HOME}/.config/bashrc.d"/*.bash; do
+  [[ -r ${bashrc_fragment} ]] || continue
+  # shellcheck disable=SC1090
+  source "${bashrc_fragment}"
+done
+unset bashrc_fragment

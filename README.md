@@ -71,7 +71,7 @@ The global mise config declares Codex, Go, Node 26, tmux, fzf, eza, fd, ripgrep,
 
 Omarchy system binaries deliberately remain earlier on `PATH` and may shadow overlapping mise tools. Use `mise x -- <command>` when the locked copy is required explicitly.
 
-The managed `.bashrc` sources Omarchy's Bash defaults when present. On Ubuntu/WSL it provides mise, zoxide, direnv, and fzf activation, eza aliases, fzf previews, and the Docker `dps`/`dsel` helpers. Zsh, Powerlevel10k, and their plugins are no longer used.
+The repository deliberately does not manage `.bashrc`: each host retains its system-specific baseline (including Omarchy's). To opt in, source the portable `~/.bashrcd` loader at the end of that baseline; it reads `~/.config/bashrc.d/*.bash` in lexical order. Each tool-specific fragment returns successfully without side effects when its command is unavailable. The fragments provide mise, zoxide, direnv, and fzf activation, eza aliases, fzf previews, and the Docker `dps`/`dsel` helpers. Zsh, Powerlevel10k, and their plugins are no longer used.
 
 ## Omarchy ownership
 
