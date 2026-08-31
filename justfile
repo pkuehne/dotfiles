@@ -1,7 +1,5 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-default: help
-
 # List available recipes
 help:
     @just --list

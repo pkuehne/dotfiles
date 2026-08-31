@@ -32,4 +32,4 @@ neovim = "latest"
 
 [tasks.bootstrap]
 description = "Install tmux plugins declared in tmux.conf."
-run = "~/.tmux/plugins/tpm/bin/install_plugins"
+run = "tmux start-server \\; source-file ~/.config/tmux/tmux.conf && ~/.tmux/plugins/tpm/bin/install_plugins"
