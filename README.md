@@ -24,7 +24,7 @@ Then bootstrap directly from the repository:
 ```bash
 mise bootstrap \
   --from https://gitea.apps.peterkuehne.com/peter/dotfiles.git \
-  --from-dir ~/.config/dotfiles \
+  --from-dir ~/dotfiles \
   --yes \
   --locked
 ```
@@ -34,7 +34,7 @@ Mise clones the repository, installs the declared plugin repositories, links the
 For an existing checkout:
 
 ```bash
-cd ~/.config/dotfiles
+cd ~/dotfiles
 mise trust
 mise bootstrap --yes --locked
 ```
@@ -45,7 +45,7 @@ mise bootstrap --yes --locked
 mise bootstrap --dry-run                 # preview without changing anything
 mise bootstrap status                    # inspect repos, dotfiles, and tools
 mise bootstrap --yes --locked            # converge using the existing lock
-mise bootstrap --from https://gitea.apps.peterkuehne.com/peter/dotfiles.git --from-dir ~/.config/dotfiles --update --yes --locked
+mise bootstrap --from https://gitea.apps.peterkuehne.com/peter/dotfiles.git --from-dir ~/dotfiles --update --yes --locked
 mise lock --platform linux-x64 --bump     # intentionally advance tool versions
 mise bootstrap dotfiles unapply --dry-run
 ```
@@ -56,7 +56,7 @@ The retained `justfile` is a convenience interface over Mise: use `just check`, 
 
 ## Machine profiles
 
-Common configuration lives in `mise.toml`. Machine-specific files can be declared in environment configs such as `mise.home.toml` and `mise.work.toml`, then selected during bootstrap:
+Common configuration lives in `mise/config.toml`. Machine-specific files can be declared in environment configs such as `mise/config.home.toml` and `mise/config.work.toml`, then selected during bootstrap:
 
 ```bash
 mise bootstrap -E home --yes --locked
@@ -67,7 +67,7 @@ Profile dotfile declarations merge with the common set. When switching profiles,
 
 ## Tools and shell
 
-The global mise config declares Codex, Go, Node 26, tmux, fzf, eza, fd, ripgrep, bat, dust, lazygit, lazydocker, GitHub CLI, CMake, zoxide, direnv, and Neovim. Git and mise remain bootstrap prerequisites. The committed `mise.lock` targets Linux x64.
+The global mise config declares Codex, Go, Node 26, tmux, fzf, eza, fd, ripgrep, bat, dust, lazygit, lazydocker, GitHub CLI, CMake, zoxide, direnv, and Neovim. Git and mise remain bootstrap prerequisites. The committed `mise/mise.lock` targets Linux x64.
 
 Omarchy system binaries deliberately remain earlier on `PATH` and may shadow overlapping mise tools. Use `mise x -- <command>` when the locked copy is required explicitly.
 

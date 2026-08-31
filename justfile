@@ -33,5 +33,5 @@ profile environment:
 
 # Intentionally refresh the Linux x64 tool lockfile, then install it
 upgrade:
-    mise lock --global --platform linux-x64 --bump
+    mise lock --platform linux-x64 --bump
     mise bootstrap --yes --locked

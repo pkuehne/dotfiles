@@ -2,8 +2,8 @@
 
 ## Architecture
 
-- `mise.toml` is the single machine-bootstrap and tool configuration.
-- `mise.lock` locks Linux x64 tool artifacts.
+- `mise/config.toml` is the single machine-bootstrap and tool configuration.
+- `mise/mise.lock` locks Linux x64 tool artifacts.
 - `files/` maps onto `$HOME` through Mise `symlink-each` mode with a Git manifest.
 - Mise bootstraps TPM; TPM installs the plugins declared in `tmux.conf`.
 - `justfile` provides convenience recipes over Mise and owns no machine state.
