@@ -1,0 +1,68 @@
+# Omarchy establishes its environment for interactive and non-interactive Bash.
+if [[ -r /usr/share/omarchy/default/bash/env-bootstrap ]]; then
+  # shellcheck disable=SC1091
+  source /usr/share/omarchy/default/bash/env-bootstrap
+fi
+
+[[ $- != *i* ]] && return
+
+if [[ -n ${OMARCHY_PATH:-} && -r ${OMARCHY_PATH}/default/bash/rc ]]; then
+  # shellcheck disable=SC1090
+  source "${OMARCHY_PATH}/default/bash/rc"
+else
+  export PATH="${HOME}/.local/bin:${HOME}/.local/share/mise/shims:${HOME}/go/bin:${PATH}"
+  export EDITOR="${EDITOR:-nvim}"
+
+  if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate bash)"
+  fi
+
+  if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init bash)"
+  fi
+
+  if command -v direnv >/dev/null 2>&1; then
+    eval "$(direnv hook bash)"
+  fi
+
+  if command -v fzf >/dev/null 2>&1; then
+    eval "$(fzf --bash)"
+  fi
+
+  if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --group-directories-first --icons=auto'
+    alias ll='eza -lh --git --group-directories-first --icons=auto'
+    alias la='eza -lha --git --group-directories-first --icons=auto'
+    alias lt='eza --tree --level=2 --long --git --icons=auto'
+  fi
+fi
+
+if command -v fd >/dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+  export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
+  export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
+fi
+
+export FZF_DEFAULT_OPTS='--height=40% --layout=reverse --border=rounded --info=inline --bind=alt-p:toggle-preview'
+
+if command -v bat >/dev/null 2>&1; then
+  export FZF_CTRL_T_OPTS="--preview='bat --color=always --style=numbers --line-range=:50 {}' --preview-window=right:55%"
+fi
+
+if command -v eza >/dev/null 2>&1; then
+  export FZF_ALT_C_OPTS="--preview='eza --tree --color=always --level=2 {}' --preview-window=right:45%"
+fi
+
+export FZF_CTRL_R_OPTS="--preview='printf %s {}' --preview-window=down:3:wrap --sort --exact"
+
+if command -v docker >/dev/null 2>&1; then
+  dps() {
+    docker ps -a --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}'
+  }
+
+  dsel() {
+    docker ps -a --format '{{.ID}}\t{{.Names}}\t{{.Status}}' \
+      | fzf --prompt='container> ' --header='ID  NAME  STATUS' \
+      | cut -f1
+  }
+fi

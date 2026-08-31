@@ -1,50 +1,47 @@
-[alias]
-	d = "difftool"
-	logdog = "log --decorate --oneline --graph"
-	logdogs = "log --decorate --oneline --graph --simplify-by-decoration"
+# See https://git-scm.com/docs/git-config
 
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	logdog = log --decorate --oneline --graph
+	logdogs = log --decorate --oneline --graph --simplify-by-decoration
+[branch]
+	sort = -committerdate     # Sort branches by most recent commit first
 [color]
 	ui = true
-
+[column]
+	ui = auto                 # Output in columns when possible
 [commit]
-	gpgSign = true
-
+	gpgSign = true            # Ensure we sign all commits by default
+	verbose = true            # Include diff comment in commit message template
 [core]
-	autocrlf = "input"
-	editor = "nvim"
-	excludesfile = "/home/peter/.gitignore_global"
-
-[credential]
-	helper = "store"
-
+	autocrlf = input
+	editor = nvim
+	excludesfile = ~/.gitignore_global
 [diff]
-	tool = "vimdiff"
-
-[difftool]
-	prompt = false
-
+	algorithm = histogram     # Clearer diffs on moved/edited lines
+	colorMoved = plain        # Highlight moved blocks in diffs
+	mnemonicPrefix = true     # More intuitive refs in diff output
 [gpg]
-	format = "ssh"
-
+	format = ssh
 [gpg "ssh"]
-	allowedSignersFile = "/home/peter/.ssh/allowed_signers"
-
-[http]
-	sslCAInfo = "/etc/ssl/certs/ca-certificates.crt"
-
+	allowedSignersFile = ~/.ssh/allowed_signers
+  program = "/opt/1Password/op-ssh-sign"
 [init]
-	defaultBranch = "main"
-
+	defaultBranch = main      # It's main now, don't care what DHH thinks
 [pull]
-	rebase = false
-
+	rebase = true             # Rebase (instead of merge) on pull
 [push]
-	default = "current"
-
+  autoSetupRemote = true    # Automatically set upstream branch on push
+[rerere]
+	enabled = true            # Record and reuse conflict resolutions
+	autoupdate = true         # Apply stored conflict resolutions automatically
 [tag]
-	gpgSign = true
-
+	gpgSign = true            # Tags should be signed by default
+	sort = -version:refname   # Sort version numbers as you would expect
 [user]
-	email = "peter.kuehne@gmail.com"
-	name = "Peter Kuehne"
-	signingKey = "/home/peter/.ssh/id_peter.pub"
+	name = Peter Kuehne
+	email = peter.kuehne@gmail.com
+	signingKey = ~/.ssh/id_peter.pub

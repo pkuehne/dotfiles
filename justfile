@@ -1,38 +1,37 @@
-# Dotfiles manager
-# Usage: just [recipe] [args]
+set shell := ["bash", "-euo", "pipefail", "-c"]
+
+default: help
 
 # List available recipes
 help:
     @just --list
 
-# Deploy files and clone repos
-apply *args:
-    dots --repo {{justfile_directory()}} apply {{args}}
+# Link dotfiles and install locked tools
+setup: link tools
 
-# Dry-run showing what would change
-check *args:
-    dots --repo {{justfile_directory()}} preview {{args}}
+# Deploy the Stow package into $HOME
+link:
+    stow --restow --verbose --no-folding --target="${HOME}" files
 
-# Install configured tools
-tools *args:
-    dots --repo {{justfile_directory()}} tools install {{args}}
+# Simulate Stow without changing $HOME
+check:
+    stow --simulate --verbose --no-folding --target="${HOME}" files
 
-# Show deployment status
-status:
-    dots --repo {{justfile_directory()}} status
+# Remove links created by Stow
+unlink:
+    stow --delete --verbose --no-folding --target="${HOME}" files
 
-# Clean generated files
-clean:
-    dots --repo {{justfile_directory()}} shell clean
+# Install exactly the tool versions and artifacts recorded in mise.lock
+tools:
+    MISE_IGNORED_CONFIG_PATHS="${HOME}/.config/mise" MISE_GLOBAL_CONFIG_FILE="{{ justfile_directory() }}/files/.config/mise/config.toml" mise install --locked
 
-# Pull latest changes and apply
+# Pull changes, restow files, and install from the existing lock
 update:
-    git pull
-    just apply
-    @echo "Done! Run: source ~/.zshrc"
+    git pull --ff-only
+    just link
+    just tools
 
-# Upgrade dots itself, then update
+# Intentionally advance fuzzy selectors, refresh the Linux x64 lock, and install
 upgrade:
-    pipx install --force git+https://github.com/pkuehne/dots.git
-    just clean
-    just update
+    MISE_IGNORED_CONFIG_PATHS="${HOME}/.config/mise" MISE_GLOBAL_CONFIG_FILE="{{ justfile_directory() }}/files/.config/mise/config.toml" mise lock --global --platform linux-x64 --bump
+    just tools

@@ -1,61 +1,36 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## What This Repo Is
-
-Personal dotfiles managed by [dots](https://github.com/pkuehne/dots), a custom Python-based dotfile manager. All machine configuration is declared in `dots.toml`. The dots tool handles file deployment (symlinks), tool installation, shell init generation, and git repo cloning.
-
-## Common Commands
-
-```bash
-just apply       # dots apply — deploy symlinks from files/ to ~
-just check       # dots preview — dry-run, show what would change
-just tools       # dots tools install — install all configured tools
-just status      # dots list — show deployment state of each file
-just update      # git pull, dots apply, prompt to source .zshrc
-```
-
-You can also call dots directly:
-```bash
-dots apply
-dots preview
-dots tools install
-dots repos clone
-```
+# Repository guidance
 
 ## Architecture
 
-### dots.toml
+- `files/` is one GNU Stow package targeting `$HOME`.
+- `files/.config/mise/config.toml` declares tools; `mise.lock` locks Linux x64 artifacts.
+- The `link` recipe runs `stow --restow --no-folding` directly; Stow conflicts are never modified automatically.
+- `bootstrap.sh` supports Arch/Omarchy and Debian/Ubuntu and installs only Git, Stow, and mise.
 
-The single source of truth for the entire configuration. Key sections:
+## Normal workflow
 
-- **`[shell]`** — declares managed PATH entries and whether dots owns the shell init dir
-- **`[env]`** — environment variables injected into generated shell init
-- **`[[tool]]`** — one entry per CLI tool; each entry declares:
-  - `check` — command to verify the tool is installed
-  - `install` — install method (apt package name, or GitHub release with URL pattern)
-  - `[tool.shell]` block with `init` — zsh snippet dots generates into `~/.config/dots/shell.d/050-<name>.sh`
-- **`[[repo]]`** — git repos to clone (zsh plugins, tmux plugins, etc.)
+```bash
+just check
+just link
+just tools
+just update
+just upgrade
+```
 
-### Shell init layering
+`update` must preserve the existing lock. Only `upgrade` may advance fuzzy mise selectors and update the lockfile. Never use `stow --adopt`.
 
-Dots manages `~/.zshrc` to source everything in `~/.config/dots/shell.d/`. Files in that directory come from two sources:
+## Ownership boundaries
 
-1. **Auto-generated** by dots from `dots.toml` — environment (`010-env.sh`), PATH (`020-path.sh`), and per-tool snippets (`050-<tool>.sh`)
-2. **Copied from `shell/`** — manual shell config files prefixed 030–090 (history, keybindings, completions, plugins, fzf, docker helpers, p10k)
+- Preserve the tracked `~/.config/tmux/tmux.conf` and its existing keybindings and TPM declarations.
+- Track only Hyprland files that differ from `/usr/share/omarchy/config/hypr`; currently that is `monitors.lua`.
+- Keep Omarchy theme includes in Kitty and Neovim integration intact.
+- Never track Omarchy-generated `nvim/lua/plugins/theme.lua` or Omarchy theme/state directories.
+- Omarchy migrations can write through Stow symlinks; inspect resulting diffs.
 
-Do not edit files in `~/.config/dots/shell.d/` directly; they are regenerated. Edit `shell/` or `dots.toml` instead.
+## Sensitive files
 
-### files/ directory
+Only public SSH material and client configuration belong here. Never add private keys, credentials, `known_hosts`, agent/control sockets, or other secrets. Private SSH keys are provisioned separately.
 
-Mirrors the home directory structure. `dots apply` symlinks each file from `files/` into `~`. To add a new dotfile, place it at the corresponding path under `files/` (e.g., `files/.config/foo/bar.conf`).
+## Validation
 
-### Adding a new tool
-
-Add a `[[tool]]` entry in `dots.toml` following the existing pattern. For GitHub releases, use `%arch%` as a placeholder (dots substitutes the current architecture). Run `just tools` to install and `just apply` to regenerate shell init files.
-
-## Notes
-
-- apt package installs belong in `bootstrap.sh`, not in tool entries, so that the dots playbook never needs sudo for day-to-day use (see feedback memory).
-- Custom bat syntaxes (e.g., Just syntax highlighting) are sourced from `.sublime-syntax` files placed in `files/.config/bat/syntaxes/`; rebuild the bat cache after adding new syntaxes with `bat cache --build`.
+Do not deploy to the real home or install tools merely to test a change. Use `bash -n`, ShellCheck when available, `just --dry-run`, mise's locked install dry-run, and a temporary Stow target. Neovim checks should use temporary XDG directories and cover both the presence and absence of the generated Omarchy theme file.
