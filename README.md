@@ -1,41 +1,73 @@
 # dotfiles
 
-Portable Linux dotfiles managed as one [GNU Stow](https://www.gnu.org/software/stow/) package, with CLI versions managed by [mise](https://mise.jdx.dev/). Supported targets are x86_64 Omarchy/Arch and Ubuntu/Debian under WSL.
+Portable Linux workstation configuration managed entirely by [mise](https://mise.jdx.dev/). Supported targets are x86_64 Omarchy/Arch and Ubuntu/Debian under WSL.
 
 ## Bootstrap
 
-On a fresh machine:
+Git and mise 2026.8.16 or newer are the only prerequisites. On Omarchy/Arch:
 
 ```bash
-curl -fsSL https://gitea.apps.peterkuehne.com/peter/dotfiles/raw/branch/main/bootstrap.sh | bash
+omarchy pkg add git mise
 ```
 
-The bootstrap installs only Git, GNU Stow, and mise, then clones this repository when needed. It does not deploy dotfiles or install the declared tools automatically. Run the command it prints:
+On Ubuntu/WSL, install Git and then install the current mise release:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git curl
+curl https://mise.run | sh
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Then bootstrap directly from the repository:
+
+```bash
+mise bootstrap \
+  --from https://gitea.apps.peterkuehne.com/peter/dotfiles.git \
+  --from-dir ~/.config/dotfiles \
+  --yes \
+  --locked
+```
+
+Mise clones the repository, installs the declared plugin repositories, links the dotfiles, exposes this configuration globally, and installs the locked tools. Existing files that conflict with managed links are refused rather than overwritten; resolve them and rerun the command.
+
+For an existing checkout:
 
 ```bash
 cd ~/.config/dotfiles
-mise x just@latest -- just setup
+mise trust
+mise bootstrap --yes --locked
 ```
-
-Stow refuses to replace existing regular files, so resolve any reported conflicts before the first deployment.
 
 ## Commands
 
 ```bash
-just check    # simulate Stow; make no changes
-just link     # restow files
-just unlink   # remove Stow-managed links
-just tools    # install only versions/artifacts in mise.lock
-just setup    # link, then install locked tools
-just update   # git pull, restow, and use the existing lock
-just upgrade  # advance fuzzy selectors and refresh the Linux x64 lock
+mise bootstrap --dry-run                 # preview without changing anything
+mise bootstrap status                    # inspect repos, dotfiles, and tools
+mise bootstrap --yes --locked            # converge using the existing lock
+mise bootstrap --from https://gitea.apps.peterkuehne.com/peter/dotfiles.git --from-dir ~/.config/dotfiles --update --yes --locked
+mise lock --platform linux-x64 --bump     # intentionally advance tool versions
+mise bootstrap dotfiles unapply --dry-run
 ```
 
-`files/` is the sole Stow package and maps directly onto `$HOME`. Stow runs with `--no-folding`, leaving ordinary target directories around individually managed links.
+`files/` maps onto `$HOME` using Mise's `symlink-each` mode and a Git manifest. This leaves ordinary target directories in place, links only tracked files, and does not touch unmanaged neighbours.
+
+The retained `justfile` is a convenience interface over Mise: use `just check`, `just apply`, `just reapply`, `just update`, or `just profile work`. It owns no machine state itself.
+
+## Machine profiles
+
+Common configuration lives in `mise.toml`. Machine-specific files can be declared in environment configs such as `mise.home.toml` and `mise.work.toml`, then selected during bootstrap:
+
+```bash
+mise bootstrap -E home --yes --locked
+mise bootstrap -E work --yes --locked
+```
+
+Profile dotfile declarations merge with the common set. When switching profiles, Mise reconciles links it previously managed while preserving unrelated files.
 
 ## Tools and shell
 
-The global mise config declares Codex, Go, Node 26, tmux, fzf, eza, fd, ripgrep, bat, dust, just, lazygit, lazydocker, GitHub CLI, CMake, zoxide, direnv, and Neovim. Git remains a system/bootstrap dependency. The committed `mise.lock` targets Linux x64.
+The global mise config declares Codex, Go, Node 26, tmux, fzf, eza, fd, ripgrep, bat, dust, lazygit, lazydocker, GitHub CLI, CMake, zoxide, direnv, and Neovim. Git and mise remain bootstrap prerequisites. The committed `mise.lock` targets Linux x64.
 
 Omarchy system binaries deliberately remain earlier on `PATH` and may shadow overlapping mise tools. Use `mise x -- <command>` when the locked copy is required explicitly.
 
@@ -45,7 +77,7 @@ The managed `.bashrc` sources Omarchy's Bash defaults when present. On Ubuntu/WS
 
 This repository manages the working Kitty, fontconfig, Neovim, and modified Hyprland monitor configuration. All other Hyprland files remain owned by Omarchy. Theme includes are retained, generated theme/state directories are not tracked, and Omarchy-generated `~/.config/nvim/lua/plugins/theme.lua` remains an unmanaged live file.
 
-The existing `~/.config/tmux/tmux.conf` is retained as a Stow target, including its prefix, keybindings, and TPM plugin declarations.
+The existing `~/.config/tmux/tmux.conf` retains its prefix and keybindings. Mise bootstraps TPM, then TPM installs Resurrect and Continuum declared in the tmux configuration. Continuum saves the tmux environment every 15 minutes and restores the latest save when a new tmux server starts.
 
 Omarchy migrations and theme tooling can write through managed symlinks. Review `git diff` after an Omarchy update or migration. Theme switching should continue to update the includes under `~/.local/state/omarchy/current/theme` without changing tracked theme state.
 

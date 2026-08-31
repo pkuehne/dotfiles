@@ -6,32 +6,32 @@ default: help
 help:
     @just --list
 
-# Link dotfiles and install locked tools
-setup: link tools
-
-# Deploy the Stow package into $HOME
-link:
-    stow --restow --verbose --no-folding --target="${HOME}" files
-
-# Simulate Stow without changing $HOME
+# Preview all bootstrap changes without applying them
 check:
-    stow --simulate --verbose --no-folding --target="${HOME}" files
+    mise bootstrap --dry-run
 
-# Remove links created by Stow
-unlink:
-    stow --delete --verbose --no-folding --target="${HOME}" files
+# Show the state of managed repositories, dotfiles, and tools
+status:
+    mise bootstrap status
 
-# Install exactly the tool versions and artifacts recorded in mise.lock
-tools:
-    MISE_IGNORED_CONFIG_PATHS="${HOME}/.config/mise" MISE_GLOBAL_CONFIG_FILE="{{ justfile_directory() }}/files/.config/mise/config.toml" mise install --locked
+# Converge the complete workstation using the committed lockfile
+apply:
+    mise bootstrap --yes --locked
 
-# Pull changes, restow files, and install from the existing lock
+# Reapply only the managed dotfile links
+reapply:
+    mise bootstrap dotfiles apply --yes
+
+# Update this checkout and managed repositories, then converge the workstation
 update:
     git pull --ff-only
-    just link
-    just tools
+    mise bootstrap --update --yes --locked
 
-# Intentionally advance fuzzy selectors, refresh the Linux x64 lock, and install
+# Apply a named Mise configuration environment, such as `just profile work`
+profile environment:
+    mise bootstrap -E {{environment}} --yes --locked
+
+# Intentionally refresh the Linux x64 tool lockfile, then install it
 upgrade:
-    MISE_IGNORED_CONFIG_PATHS="${HOME}/.config/mise" MISE_GLOBAL_CONFIG_FILE="{{ justfile_directory() }}/files/.config/mise/config.toml" mise lock --global --platform linux-x64 --bump
-    just tools
+    mise lock --global --platform linux-x64 --bump
+    mise bootstrap --yes --locked
