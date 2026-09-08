@@ -1,5 +1,7 @@
 gui:
   nerdFontsVersion: "3"
+  showBottomLine: false
+  border: rounded
   theme:
     activeBorderColor:
       - "#bd93f9"
@@ -7,22 +9,28 @@ gui:
     inactiveBorderColor:
       - "#6272a4"
     searchingActiveBorderColor:
-      - "#8be9fd"
+      - "#ffb86c"
       - bold
     optionsTextColor:
-      - "#bd93f9"
+      - "#8be9fd"
     selectedLineBgColor:
       - "#44475a"
-    inactiveViewSelectedLineBgColor:
-      - "#44475a"
     cherryPickedCommitFgColor:
-      - "#f1fa8c"
+      - "#ff79c6"
     cherryPickedCommitBgColor:
+      - "#44475a"
+    markedBaseCommitFgColor:
+      - "#ffb86c"
+    markedBaseCommitBgColor:
       - "#44475a"
     unstagedChangesColor:
       - "#ff5555"
     defaultFgColor:
       - "#f8f8f2"
+git:
+  diffRenderers:
+    - colorArg: always
+      command: delta --dark --paging=never
 
 os:
   edit: "nvim {{filename}}"

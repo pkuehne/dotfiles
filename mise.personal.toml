@@ -1,0 +1,20 @@
+# Personal-machine layer. bootstrap.sh symlinks this to
+# ~/.config/mise/conf.d/personal.toml; the work bootstrap deliberately does not,
+# and removes it if it finds one.
+#
+# Everything here is config that must NOT reach a work machine and that an
+# overlay cannot suppress: mise has no way to switch off a [dotfiles] entry or
+# drop a [tools] entry inherited from a lower layer (`enabled = false` applies
+# to tracking entries only — a whole-file entry using it is warned about and
+# ignored, and the inherited entry still applies), so anything a work box must
+# not get has to be absent from the base rather than disabled on top of it.
+
+[tools]
+codex = "latest"
+
+[dotfiles]
+"~/.config/mise/conf.d/personal.toml" = { source = "~/dotfiles/mise.personal.toml" }
+
+"~/.ssh/config"          = { source = "~/dotfiles/files/.ssh/config" }
+"~/.ssh/allowed_signers" = { source = "~/dotfiles/files/.ssh/allowed_signers" }
+"~/.ssh/id_peter.pub"    = { source = "~/dotfiles/files/.ssh/id_peter.pub" }

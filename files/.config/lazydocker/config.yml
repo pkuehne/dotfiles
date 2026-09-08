@@ -1,0 +1,15 @@
+gui:
+  showAllContainers: true
+  border: rounded
+  theme:
+    activeBorderColor:
+      - "#bd93f9"
+      - bold
+    inactiveBorderColor:
+      - "#6272a4"
+    optionsTextColor:
+      - "#8be9fd"
+    selectedLineBgColor:
+      - "#44475a"
+    defaultFgColor:
+      - "#f8f8f2"

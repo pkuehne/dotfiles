@@ -1,0 +1,9 @@
+HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history
+[[ -d ${HISTFILE:h} ]] || mkdir -p ${HISTFILE:h}
+HISTSIZE=50000
+SAVEHIST=50000
+setopt APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+setopt SHARE_HISTORY

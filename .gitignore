@@ -1,4 +1,3 @@
 __pycache__/
 .claude/settings.local.json
 .mise.local.toml
-files/.config/mise/

@@ -1,7 +1,5 @@
-# bat configuration
-# https://github.com/sharkdp/bat#configuration-file
-
---theme=Dracula
---style=numbers,changes,header
---italic-text=always
+--theme="Dracula"
+--style="numbers,changes,header"
 --pager="less -FR"
+--tabs=4
+--italic-text=always

@@ -1,35 +1,40 @@
-set shell := ["bash", "-euo", "pipefail", "-c"]
+# Thin wrappers around mise — everything real is declared in mise.toml.
+# No -C: every config in ~/.config/mise/conf.d is global, so a bare
+# `mise bootstrap` converges this repo and any overlay layered on top of it.
+default: help
 
-# List available recipes
 help:
-    @just --list
+  just --list
 
-# Preview all bootstrap changes without applying them
-check:
-    mise bootstrap --dry-run
+# Install mise itself
+install:
+  curl -fsSL https://mise.run | sh
+  mise --version
 
-# Show the state of managed repositories, dotfiles, and tools
-status:
-    mise bootstrap status
-
-# Converge the complete workstation using the committed lockfile
+# Deploy everything: dotfiles, plugin repos, tools, completions
 apply:
-    mise bootstrap --yes --locked
+  mise bootstrap --yes
 
-# Reapply only the managed dotfile links
-reapply:
-    mise bootstrap dotfiles apply --yes
+# Show what `just apply` would change, without changing anything
+plan:
+  mise bootstrap plan
 
-# Update this checkout and managed repositories, then converge the workstation
-update:
-    git pull --ff-only
-    mise bootstrap --update --yes --locked
+# Symlink dotfiles only
+link:
+  mise bootstrap --only dotfiles --yes
 
-# Apply a named Mise configuration environment, such as `just profile work`
-profile environment:
-    mise bootstrap -E {{environment}} --yes --locked
+# Show the state of every managed dotfile
+status:
+  mise bootstrap dotfiles status
 
-# Intentionally refresh the Linux x64 tool lockfile, then install it
-upgrade:
-    mise lock --platform linux-x64 --bump
-    mise bootstrap --yes --locked
+# Show the pending dotfile changes in detail
+diff:
+  mise bootstrap dotfiles diff
+
+# Upgrade pinned tool versions, then refresh completions
+up:
+  mise run up
+
+# Regenerate zsh completions
+completions:
+  mise run completions

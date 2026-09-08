@@ -1,0 +1,10 @@
+session: dotfiles
+root: ~/dotfiles
+windows:
+  - name: editor
+    commands:
+      - nvim
+  - name: shell
+  - name: git
+    commands:
+      - lazygit

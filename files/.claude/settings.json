@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(just *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git status)",
+      "mcp__obsidian__*"
+    ],
+    "defaultMode": "acceptEdits"
+  },
+  "model": "opus[1m]",
+  "statusLine": {
+    "type": "command",
+    "command": "$HOME/.claude/statusline.sh"
+  },
+  "effortLevel": "xhigh",
+  "tui": "fullscreen"
+}

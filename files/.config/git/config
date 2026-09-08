@@ -7,6 +7,7 @@
 	st = status
 	logdog = log --decorate --oneline --graph
 	logdogs = log --decorate --oneline --graph --simplify-by-decoration
+	dft = difftool
 [branch]
 	sort = -committerdate     # Sort branches by most recent commit first
 [color]
@@ -19,22 +20,35 @@
 [core]
 	autocrlf = input
 	editor = nvim
-	excludesfile = ~/.gitignore_global
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	syntax-theme = Dracula
 [diff]
 	algorithm = histogram     # Clearer diffs on moved/edited lines
 	colorMoved = plain        # Highlight moved blocks in diffs
 	mnemonicPrefix = true     # More intuitive refs in diff output
+	# delta stays the pager for `git diff`; difftastic is opt-in via `git dft`,
+	# because it compares parsed syntax trees rather than lines.
+	tool = difftastic
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
 [gpg]
 	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
-  program = "/opt/1Password/op-ssh-sign"
+	program = "/opt/1Password/op-ssh-sign"
 [init]
 	defaultBranch = main      # It's main now, don't care what DHH thinks
 [pull]
 	rebase = true             # Rebase (instead of merge) on pull
 [push]
-  autoSetupRemote = true    # Automatically set upstream branch on push
+	autoSetupRemote = true    # Automatically set upstream branch on push
 [rerere]
 	enabled = true            # Record and reuse conflict resolutions
 	autoupdate = true         # Apply stored conflict resolutions automatically
@@ -45,3 +59,10 @@
 	name = Peter Kuehne
 	email = peter.kuehne@gmail.com
 	signingKey = ~/.ssh/id_peter.pub
+
+# Machine-local overrides (work identity, signing), read after everything above
+# so they win. Git ignores a missing include, so a personal box needs nothing
+# here. Note `git config --global` reads this file alone and does not follow the
+# include; use plain `git config` to see the effective value.
+[include]
+	path = ~/.config/git/local.config

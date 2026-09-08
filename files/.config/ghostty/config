@@ -1,5 +1,4 @@
-# Dynamic theme colors
-config-file = ?"~/.local/state/omarchy/current/theme/ghostty.conf"
+theme = Dracula
 
 # Font
 font-family = "FiraCode Nerd Font"

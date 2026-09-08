@@ -1,0 +1,134 @@
+# Repo config and — via the [dotfiles] entry below symlinking it into
+# ~/.config/mise/conf.d/ — the global user config. conf.d rather than
+# config.toml, which outranks it and stays unmanaged for machine-local
+# overrides. A second file in conf.d (e.g. a private work overlay) merges on
+# top of this one; see CLAUDE.md.
+
+[settings]
+dotfiles.root = "~/dotfiles/files"
+dotfiles.default_mode = "symlink"
+
+[tools]
+bat         = "0.26.1"
+btop        = "1.4.7"
+claude      = "latest"
+cmake       = "4.4.3"
+delta       = "0.19.2"
+difftastic  = "0.70.0"
+direnv      = "2.37.1"
+duf         = "0.9.1"
+dust        = "1.2.5"
+eza         = "0.23.5"
+fd          = "10.5.0"
+fzf         = "0.74.3"
+gh          = "2.100.0"
+go          = "1.27.1"
+just        = "1.58.0"
+lazydocker  = "0.25.2"
+lazygit     = "0.64.1"
+node        = "26.8.1"
+ripgrep     = "15.2.0"
+starship    = "1.26.0"
+tree-sitter = "0.27.0"
+vivid       = "0.11.1"
+watchexec   = "2.7.0"
+yq          = "4.53.6"
+zoxide      = "0.10.0"
+"aqua:neovim/neovim"    = "0.12.5"  # registry prefers vfox, which needs a plugin
+"aqua:tmux/tmux-builds" = "3.7c"    # static build; asdf backend would compile
+"github:ivaaaan/smug"   = "0.3.19"  # not in the registry
+
+[env]
+_.path = ["{{env.HOME}}/.local/bin", "/usr/local/go/bin"]
+GOBIN = "{{env.HOME}}/.local/bin"
+EDITOR = "nvim"
+
+FZF_DEFAULT_OPTS = "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --height=40% --layout=reverse --border"
+FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude .git"
+FZF_CTRL_T_COMMAND = "fd --type f --hidden --exclude .git"
+FZF_ALT_C_COMMAND = "fd --type d --hidden --exclude .git"
+FZF_CTRL_T_OPTS = "--preview 'bat --color=always --style=numbers --line-range=:200 {}'"
+FZF_ALT_C_OPTS = "--preview 'eza --tree --level=2 --color=always {}'"
+
+[dotfiles]
+# symlink-each recurses and links only leaf files, so un-owned neighbours
+# survive: ~/.config/smug/htmx.yml, LazyVim's LICENSE/README. manifest = "git"
+# keeps untracked strays out of the walk.
+#
+# .claude/settings.json is excluded here and given its own entry below: a file
+# swept up by the walk cannot be redirected by a later config layer, one with
+# its own target path can. .ssh is excluded because it is machine-specific and
+# lives in mise.personal.toml instead — an overlay cannot switch it off, only
+# point it somewhere else, and there is nothing to point it at on a work box.
+"~" = { source = "~/dotfiles/files", mode = "symlink-each", manifest = "git", exclude = [".ssh/**", ".claude/settings.json"] }
+
+"~/.claude/settings.json" = { source = "~/dotfiles/files/.claude/settings.json" }
+
+"~/.config/mise/conf.d/dotfiles.toml" = { source = "~/dotfiles/mise.toml" }
+
+# ZDOTDIR has to be set before zsh reads any rc file, and ~/.zshenv is the only
+# hook for that. Ubuntu's /etc/zsh/zshrc also runs a full compinit before
+# ~/.zshrc and checks skip_global_compinit to skip it. A block edit rather than
+# a managed file because rustup owns ~/.zshenv's other line.
+"~/.zshenv/zdotdir" = { comment = "#", block = """
+export ZDOTDIR="$HOME/.config/zsh"
+skip_global_compinit=1""" }
+
+# Key is "<file>/<block-name>". The rest of ~/.bashrc stays unmanaged.
+"~/.bashrc/shell-d-loader" = { comment = "#", block = """
+for _f in "${XDG_CONFIG_HOME:-$HOME/.config}"/bash/rc.d/*.bash; do
+  [ -r "$_f" ] && . "$_f"
+done
+unset _f""" }
+
+[bootstrap.repos]
+"~/.local/share/tmux/plugins/tpm" = { url = "https://github.com/tmux-plugins/tpm" }
+"~/.local/share/zsh/plugins/powerlevel10k" = { url = "https://github.com/romkatv/powerlevel10k" }
+"~/.local/share/zsh/plugins/fzf-tab" = { url = "https://github.com/Aloxaf/fzf-tab" }
+"~/.local/share/zsh/plugins/zsh-autosuggestions" = { url = "https://github.com/zsh-users/zsh-autosuggestions" }
+"~/.local/share/zsh/plugins/zsh-completions" = { url = "https://github.com/zsh-users/zsh-completions" }
+"~/.local/share/zsh/plugins/zsh-syntax-highlighting" = { url = "https://github.com/zsh-users/zsh-syntax-highlighting" }
+
+[bootstrap.user]
+login_shell = "/usr/bin/zsh"
+
+# No [bootstrap.mise_shell_activate] on purpose: activation is zsh/033-mise.zsh
+# and bash/rc.d/030-mise.bash, and mise editing ~/.zshrc would fight the symlink.
+
+[bootstrap.hooks.post-tools]
+run = "mise run completions"
+
+[tasks.apply]
+description = "Deploy everything (dotfiles, repos, tools, completions)"
+run = "mise bootstrap --yes"
+
+# Step 15 of `mise bootstrap`, so ~/.config/tmux/tmux.conf (step 8) and tmux
+# (step 14) both exist. TPM needs them, which is why it can't be a post-repos hook.
+[tasks.bootstrap]
+description = "Install tmux plugins via TPM"
+run = "~/.local/share/tmux/plugins/tpm/bin/install_plugins"
+
+[tasks.completions]
+description = "Regenerate zsh completions into ~/.local/share/zsh/completions"
+run = """
+set -eu
+d="$HOME/.local/share/zsh/completions"
+mkdir -p "$d"
+bat  --completion zsh          > "$d/_bat"
+delta --generate-completion zsh > "$d/_delta"
+fd   --gen-completions zsh     > "$d/_fd"
+gh   completion -s zsh         > "$d/_gh"
+just --completions zsh         > "$d/_just"
+rg   --generate complete-zsh   > "$d/_rg"
+yq   shell-completion zsh      > "$d/_yq"
+watchexec --completions zsh    > "$d/_watchexec"
+mise completion zsh            > "$d/_mise"
+# zsh/034-completion.zsh caches the compinit dump for 24h; drop it so the next
+# shell rebuilds against what was just written instead of waiting out the cache.
+rm -f "${XDG_CACHE_HOME:-$HOME/.cache}"/zsh/zcompdump-*
+echo "completions written to $d"
+"""
+
+[tasks.up]
+description = "Upgrade pinned tool versions, then refresh completions"
+run = ["mise up", "mise run completions"]
