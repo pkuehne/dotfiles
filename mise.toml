@@ -36,7 +36,6 @@ yq          = "4.53.6"
 zoxide      = "0.10.0"
 "aqua:neovim/neovim"    = "0.12.5"  # registry prefers vfox, which needs a plugin
 "aqua:tmux/tmux-builds" = "3.7c"    # static build; asdf backend would compile
-"github:ivaaaan/smug"   = "0.3.19"  # not in the registry
 
 [env]
 _.path = ["{{env.HOME}}/.local/bin"]
@@ -52,8 +51,8 @@ FZF_ALT_C_OPTS = "--preview 'eza --tree --level=2 --color=always {}'"
 
 [dotfiles]
 # symlink-each recurses and links only leaf files, so un-owned neighbours
-# survive: ~/.config/smug/htmx.yml, LazyVim's LICENSE/README. manifest = "git"
-# keeps untracked strays out of the walk.
+# survive: LazyVim's LICENSE/README. manifest = "git" keeps untracked strays
+# out of the walk.
 #
 # .claude/settings.json is excluded here and given its own entry below: a file
 # swept up by the walk cannot be redirected by a later config layer, one with

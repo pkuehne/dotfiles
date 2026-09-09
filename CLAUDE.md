@@ -31,7 +31,6 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
     lazygit/config.yml
     nvim/                 # Full LazyVim config (starter + custom overrides)
       lua/plugins/        # colorscheme.lua sets Tokyo Night Moon
-    smug/                 # smug tmux session layouts
     starship.toml         # bash fallback prompt
     tmux/tmux.conf        # tmux config (Tokyo Night Moon, vi-mode, TPM plugins)
     zsh/
@@ -95,7 +94,7 @@ skips when absent.
 ## Tools installed
 
 bat, btop, claude, cmake, delta, difftastic, direnv, duf, dust, eza, fd, fzf,
-gh, go, just, lazydocker, lazygit, neovim, node, ripgrep, smug, starship, tmux,
+gh, go, just, lazydocker, lazygit, neovim, node, ripgrep, starship, tmux,
 tree-sitter, vivid, watchexec, yq, zoxide — all pinned in `[tools]`.
 
 `mise.personal.toml` adds `codex` on personal machines only. `[tools]` merges
@@ -145,7 +144,7 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   symlinked there. Hence absolute sources, and hence `bootstrap.sh` refuses to run from a
   clone at any other path.
 - **`symlink-each`, not directory symlinks.** Several target directories hold files this
-  repo doesn't own — `~/.config/smug/htmx.yml`, LazyVim's `LICENSE`/`README.md`.
+  repo doesn't own — LazyVim's `LICENSE`/`README.md`, for one.
   `symlink-each` recurses, creating real directories and symlinking only leaf files, so
   those survive. `manifest = "git"` keeps untracked strays out of the walk.
 - **`[dotfiles]` edit entries are keyed `"<file>/<block-name>"`.** Undocumented and easy to
