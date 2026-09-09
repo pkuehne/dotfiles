@@ -13,6 +13,7 @@ mise.toml                 # EVERYTHING: settings, tools, env, dotfiles, repos, h
 justfile                  # Thin wrappers around mise commands
 
 files/                    # Mirrored into $HOME by the single "~" [dotfiles] entry
+  .zshenv                 # Sets ZDOTDIR; the one zsh file that cannot move
   .claude/
     settings.json         # Own entry, so an overlay can redirect it
     statusline.sh         # Extracted from settings.json so overlays duplicate less
@@ -149,10 +150,13 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   those survive. `manifest = "git"` keeps untracked strays out of the walk.
 - **`[dotfiles]` edit entries are keyed `"<file>/<block-name>"`.** Undocumented and easy to
   get wrong: `"~/.bashrc/shell-d-loader"` means *block `shell-d-loader` inside `~/.bashrc`*,
-  not a file called `shell-d-loader`. Used to keep `~/.bashrc` and `~/.zshenv` (distro
-  defaults, rustup's line) unmanaged apart from one marked block each.
-- **XDG wherever the tool allows it.** zsh via `ZDOTDIR` (set in the `~/.zshenv` block,
-  the one file that cannot move), tmux at `~/.config/tmux/tmux.conf` with
+  not a file called `shell-d-loader`. Used to keep Ubuntu's `~/.bashrc` unmanaged apart
+  from one marked block. `~/.zshenv` used to be a block edit too, because rustup owned its
+  other line; rustup is gone, so it is now an ordinary file in `files/`.
+- **XDG wherever the tool allows it.** zsh via `ZDOTDIR` (set in `~/.zshenv`, the one file
+  that cannot move; it also sets `skip_global_compinit=1`, which is how Ubuntu's
+  `/etc/zsh/zshrc` is told not to run its own compinit before `~/.zshrc`),
+  tmux at `~/.config/tmux/tmux.conf` with
   `TMUX_PLUGIN_MANAGER_PATH` pointing TPM at `~/.local/share/tmux/plugins`, zsh plugins
   under `~/.local/share/zsh/plugins`, history under `~/.local/state/zsh`, global gitignore
   at `~/.config/git/ignore`. `~/.bashrc`, `~/.ssh` and `~/.claude` have no XDG support.

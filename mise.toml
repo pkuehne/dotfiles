@@ -66,14 +66,6 @@ FZF_ALT_C_OPTS = "--preview 'eza --tree --level=2 --color=always {}'"
 
 "~/.config/mise/conf.d/dotfiles.toml" = { source = "~/dotfiles/mise.toml" }
 
-# ZDOTDIR has to be set before zsh reads any rc file, and ~/.zshenv is the only
-# hook for that. Ubuntu's /etc/zsh/zshrc also runs a full compinit before
-# ~/.zshrc and checks skip_global_compinit to skip it. A block edit rather than
-# a managed file because rustup owns ~/.zshenv's other line.
-"~/.zshenv/zdotdir" = { comment = "#", block = """
-export ZDOTDIR="$HOME/.config/zsh"
-skip_global_compinit=1""" }
-
 # Key is "<file>/<block-name>". The rest of ~/.bashrc stays unmanaged.
 "~/.bashrc/shell-d-loader" = { comment = "#", block = """
 for _f in "${XDG_CONFIG_HOME:-$HOME/.config}"/bash/rc.d/*.bash; do
