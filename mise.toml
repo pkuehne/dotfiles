@@ -39,7 +39,7 @@ zoxide      = "0.10.0"
 "github:ivaaaan/smug"   = "0.3.19"  # not in the registry
 
 [env]
-_.path = ["{{env.HOME}}/.local/bin", "/usr/local/go/bin"]
+_.path = ["{{env.HOME}}/.local/bin"]
 GOBIN = "{{env.HOME}}/.local/bin"
 EDITOR = "nvim"
 
