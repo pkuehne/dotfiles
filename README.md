@@ -71,8 +71,12 @@ the docker helpers. Each fragment returns cleanly when its tool is absent.
 
 ## Theme
 
-Dracula throughout: bat, delta, fzf, ghostty, kitty, lazygit, tmux, and the
-Neovim colorscheme.
+Tokyo Night Moon throughout: bat, delta, fzf, ghostty, kitty, lazygit, tmux,
+vivid, and the Neovim colorscheme.
+
+bat is the exception to "first-party everywhere": it ships no Tokyo Night, so
+`files/.config/bat/themes/tokyonight_moon.tmTheme` is vendored and compiled by
+`mise run bat-cache` (wired into bootstrap and `just up`). delta inherits it.
 
 ## Omarchy ownership
 

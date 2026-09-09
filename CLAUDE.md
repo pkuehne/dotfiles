@@ -19,19 +19,20 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
   .config/
     bash/rc.d/            # Bash fallback fragments, sourced by the ~/.bashrc block
     bat/config
+    bat/themes/           # vendored tmTheme; needs `mise run bat-cache`
     fontconfig/fonts.conf
-    ghostty/config        # Dracula via ghostty's built-in theme
+    ghostty/config        # Tokyo Night Moon via ghostty's built-in theme
     git/config            # ends with an optional `include local.config` for overlays
     git/ignore            # global gitignore (git's default XDG path)
     hypr/monitors.lua     # only Hyprland file that differs from Omarchy's defaults
-    kitty/                # kitty.conf + dracula.conf
+    kitty/                # kitty.conf + tokyonight-moon.conf
     lazydocker/config.yml
     lazygit/config.yml
     nvim/                 # Full LazyVim config (starter + custom overrides)
-      lua/plugins/        # colorscheme.lua sets Dracula
+      lua/plugins/        # colorscheme.lua sets Tokyo Night Moon
     smug/                 # smug tmux session layouts
     starship.toml         # bash fallback prompt
-    tmux/tmux.conf        # tmux config (Dracula, vi-mode, plugins via TPM)
+    tmux/tmux.conf        # tmux config (Tokyo Night Moon, vi-mode, TPM plugins)
     zsh/
       .zshrc              # sources $ZDOTDIR/rc.d in strict numeric order
       .p10k.zsh           # Powerlevel10k prompt config
@@ -184,7 +185,19 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   bootstrap` at step 15, after dotfiles (8) and tools (14) — TPM needs
   `~/.config/tmux/tmux.conf` and the `tmux` binary, so any earlier phase aborts the whole
   bootstrap on a fresh machine.
-- **Theming:** Dracula across bat, fzf, ghostty, kitty, lazygit, delta, tmux, and neovim.
+- **Theming:** Tokyo Night Moon across bat, fzf, ghostty, kitty, lazygit, delta, tmux,
+  vivid and neovim. Dracula was dropped because it has only three greys; UI chrome needs
+  a mid-tone ramp, which is why the tabline and status badges kept coming out either
+  invisible or slabby. Tokyo Night Moon supplies one (`bg_dark`/`bg`/`bg_highlight`/
+  `fg_gutter`/`terminal_black`/`dark3`/`comment`/`dark5`/`fg_dark`/`fg`).
+- **bat is the one theme that isn't first-party.** vivid, ghostty and kitty all know
+  Tokyo Night; bat ships only Catppuccin, so `files/.config/bat/themes/` vendors
+  `tokyonight_moon.tmTheme` from folke/tokyonight.nvim's `extras/sublime`. bat only sees
+  it once compiled, hence `[tasks.bat-cache]`, run by the `post-tools` hook and by
+  `just up` — a bat upgrade invalidates the cache. delta reads bat's registry, so this
+  covers `git diff` and the fzf previews too. **The theme is registered under its
+  filename stem, `tokyonight_moon`, not the `TokyoNight` name inside the file**; get it
+  wrong and bat silently falls back to the default with a warning on stderr.
 
 ## Sensitive files
 

@@ -9,7 +9,7 @@ unset _zplug
 
 ### fzf-tab ###
 ################
-# Without this fzf-tab ignores FZF_DEFAULT_OPTS and loses the Dracula palette.
+# Without this fzf-tab ignores FZF_DEFAULT_OPTS and loses the theme palette.
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:*' switch-group '<' '>'
 

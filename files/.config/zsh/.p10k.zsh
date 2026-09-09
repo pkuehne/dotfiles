@@ -13,17 +13,17 @@
   [[ $ZSH_VERSION == (5.<1->*|<6->.*) ]] || return
 
   typeset -gA _thm=(
-    bg      '#282a36'
-    fg      '#f8f8f2'
-    grey    '#44475a'
-    dim     '#6272a4'
-    cyan    '#8be9fd'
-    green   '#50fa7b'
-    orange  '#ffb86c'
-    pink    '#ff79c6'
-    purple  '#bd93f9'
-    red     '#ff5555'
-    yellow  '#f1fa8c'
+    bg      '#222436'
+    fg      '#c8d3f5'
+    grey    '#3b4261'
+    dim     '#636da6'
+    cyan    '#86e1fc'
+    green   '#c3e88d'
+    orange  '#ff966c'
+    pink    '#fca7ea'
+    purple  '#c099ff'
+    red     '#ff757f'
+    yellow  '#ffc777'
   )
 
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(

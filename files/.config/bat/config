@@ -1,4 +1,4 @@
---theme="Dracula"
+--theme="tokyonight_moon"
 --style="numbers,changes,header"
 --pager="less -FR"
 --tabs=4

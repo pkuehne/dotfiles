@@ -25,10 +25,10 @@ compdef _delta delta
 # vivid costs a ~119ms fork, so cache it like the dump above — -nt against mise's
 # versioned install path picks up a `mise up`.
 if (( $+commands[vivid] )); then
-  _lscolors=${XDG_CACHE_HOME:-$HOME/.cache}/vivid/dracula
+  _lscolors=${XDG_CACHE_HOME:-$HOME/.cache}/vivid/tokyonight-moon
   if [[ ! -s $_lscolors || $commands[vivid] -nt $_lscolors ]]; then
     mkdir -p ${_lscolors:h}
-    vivid generate dracula > $_lscolors
+    vivid generate tokyonight-moon > $_lscolors
   fi
   export LS_COLORS="$(<$_lscolors)"
   unset _lscolors

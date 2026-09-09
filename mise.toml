@@ -43,7 +43,7 @@ _.path = ["{{env.HOME}}/.local/bin", "/usr/local/go/bin"]
 GOBIN = "{{env.HOME}}/.local/bin"
 EDITOR = "nvim"
 
-FZF_DEFAULT_OPTS = "--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4 --height=40% --layout=reverse --border"
+FZF_DEFAULT_OPTS = "--color=fg:#c8d3f5,bg:#222436,hl:#c099ff --color=fg+:#c8d3f5,bg+:#3b4261,hl+:#c099ff --color=info:#ff966c,prompt:#c3e88d,pointer:#fca7ea --color=marker:#fca7ea,spinner:#ff966c,header:#636da6 --height=40% --layout=reverse --border"
 FZF_DEFAULT_COMMAND = "fd --type f --hidden --exclude .git"
 FZF_CTRL_T_COMMAND = "fd --type f --hidden --exclude .git"
 FZF_ALT_C_COMMAND = "fd --type d --hidden --exclude .git"
@@ -96,7 +96,7 @@ login_shell = "/usr/bin/zsh"
 # and bash/rc.d/030-mise.bash, and mise editing ~/.zshrc would fight the symlink.
 
 [bootstrap.hooks.post-tools]
-run = "mise run completions"
+run = ["mise run completions", "mise run bat-cache"]
 
 [tasks.apply]
 description = "Deploy everything (dotfiles, repos, tools, completions)"
@@ -129,6 +129,14 @@ rm -f "${XDG_CACHE_HOME:-$HOME/.cache}"/zsh/zcompdump-*
 echo "completions written to $d"
 """
 
+# bat only sees themes in ~/.config/bat/themes after they are compiled into its
+# cache, and the cache is invalidated by a bat upgrade — hence a task rather
+# than a one-off. delta reads bat's theme registry, so this covers `git diff`
+# and the fzf previews too.
+[tasks.bat-cache]
+description = "Compile ~/.config/bat/themes into bat's theme cache"
+run = "bat cache --build >/dev/null && echo 'bat theme cache rebuilt'"
+
 [tasks.up]
 description = "Upgrade pinned tool versions, then refresh completions"
-run = ["mise up", "mise run completions"]
+run = ["mise up", "mise run completions", "mise run bat-cache"]

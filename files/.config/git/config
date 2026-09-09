@@ -26,7 +26,7 @@
 [delta]
 	navigate = true
 	line-numbers = true
-	syntax-theme = Dracula
+	syntax-theme = tokyonight_moon
 [diff]
 	algorithm = histogram     # Clearer diffs on moved/edited lines
 	colorMoved = plain        # Highlight moved blocks in diffs
