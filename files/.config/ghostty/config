@@ -22,7 +22,10 @@ cursor-style-blink = false
 shell-integration-features = no-cursor,ssh-env
 
 # Keyboard bindings
+# Keep conventional terminal text paste. Send a raw Ctrl+V with Ctrl+Shift+V
+# so Codex and other image-aware TUIs can inspect the Wayland clipboard.
 keybind = control+v=paste_from_clipboard
+keybind = control+shift+v=text:\x16
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
 # Send Shift+Enter as CSI-u so TUIs can distinguish it from Enter.
