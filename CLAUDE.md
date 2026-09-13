@@ -22,7 +22,7 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
     bat/config
     bat/themes/           # vendored tmTheme; needs `mise run bat-cache`
     fontconfig/fonts.conf
-    ghostty/config        # Tokyo Night Moon via ghostty's built-in theme
+    ghostty/config        # Tokyo Night Moon, Aurora edge glow + cursor sweep
     git/config            # ends with an optional `include local.config` for overlays
     git/ignore            # global gitignore (git's default XDG path)
     hypr/monitors.lua     # only Hyprland file that differs from Omarchy's defaults

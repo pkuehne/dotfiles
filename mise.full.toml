@@ -10,6 +10,28 @@ lazydocker  = "0.25.2"
 node        = "26.8.1"
 tree-sitter = "0.27.0"
 
+[bootstrap.repos]
+"~/.config/ghostty/shaders/aurora" = { url = "https://github.com/cmmichael/ghostty-aurora" }
+"~/.config/ghostty/shaders/ghostty-shaders" = { url = "https://github.com/thamarnan/ghostty-shaders" }
+
+# Keep the upstream Aurora checkout clean so `mise bootstrap repos update` can
+# fast-forward it. The shader selects its palette at compile time, so generate
+# a Tokyo Night variant alongside the checkout after every clone/update.
+[bootstrap.hooks]
+post-repos = '''
+set -eu
+shader_dir="$HOME/.config/ghostty/shaders"
+sed \
+  -e 's/^#define ACTIVE_THEME .*/#define ACTIVE_THEME THEME_TOKYO_NIGHT/' \
+  -e 's/^const float SPEED = .*/const float SPEED = 0.1;/' \
+  -e 's/^const float DECAY_START = .*/const float DECAY_START = 0.1;/' \
+  -e 's/^const float DECAY_RATE = .*/const float DECAY_RATE = 8.0;/' \
+  -e 's/^const float GLOW_CUTOFF_DISTANCE = .*/const float GLOW_CUTOFF_DISTANCE = 0.08;/' \
+  -e 's/^const float GLOW_CUTOFF_SOFTNESS = .*/const float GLOW_CUTOFF_SOFTNESS = 0.12;/' \
+  -e 's/^const float GLOW_OPACITY = .*/const float GLOW_OPACITY = 0.07;/' \
+  "$shader_dir/aurora/aurora.glsl" > "$shader_dir/aurora-tokyonight.glsl"
+'''
+
 [dotfiles]
 # Preserve the full layer on later bare `mise bootstrap` runs.
 "~/.config/mise/conf.d/dotfiles-full.toml" = { source = "~/dotfiles/mise.full.toml" }

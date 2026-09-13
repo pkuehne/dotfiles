@@ -84,7 +84,13 @@ the docker helpers. Each fragment returns cleanly when its tool is absent.
 ## Theme
 
 Tokyo Night Moon throughout: bat, delta, fzf, ghostty, kitty, lazygit, tmux,
-vivid, and the Neovim colorscheme.
+vivid, and the Neovim colorscheme. Ghostty additionally uses the Tokyo Night
+Aurora edge glow and a cursor-sweep shader on the full-workstation profile only.
+Their repositories are declaratively cloned by `./bootstrap.sh full` into
+`~/.config/ghostty/shaders/`; its post-repository hook generates a clean Tokyo
+Night Aurora variant without modifying the upstream checkout. Ghostty is not
+launched on the space-constrained VM profile, so its shader dependencies are
+not cloned there. There is no separate Ghostty shader installer.
 
 bat is the exception to "first-party everywhere": it ships no Tokyo Night, so
 `files/.config/bat/themes/tokyonight_moon.tmTheme` is vendored and compiled by
