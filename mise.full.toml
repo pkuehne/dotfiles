@@ -1,0 +1,15 @@
+# Full-workstation layer. bootstrap.sh links this into mise's global conf.d
+# only when invoked as `./bootstrap.sh full`.
+
+[tools]
+# Language runtimes and development-only tools stay off utility/remote hosts.
+claude      = "latest"
+cmake       = "4.4.3"
+go          = "1.27.1"
+lazydocker  = "0.25.2"
+node        = "26.8.1"
+tree-sitter = "0.27.0"
+
+[dotfiles]
+# Preserve the full layer on later bare `mise bootstrap` runs.
+"~/.config/mise/conf.d/dotfiles-full.toml" = { source = "~/dotfiles/mise.full.toml" }

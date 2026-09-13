@@ -13,21 +13,33 @@ cd ~ && git clone https://github.com/pkuehne/dotfiles.git
 ~/dotfiles/bootstrap.sh
 ```
 
+This installs the **minimal** profile: the shell, Neovim, tmux, Git helpers,
+search/navigation tools, and their plugins, but no language runtimes. For a
+development workstation, install the additional Node and Go runtimes and
+development tools explicitly:
+
+```bash
+~/dotfiles/bootstrap.sh full
+```
+
 The clone path is mandatory — `bootstrap.sh` refuses to run from anywhere else,
 because mise does no templating on a `[dotfiles]` source and the paths in
 `mise.toml` are absolute under `~/dotfiles`.
 
-The script installs mise if it is missing, symlinks `mise.toml` into
+The script installs mise if it is missing, symlinks the selected profile into
 `~/.config/mise/conf.d/`, and runs `mise bootstrap`, which clones the plugin
-repositories, links the dotfiles, installs the pinned tools and generates zsh
-completions. Existing real files that conflict with a managed link are refused
-rather than overwritten; resolve them and rerun.
+repositories, links the dotfiles, installs the selected pinned tools and
+generates zsh completions. Existing real files that conflict with a managed
+link are refused rather than overwritten; resolve them and rerun. Switching
+from `full` to the minimal profile prevents future installs of the full-only
+tools; it intentionally does not delete already-installed runtimes.
 
 ## Commands
 
 ```bash
 just            # list recipes
 just apply      # mise bootstrap --yes
+just full       # install the full workstation profile
 just plan       # preview without changing anything
 just diff       # pending dotfile changes in detail
 just status     # state of every managed dotfile

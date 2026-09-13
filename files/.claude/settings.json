@@ -15,5 +15,6 @@
     "command": "$HOME/.claude/statusline.sh"
   },
   "effortLevel": "xhigh",
-  "tui": "fullscreen"
+  "tui": "fullscreen",
+  "agentPushNotifEnabled": true
 }

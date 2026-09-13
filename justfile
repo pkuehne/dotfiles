@@ -11,9 +11,13 @@ install:
   curl -fsSL https://mise.run | sh
   mise --version
 
-# Deploy everything: dotfiles, plugin repos, tools, completions
+# Deploy the lightweight default: dotfiles, plugin repos, editor and CLI tools.
 apply:
   mise bootstrap --yes
+
+# Install the full workstation layer, including language runtimes.
+full:
+  ./bootstrap.sh full
 
 # Show what `just apply` would change, without changing anything
 plan:
