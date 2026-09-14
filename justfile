@@ -21,7 +21,7 @@ full:
 
 # Show what `just apply` would change, without changing anything
 plan:
-  mise bootstrap plan
+  mise bootstrap --dry-run
 
 # Symlink dotfiles only
 link:
