@@ -7,6 +7,11 @@ return {
           files = { hidden = true, exclude = { ".git" } },
         },
       },
+      terminal = {
+        win = {
+          wo = { winbar = "" },
+        },
+      },
     },
   },
 }
