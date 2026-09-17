@@ -16,5 +16,6 @@ codex = "latest"
 "~/.config/mise/conf.d/personal.toml" = { source = "~/dotfiles/mise.personal.toml" }
 
 "~/.ssh/config"          = { source = "~/dotfiles/files/.ssh/config" }
+"~/.ssh/config.d"        = { source = "~/dotfiles/files/.ssh/config.d", mode = "symlink-each", manifest = "git" }
 "~/.ssh/allowed_signers" = { source = "~/dotfiles/files/.ssh/allowed_signers" }
 "~/.ssh/id_peter.pub"    = { source = "~/dotfiles/files/.ssh/id_peter.pub" }

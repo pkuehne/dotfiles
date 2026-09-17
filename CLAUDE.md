@@ -51,7 +51,9 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
         041-vi-mode.zsh       # vi keymap fixes on top of bindkey -v
         042-direnv.zsh        # direnv hook
         049-p10k.zsh          # p10k config (must be last)
-  .ssh/                   # own entries, excluded from the "~" walk
+  .ssh/                   # own entries in mise.personal.toml, excluded from the "~" walk
+    config                # `Include config.d/*` and nothing else
+    config.d/             # 10-defaults, 20-canonicalize, 30-homelab, 40-git
 ```
 
 ## Usage
@@ -152,6 +154,15 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   not a file called `shell-d-loader`. Used to keep Ubuntu's `~/.bashrc` unmanaged apart
   from one marked block. `~/.zshenv` used to be a block edit too, because rustup owned its
   other line; rustup is gone, so it is now an ordinary file in `files/`.
+- **`~/.ssh/config` is `Include config.d/*` and nothing else,** matching the shape work
+  now imposes, so both machines have one layout. Two ssh parser rules govern edits here:
+  ssh takes the **first** value it obtains for a keyword, so fragment order is
+  authoritative and `10-defaults.conf` must stay first; and `Host`/`Match` context carries
+  **across** `Include` boundaries, so every fragment must open with an explicit `Host`
+  line or it silently inherits the previous file's last stanza. A relative `Include`
+  resolves against `~/.ssh`, not against the symlink target in this repo. Verify a change
+  with `diff <(ssh -F old -G host) <(ssh -F new -G host)` — concatenating the fragments in
+  glob order is exactly what `Include` does.
 - **XDG wherever the tool allows it.** zsh via `ZDOTDIR` (set in `~/.zshenv`, the one file
   that cannot move; it also sets `skip_global_compinit=1`, which is how Ubuntu's
   `/etc/zsh/zshrc` is told not to run its own compinit before `~/.zshrc`),
