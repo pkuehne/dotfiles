@@ -1,0 +1,308 @@
+#!/usr/bin/env python3
+"""Next trains home, as coloured glyphs.
+
+Reads the National Rail LDBWS departure board and prints one train glyph per
+service, coloured by lateness:
+
+    green   on time
+    yellow  1-9 minutes late
+    red     10+ minutes late, or delayed by an unknown amount
+
+Cancelled services get a red cross instead of a train, since "not running" is
+worth telling apart from "running late" at a glance.
+
+Settings come from DEFAULTS below, overridden by ~/.config/rail-status.json,
+overridden by the matching RAIL_* environment variable. That config file holds
+the API key and the stations, is not managed by the dotfiles repo, and is the
+only thing that makes this script do anything: a host without it prints nothing,
+which is how this can be wired into a shared tmux config unconditionally.
+
+Usage:
+    rail-status            ANSI colour - terminals, prompts, most status bars
+    rail-status --tmux     tmux #[fg=...] markup, for status-right
+    rail-status --plain    a human-readable board (for debugging)
+    rail-status --refresh  refresh the cache and print nothing
+
+tmux needs its own markup because it strips escape characters out of #()
+output; set NO_COLOR to get bare glyphs with no colour at all.
+"""
+
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from pathlib import Path
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+API = (
+    "https://api1.raildata.org.uk"
+    "/1010-live-arrival-and-departure-boards-arr-and-dep1_1"
+    "/LDBWS/api/20220120/GetArrivalDepartureBoard/{crs}"
+)
+
+# No station defaults: they would say where the owner of this repo lives.
+REQUIRED = ("api_key", "from", "to")
+
+DEFAULTS = {
+    "api_key": "",        # RAIL_API_KEY overrides
+    "from": "",           # departure station CRS
+    "to": "",             # destination CRS to filter on
+    "count": 5,           # how many services to show
+    "cache_seconds": 60,  # how often to hit the API
+}
+
+GLYPH = "\uf238"            # nf-fa-train
+CANCELLED_GLYPH = "\uf00d"  # nf-fa-times, for services not running at all
+SEPARATOR = " "
+
+CANCELLED = "cancelled"   # sentinel, distinct from "late by N minutes"
+
+STYLES = {
+    "ansi": {
+        "green": "\033[32m", "yellow": "\033[33m", "red": "\033[31m",
+        "dim": "\033[90m", "reset": "\033[0m",
+    },
+    # tmux strips escape characters out of #() output, so it needs its own
+    # markup; #[default] restores status-style, where \033[0m would also drop
+    # the status bar's background colour and leave a gap. Tokyo Night Moon
+    # literals rather than #{@thm_*}: tmux honours #[...] in #() output but
+    # does not re-expand #{...} format substitutions in it.
+    "tmux": {
+        "green": "#[fg=#c3e88d]", "yellow": "#[fg=#ffc777]",
+        "red": "#[fg=#ff757f]", "dim": "#[fg=#636da6]", "reset": "#[default]",
+    },
+    "none": dict.fromkeys(("green", "yellow", "red", "dim", "reset"), ""),
+}
+
+TIME_WINDOW = 120         # minutes of board to ask for (API max)
+HTTP_TIMEOUT = 5
+YELLOW_AFTER = 1          # minutes late
+RED_AFTER = 10            # minutes late
+STALE_AFTER = 900         # mark the output stale if the cache is older
+
+CONFIG_PATH = Path(
+    os.environ.get("RAIL_CONFIG", Path.home() / ".config" / "rail-status.json")
+)
+CACHE_PATH = Path(
+    os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache")
+) / "rail-status.json"
+LOCK_PATH = CACHE_PATH.with_suffix(".lock")
+
+HHMM = re.compile(r"^\d{2}:\d{2}$")
+
+
+def load_config():
+    cfg = dict(DEFAULTS)
+    try:
+        cfg.update(json.loads(CONFIG_PATH.read_text()))
+    except (OSError, ValueError):
+        pass
+    for key in DEFAULTS:
+        env = os.environ.get("RAIL_" + key.upper())
+        if env:
+            cfg[key] = env
+    cfg["count"] = max(1, int(cfg["count"]))
+    cfg["cache_seconds"] = max(0, int(cfg["cache_seconds"]))
+    return cfg
+
+
+def missing(cfg):
+    """Which required settings are absent. Empty means this host is configured."""
+    return [key for key in REQUIRED if not cfg[key]]
+
+
+# --- the board ------------------------------------------------------------
+
+
+def fetch(cfg):
+    url = API.format(crs=cfg["from"]) + "?" + urlencode({
+        "numRows": cfg["count"],
+        "timeOffset": 0,
+        "timeWindow": TIME_WINDOW,
+        "filterCrs": cfg["to"],
+        "filterType": "to",
+    })
+    req = Request(url, headers={
+        "x-apikey": cfg["api_key"],
+        "User-Agent": "rail-status",
+    })
+    with urlopen(req, timeout=HTTP_TIMEOUT) as resp:
+        return json.load(resp)
+
+
+def minutes(hhmm):
+    hours, mins = hhmm.split(":")
+    return int(hours) * 60 + int(mins)
+
+
+def delay_minutes(service):
+    """Minutes late, CANCELLED, or None when delayed by an unknown amount."""
+    expected = (service.get("etd") or service.get("eta") or "On time").strip()
+    if service.get("isCancelled") or expected.lower() == "cancelled":
+        return CANCELLED
+    scheduled = service.get("std") or service.get("sta")
+    if expected.lower() == "on time":
+        return 0
+    if not scheduled or not HHMM.match(expected):
+        return None  # "Delayed", "Starts here", ...
+    late = minutes(expected) - minutes(scheduled)
+    if late < -720:      # expected tomorrow, scheduled today
+        late += 1440
+    elif late > 720:     # and the other way round
+        late -= 1440
+    return max(late, 0)
+
+
+def colour(late):
+    if late == CANCELLED or late is None or late >= RED_AFTER:
+        return "red"
+    if late >= YELLOW_AFTER:
+        return "yellow"
+    return "green"
+
+
+def glyph(late):
+    return CANCELLED_GLYPH if late == CANCELLED else GLYPH
+
+
+# --- caching --------------------------------------------------------------
+
+
+def read_cache():
+    try:
+        blob = json.loads(CACHE_PATH.read_text())
+        return blob["board"], blob["fetched_at"]
+    except (OSError, ValueError, KeyError):
+        return None, 0
+
+
+def write_cache(board):
+    CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = CACHE_PATH.with_suffix(".tmp")
+    tmp.write_text(json.dumps({"fetched_at": time.time(), "board": board}))
+    tmp.replace(CACHE_PATH)
+
+
+def spawn_refresh(cfg):
+    """Kick off a background refresh so the status line never blocks."""
+    try:
+        if time.time() - LOCK_PATH.stat().st_mtime < max(cfg["cache_seconds"], 60):
+            return  # a refresh is already in flight, or recently failed
+        LOCK_PATH.unlink()
+    except FileNotFoundError:
+        pass
+    except OSError:
+        return
+    try:
+        LOCK_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LOCK_PATH.touch()
+        subprocess.Popen(
+            [sys.executable, os.path.abspath(__file__), "--refresh"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+        )
+    except OSError:
+        pass
+
+
+def refresh(cfg):
+    board = fetch(cfg)
+    write_cache(board)
+    LOCK_PATH.unlink(missing_ok=True)  # leave it in place on failure, as backoff
+    return board
+
+
+# --- rendering ------------------------------------------------------------
+
+
+def render(board, age, cfg, style):
+    palette = STYLES[style]
+    services = (board.get("trainServices") or [])[:cfg["count"]]
+    if not services:
+        return palette["dim"] + GLYPH + palette["reset"]
+    out = SEPARATOR.join(
+        palette[colour(late)] + glyph(late)
+        for late in map(delay_minutes, services)
+    )
+    if time.time() - age > STALE_AFTER:
+        out += palette["dim"] + "?"
+    return out + palette["reset"]
+
+
+def render_plain(board, age, cfg):
+    services = (board.get("trainServices") or [])[:cfg["count"]]
+    lines = ["%s -> %s, fetched %ds ago" % (
+        board.get("locationName", cfg["from"]),
+        cfg["to"],
+        time.time() - age,
+    )]
+    for svc in services:
+        late = delay_minutes(svc)
+        lines.append("  %s  %-8s %-6s %s" % (
+            svc.get("std") or svc.get("sta") or "??:??",
+            svc.get("etd") or svc.get("eta") or "?",
+            "cancelled" if late == CANCELLED else
+            "delayed" if late is None else "+%dm" % late,
+            colour(late),
+        ))
+    if not services:
+        lines.append("  no services in the next %d minutes" % TIME_WINDOW)
+    return "\n".join(lines)
+
+
+def main(argv):
+    cfg = load_config()
+    gaps = missing(cfg)
+
+    if "--refresh" in argv:
+        if gaps:
+            return 1
+        refresh(cfg)
+        return 0
+
+    board, age = read_cache()
+    stale = board is None or time.time() - age > cfg["cache_seconds"]
+
+    if "--plain" in argv:
+        if gaps:  # a human typed this, so say what is wrong
+            print("not configured: %s missing from %s"
+                  % (", ".join(gaps), CONFIG_PATH))
+            return 1
+        if stale:  # blocking is fine when a human typed the command
+            try:
+                board, age = refresh(cfg), time.time()
+            except Exception as err:
+                print("fetch failed: %s" % err)
+                return 1
+        print(render_plain(board, age, cfg))
+        return 0
+
+    if "--tmux" in argv:
+        style = "tmux"
+    elif os.environ.get("NO_COLOR"):
+        style = "none"
+    else:
+        style = "ansi"
+
+    if gaps:
+        return 0  # unconfigured host: print nothing at all, not even a stale
+                  # cache left over from before the key was removed, and not an
+                  # error glyph that would sit in the bar forever. --plain still
+                  # says what is missing.
+
+    if stale:
+        spawn_refresh(cfg)  # serve what we have; the fresh board lands next tick
+    if board is None:
+        palette = STYLES[style]
+        print(palette["dim"] + GLYPH + "?" + palette["reset"])
+        return 0
+    print(render(board, age, cfg, style))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

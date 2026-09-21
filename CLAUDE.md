@@ -51,6 +51,10 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
         041-vi-mode.zsh       # vi keymap fixes on top of bindkey -v
         042-direnv.zsh        # direnv hook
         049-p10k.zsh          # p10k config (must be last)
+  .local/bin/
+    rail-status           # next trains home, wired into tmux status-right. Reads an
+                          # unmanaged ~/.config/rail-status.json (API key + stations)
+                          # and prints nothing when absent, so it is safe on every host
   .ssh/                   # own entries in mise.personal.toml, excluded from the "~" walk
     config                # `Include config.d/*` and nothing else
     config.d/             # 10-defaults, 20-canonicalize, 30-homelab, 40-git
