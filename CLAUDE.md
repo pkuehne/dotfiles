@@ -52,9 +52,12 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
         042-direnv.zsh        # direnv hook
         049-p10k.zsh          # p10k config (must be last)
   .local/bin/
-    rail-status           # next trains home, wired into tmux status-right. Reads an
-                          # unmanaged ~/.config/rail-status.json (API key + stations)
-                          # and prints nothing when absent, so it is safe on every host
+    rail-status           # next trains home. Reads an unmanaged
+                          # ~/.config/rail-status.json (API key + stations) and prints
+                          # nothing when absent. Nothing here wires it up: a commute-home
+                          # indicator is only wanted on the work machine, so the consumer
+                          # is the work overlay's wtbar. The script stays public because
+                          # it holds no secrets — only the wiring is machine-specific
   .ssh/                   # own entries in mise.personal.toml, excluded from the "~" walk
     config                # `Include config.d/*` and nothing else
     config.d/             # 10-defaults, 20-canonicalize, 30-homelab, 40-git
