@@ -103,7 +103,7 @@ skips when absent.
 ## Tools installed
 
 bat, btop, claude, cmake, delta, difftastic, direnv, duf, dust, eza, fd, fzf,
-gh, go, just, lazydocker, lazygit, neovim, node, ripgrep, starship, tmux,
+gh, go, gum, just, lazydocker, lazygit, neovim, node, ripgrep, starship, tmux,
 tree-sitter, vivid, watchexec, yq, zoxide — all pinned in `[tools]`.
 
 `mise.personal.toml` adds `codex` on personal machines only. `[tools]` merges
