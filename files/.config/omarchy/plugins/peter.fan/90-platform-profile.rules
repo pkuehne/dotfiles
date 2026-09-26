@@ -1,0 +1,11 @@
+# Let members of `wheel` set the ACPI platform profile (the thermal/fan mode)
+# without root, so a desktop widget can change it with no password prompt and
+# no polkit round-trip.
+#
+# The write lands on the class device's `profile` attribute, not on the legacy
+# /sys/firmware/acpi/platform_profile inode — those are two different inodes
+# and udev can only reach the former. fanctl prefers the same path.
+#
+# Install:  sudo install -m 0644 90-platform-profile.rules /etc/udev/rules.d/
+#           sudo udevadm control --reload && sudo udevadm trigger -s platform-profile
+ACTION=="add|change", SUBSYSTEM=="platform-profile", RUN+="/usr/bin/chgrp wheel /sys%p/profile", RUN+="/usr/bin/chmod g+w /sys%p/profile"
