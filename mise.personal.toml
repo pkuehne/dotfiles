@@ -10,7 +10,8 @@
 # not get has to be absent from the base rather than disabled on top of it.
 
 [tools]
-codex = "latest"
+claude = "latest"
+codex  = "latest"
 
 [dotfiles]
 "~/.config/mise/conf.d/personal.toml" = { source = "~/dotfiles/mise.personal.toml" }

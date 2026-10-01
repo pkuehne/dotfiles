@@ -3,7 +3,6 @@
 
 [tools]
 # Language runtimes and development-only tools stay off utility/remote hosts.
-claude      = "latest"
 cmake       = "4.4.3"
 go          = "1.27.1"
 lazydocker  = "0.25.2"
