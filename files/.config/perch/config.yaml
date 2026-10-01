@@ -3,11 +3,9 @@
 interval: 16ms
 separator: " "
 
-modules-left:  [spinner, tmux]
-modules-right: [custom/rail, battery, clock]
+modules-left:  [spinner, custom/rail]
+modules-right: [cpu, memory, battery, clock]
 
-# Which palette the bar draws with. Nothing below names a colour directly, so
-# this line is the whole of a theme change.
 palette: tokyonight-moon
 
 palettes:
@@ -21,15 +19,6 @@ palettes:
     warn:    "#ffc777"
     error:   "#ff757f"
 
-  dracula:
-    text:    "#f8f8f2"
-    muted:   "#6272a4"
-    surface: "#44475a"
-    accent:  "#bd93f9"
-    ok:      "#50fa7b"
-    warn:    "#ffb86c"
-    error:   "#ff5555"
-
 spinner:
   interval: 64ms
   style: {default: ok}
@@ -37,8 +26,6 @@ spinner:
 tmux:
   interval: 2s
   format: "{sessions}"
-  # A module that picks its own colours does it by state: tmux asks for
-  # "attached" or "default", and the palette decides what those look like.
   style:
     default:  muted
     attached: accent
@@ -50,28 +37,42 @@ custom/rail:
   format: "{output}"
 
 battery:
-  format: "{icon} {capacity}%"
-  # The operator is part of the value, so this block says which way it goes
-  # rather than leaving that to be known about the module.
+  format: "[](fg:accent)[{icon} ](fg:surface bg:accent)[](fg:accent bg:surface)[ {capacity}% ](bg:surface)[](fg:surface)"
   states:
     critical: "<15"
     warning:  "<30"
-  # A ramp per state: charging wants different glyphs, not a different colour.
   icons:
-    default:  ["󰁺", "󰁼", "󰁾", "󰂀", "󰂂"]
-    charging: ["󰢜", "󰂉", "󰂅"]
-  # Styles merge with default first, so critical names only what it changes.
-  # Nothing styles "discharging": the module reports no state then, which is
-  # what leaves warning and critical in charge of the colour just when they
-  # matter.
+    default:  ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂" ,"󰁹"]
+    charging: ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂅"]
   style:
     default:  text
     warning:  warn
     critical: "bold error"
     charging: ok
 
+cpu:
+  format: "[](fg:accent)[ ](fg:surface bg:accent)[](fg:accent bg:surface)[ {usage:.0f}% ](bg:surface)[](fg:surface)"
+  interval: 2s
+  states:
+    warning:  ">50"
+    critical: ">80"
+  icons: ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+  style:
+    default:  text
+    warning:  warn
+    critical: "bold error"
+
+memory:
+  format: "[](fg:accent)[ ](fg:surface bg:accent)[](fg:accent bg:surface)[ {percentage:.1f}% ](bg:surface)[](fg:surface)"
+  interval: 5s
+  states:
+    warning:  ">70"
+    critical: ">90"
+  icons: ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+  style:
+    default:  text
+    warning:  warn
+    critical: "bold error"
+
 clock:
-  # [text](style) styles a span and ends with it. The halfmoons want the
-  # opposite pairing from the time between them — the cap is the pill colour in
-  # the foreground, with nothing behind it.
-  format: "[](fg:surface)[%H:%M:%S](fg:text bg:surface)[](fg:surface)"
+  format: "[](fg:accent)[󰥔 ](fg:surface bg:accent)[](fg:accent bg:surface)[ %H:%M:%S ](bg:surface)[](fg:surface)"
