@@ -127,3 +127,7 @@ run = "bat cache --build >/dev/null && echo 'bat theme cache rebuilt'"
 [tasks.up]
 description = "Upgrade pinned tool versions, then refresh completions"
 run = ["mise up", "mise run completions", "mise run bat-cache"]
+
+[tasks.desktop-packages-arch]
+description = "Install desktop packages on Arch (pacman) systems"
+run = "sudo pacman -S --needed kitty niri ttf-firacode-nerd xwayland-satellite"
