@@ -2,7 +2,9 @@ _zplug=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins
 
 # fzf-tab must be loaded after compinit, before other plugins
 source $_zplug/fzf-tab/fzf-tab.plugin.zsh 2>/dev/null
-source $_zplug/powerlevel10k/powerlevel10k.zsh-theme 2>/dev/null
+if [[ $TTY != /dev/tty1 ]]; then
+  source $_zplug/powerlevel10k/powerlevel10k.zsh-theme 2>/dev/null
+fi
 source $_zplug/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 source $_zplug/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
 unset _zplug
