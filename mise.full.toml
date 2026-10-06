@@ -35,3 +35,15 @@ sed \
 [dotfiles]
 # Preserve the full layer on later bare `mise bootstrap` runs.
 "~/.config/mise/conf.d/dotfiles-full.toml" = { source = "~/dotfiles/mise.full.toml" }
+
+[tasks.desktop-packages-arch]
+description = "Install desktop packages on Arch (pacman) systems"
+run = """
+  sudo pacman -S --needed \
+    kitty \
+    niri \
+    ttf-firacode-nerd \
+    xwayland-satellite \
+    quickshell \
+
+"""
