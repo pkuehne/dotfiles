@@ -57,6 +57,7 @@ esac
 
 echo "==> Running mise bootstrap ($PROFILE profile)..."
 mise trust "$DOTFILES_DIR"
+cd "$HOME"
 mise bootstrap --yes
 
 echo "==> Done! Restart your shell to pick up all changes."

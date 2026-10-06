@@ -1,6 +1,10 @@
 # Thin wrappers around mise — everything real is declared in mise.toml.
 # No -C: every config in ~/.config/mise/conf.d is global, so a bare
 # `mise bootstrap` converges this repo and any overlay layered on top of it.
+# Run from $HOME: inside the repo, mise.toml loads as a project config and
+# outranks the overlays in conf.d.
+set working-directory := '..'
+
 default: help
 
 help:
@@ -17,7 +21,7 @@ apply:
 
 # Install the full workstation layer, including language runtimes.
 full:
-  ./bootstrap.sh full
+  {{justfile_directory()}}/bootstrap.sh full
 
 # Show what `just apply` would change, without changing anything
 plan:

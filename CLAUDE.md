@@ -89,6 +89,10 @@ and a bare `mise bootstrap` then converges both in a single pass, no `-C`.
 
 mise.toml has no `include`/`import` key; `conf.d` is the mechanism.
 
+Run mise from outside the repo. Inside `~/dotfiles`, `mise.toml` also loads as a
+project config, which outranks every `conf.d` overlay, so base entries silently
+win. The justfile and `bootstrap.sh` both run mise from `$HOME` for this reason.
+
 An overlay redirects an individual file by **naming the same target path**:
 whole-file `[dotfiles]` entries merge by target path, and the later config layer
 wins. That only works for files with their own entry — anything swept up by a
@@ -102,13 +106,17 @@ skips when absent.
 
 ## Tools installed
 
-bat, btop, claude, cmake, delta, difftastic, direnv, duf, dust, eza, fd, fzf,
-gh, go, gum, just, lazydocker, lazygit, neovim, node, ripgrep, starship, tmux,
-tree-sitter, vivid, watchexec, yq, zoxide — all pinned in `[tools]`.
+Everyday CLI tools (e.g. bat, fzf, lazygit, neovim, ripgrep) are pinned in
+`[tools]` in `mise.toml` and installed everywhere.
 
-`mise.personal.toml` adds `codex` on personal machines only. `[tools]` merges
-additively and a later layer cannot *remove* an inherited entry, so anything a
-work machine must not have has to live there rather than in `[tools]` here.
+`mise.full.toml` adds heavier build tooling (e.g. go, node) on the full
+workstation profile only.
+
+`mise.personal.toml` adds tools for personal machines only (e.g. claude).
+`[tools]` merges additively and a later layer cannot *remove* an inherited
+entry, so anything a work machine must not have has to live there rather than
+in `[tools]` here — claude in particular, because work installs its own build
+and a mise-managed copy shadows it on PATH.
 
 ## Adding a new tool
 
