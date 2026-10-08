@@ -9,12 +9,12 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "$HOME/.claude/statusline.sh"
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
+  "theme": "dark",
   "agentPushNotifEnabled": true
 }
