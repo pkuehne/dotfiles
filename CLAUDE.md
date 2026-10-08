@@ -16,6 +16,7 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
   .zshenv                 # Sets ZDOTDIR; the one zsh file that cannot move
   .claude/
     settings.json         # Own entry, so an overlay can redirect it
+    CLAUDE.md             # Global Claude instructions (~/.claude/CLAUDE.md); own entry too
     statusline.sh         # Extracted from settings.json so overlays duplicate less
   .config/
     bash/rc.d/            # Bash fallback fragments, sourced by the ~/.bashrc block
@@ -97,8 +98,8 @@ An overlay redirects an individual file by **naming the same target path**:
 whole-file `[dotfiles]` entries merge by target path, and the later config layer
 wins. That only works for files with their own entry — anything swept up by a
 `symlink-each` directory walk cannot be redirected — which is why the `exclude`
-list on the `"~"` entry pulls `.ssh/**` and `.claude/settings.json` out of the
-walk and gives each its own entry.
+list on the `"~"` entry pulls `.ssh/**`, `.claude/settings.json` and
+`.claude/CLAUDE.md` out of the walk and gives each its own entry.
 
 For git, the overlay needs no dotfile entry at all: `files/.config/git/config`
 ends with `[include] path = local.config`, a relative include that git silently

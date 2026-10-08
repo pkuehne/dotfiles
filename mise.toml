@@ -50,14 +50,16 @@ FZF_ALT_C_OPTS = "--preview 'eza --tree --level=2 --color=always {}'"
 # survive: LazyVim's LICENSE/README. manifest = "git" keeps untracked strays
 # out of the walk.
 #
-# .claude/settings.json is excluded here and given its own entry below: a file
-# swept up by the walk cannot be redirected by a later config layer, one with
-# its own target path can. .ssh is excluded because it is machine-specific and
-# lives in mise.personal.toml instead — an overlay cannot switch it off, only
-# point it somewhere else, and there is nothing to point it at on a work box.
-"~" = { source = "~/dotfiles/files", mode = "symlink-each", manifest = "git", exclude = [".ssh/**", ".claude/settings.json"] }
+# .claude/settings.json and .claude/CLAUDE.md are excluded here and given their
+# own entries below: a file swept up by the walk cannot be redirected by a later
+# config layer, one with its own target path can. .ssh is excluded because it
+# is machine-specific and lives in mise.personal.toml instead — an overlay
+# cannot switch it off, only point it somewhere else, and there is nothing to
+# point it at on a work box.
+"~" = { source = "~/dotfiles/files", mode = "symlink-each", manifest = "git", exclude = [".ssh/**", ".claude/settings.json", ".claude/CLAUDE.md"] }
 
 "~/.claude/settings.json" = { source = "~/dotfiles/files/.claude/settings.json" }
+"~/.claude/CLAUDE.md" = { source = "~/dotfiles/files/.claude/CLAUDE.md" }
 
 "~/.config/mise/conf.d/dotfiles.toml" = { source = "~/dotfiles/mise.toml" }
 
