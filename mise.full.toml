@@ -31,6 +31,15 @@ sed \
   -e 's/^const float GLOW_OPACITY = .*/const float GLOW_OPACITY = 0.07;/' \
   "$shader_dir/aurora/aurora.glsl" > "$shader_dir/aurora-tokyonight.glsl"
 '''
+# quickshell only generates its qmlls import config when .qmlls.ini already
+# exists, replacing it with a symlink into /run. qmlls resolves the dotfile
+# symlinks and looks next to the repo copy, so link it there too (gitignored).
+post-dotfiles = '''
+set -eu
+ini="$HOME/.config/quickshell/titan/.qmlls.ini"
+[ -L "$ini" ] || [ -e "$ini" ] || : > "$ini"
+ln -sfn "$ini" "$HOME/dotfiles/files/.config/quickshell/titan/.qmlls.ini"
+'''
 
 [dotfiles]
 # Preserve the full layer on later bare `mise bootstrap` runs.
