@@ -56,7 +56,10 @@ run = """
     quickshell \
     bluez \
     bluez-tools \
-    kernel-modules-hook
+    kernel-modules-hook \
+    gnome-keyring \
+    seahorse
   sudo systemctl enable --now bluetooth
   sudo systemctl enable linux-modules-cleanup
+  systemctl --user enable --now gnome-keyring-daemon.socket
 """
