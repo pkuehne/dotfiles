@@ -54,5 +54,7 @@ run = """
     ttf-firacode-nerd \
     xwayland-satellite \
     quickshell \
-
+    bluez \
+    bluez-tools
+  sudo systemctl enable --now bluetooth
 """
