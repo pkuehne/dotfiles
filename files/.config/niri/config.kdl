@@ -43,6 +43,7 @@ binds {
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
     Mod+D hotkey-overlay-title="Run an Application: firefox" { spawn "firefox"; }
+    Mod+Space hotkey-overlay-title="Run an Application: launcher" { spawn "qs" "-c" "titan" "ipc" "call" "launcher" "toggle"; }
     Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
     Mod+Shift+S hotkey-overlay-title="Take a screenshot" { screenshot; }
 
