@@ -1,0 +1,3 @@
+environment {
+    XDG_SESSION_TYPE "wayland"
+}

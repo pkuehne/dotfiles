@@ -10,6 +10,7 @@ include "config.d/layout.kdl"
 include "config.d/autostart.kdl"
 include "config.d/overlay.kdl"
 include "config.d/animation.kdl"
+include "config.d/environment.kdl"
 
 // Window Rules
 include "rules.d/firefox.kdl"
