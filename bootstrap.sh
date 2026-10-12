@@ -9,8 +9,8 @@ PROFILE="${1:-minimal}"
 # mise.toml's [dotfiles] sources are absolute paths under $DOTFILES_DIR, and have
 # to be: mise does no templating on a dotfile `source`, and a relative one resolves
 # against ~/.config/mise/conf.d/ once mise.toml is symlinked there.
-HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
-if [ "$HERE" != "$(CDPATH= cd -- "$DOTFILES_DIR" 2>/dev/null && pwd -P)" ]; then
+HERE=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)
+if [ "$HERE" != "$(CDPATH='' cd -- "$DOTFILES_DIR" 2>/dev/null && pwd -P)" ]; then
     echo "ERROR: clone this repo to $DOTFILES_DIR (running from $HERE)" >&2
     exit 1
 fi

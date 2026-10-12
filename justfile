@@ -46,3 +46,7 @@ up:
 # Regenerate zsh completions
 completions:
   mise run completions
+
+# Lint shell scripts with shellcheck
+lint:
+  cd {{justfile_directory()}} && git ls-files -z --cached --others --exclude-standard '*.sh' '*.bash' | xargs -0 shellcheck
