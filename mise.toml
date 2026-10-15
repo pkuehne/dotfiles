@@ -78,9 +78,6 @@ unset _f""" }
 "~/.local/share/zsh/plugins/zsh-completions" = { url = "https://github.com/zsh-users/zsh-completions" }
 "~/.local/share/zsh/plugins/zsh-syntax-highlighting" = { url = "https://github.com/zsh-users/zsh-syntax-highlighting" }
 
-[bootstrap.user]
-login_shell = "/usr/bin/zsh"
-
 # No [bootstrap.mise_shell_activate] on purpose: activation is zsh/033-mise.zsh
 # and bash/rc.d/030-mise.bash, and mise editing ~/.zshrc would fight the symlink.
 
@@ -129,4 +126,9 @@ run = "bat cache --build >/dev/null && echo 'bat theme cache rebuilt'"
 [tasks.up]
 description = "Upgrade pinned tool versions, then refresh completions"
 run = ["mise up", "mise run completions", "mise run bat-cache"]
+
+[tasks.change-shell]
+description = "Make <shell> the login shell"
+usage = 'arg "<shell>" help="Full path to the shell, as listed in /etc/shells"'
+run = 'chsh -s "$usage_shell"'
 

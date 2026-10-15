@@ -50,3 +50,7 @@ completions:
 # Lint shell scripts with shellcheck
 lint:
   cd {{justfile_directory()}} && git ls-files -z --cached --others --exclude-standard '*.sh' '*.bash' | xargs -0 shellcheck
+
+# Make zsh the login shell
+change-shell:
+  mise run change-shell "$(command -v zsh)"
