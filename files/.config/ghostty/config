@@ -16,16 +16,9 @@ gtk-toolbar-style = flat
 # Cursor styling
 cursor-style = "block"
 cursor-style-blink = false
-# Tokyo Night Moon purple; the cursor-sweep shader inherits this colour.
+# Tokyo Night Moon purple
 cursor-color = #c099ff
 cursor-text = #222436
-
-# Shader ambience
-# The repositories and generated Aurora variant are provisioned by the full
-# profile only; Ghostty itself is not used on bare VMs.
-custom-shader = shaders/aurora-tokyonight.glsl
-custom-shader = shaders/ghostty-shaders/shaders/cursor_sweep.glsl
-custom-shader-animation = true
 
 # Cursor styling + SSH session terminfo
 # (all shell integration options must be passed together)
