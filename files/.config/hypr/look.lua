@@ -25,6 +25,7 @@ hl.config({
 
         dim_inactive = true,
         dim_strength = 0.15,
+        dim_special  = 0.4,
 
         shadow = {
             enabled        = true,
@@ -39,6 +40,7 @@ hl.config({
             size      = 3,
             passes    = 1,
             vibrancy  = 0.1696,
+            special   = true,
         },
     },
 

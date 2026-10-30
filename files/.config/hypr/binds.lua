@@ -55,6 +55,14 @@ hl.bind(mainMod .. " + CTRL + F",      hl.dsp.layout("fit expand"))
 hl.bind(mainMod .. " + C",             hl.dsp.layout("center"))
 hl.bind(mainMod .. " + CTRL + C",      hl.dsp.layout("fit visible"))
 
+hl.bind(mainMod .. " + grave", function()
+    if #hl.get_windows({ class = "scratchpad" }) == 0 then
+        hl.dispatch(hl.dsp.exec_cmd(terminal .. " --class scratchpad"))
+    else
+        hl.dispatch(hl.dsp.workspace.toggle_special("scratchpad"))
+    end
+end)
+
 hl.bind(mainMod .. " + V",             hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + W",             hl.dsp.group.toggle())
 
