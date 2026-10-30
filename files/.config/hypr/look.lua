@@ -1,3 +1,5 @@
+local c = require("colors")
+
 hl.config({
     general = {
         gaps_in  = 5,
@@ -6,8 +8,8 @@ hl.config({
         border_size = 2,
 
         col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            inactive_border = "rgba(595959aa)",
+            active_border   = { colors = { c.rgb("blue"), c.rgb("magenta") }, angle = 45 },
+            inactive_border = c.rgb("bg_highlight"),
         },
 
         resize_on_border = false,
@@ -25,7 +27,7 @@ hl.config({
             enabled      = true,
             range        = 4,
             render_power = 3,
-            color        = 0xee1a1a1a,
+            color        = c.rgba("bg_dark1", "ee"),
         },
 
         blur = {
@@ -40,9 +42,25 @@ hl.config({
         enabled = true,
     },
 
+    group = {
+        col = {
+            border_active   = { colors = { c.rgb("magenta"), c.rgb("purple") }, angle = 45 },
+            border_inactive = c.rgb("bg_highlight"),
+        },
+        groupbar = {
+            col = {
+                active   = c.rgb("magenta"),
+                inactive = c.rgb("bg_highlight"),
+            },
+            text_color          = c.rgb("bg_dark"),
+            text_color_inactive = c.rgb("fg_dark"),
+        },
+    },
+
     misc = {
-        force_default_wallpaper = -1,
-        disable_hyprland_logo   = false,
+        force_default_wallpaper = 0,
+        disable_hyprland_logo   = true,
+        background_color        = c.rgb("bg"),
     },
 
     layers = {
