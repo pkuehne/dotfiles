@@ -2,7 +2,7 @@ local terminal = "kitty"
 local browser  = "firefox"
 local launcher = "qs -c titan ipc call launcher toggle"
 local keybinds = "qs -c titan ipc call keybinds toggle"
-local locker   = "swaylock"
+local locker   = "loginctl lock-session"
 
 local mainMod = "SUPER"
 
