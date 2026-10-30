@@ -17,17 +17,21 @@ hl.config({
     },
 
     decoration = {
-        rounding       = 10,
-        rounding_power = 2,
+        rounding       = 12,
+        rounding_power = 4,
 
         active_opacity   = 1.0,
         inactive_opacity = 1.0,
 
+        dim_inactive = true,
+        dim_strength = 0.15,
+
         shadow = {
-            enabled      = true,
-            range        = 4,
-            render_power = 3,
-            color        = c.rgba("bg_dark1", "ee"),
+            enabled        = true,
+            range          = 20,
+            render_power   = 3,
+            color          = c.rgba("bg_dark1", "ee"),
+            color_inactive = c.rgba("bg_dark1", "66"),
         },
 
         blur = {
