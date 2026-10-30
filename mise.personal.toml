@@ -20,3 +20,31 @@ codex  = "latest"
 "~/.ssh/config.d"        = { source = "~/dotfiles/files/.ssh/config.d", mode = "symlink-each", manifest = "git" }
 "~/.ssh/allowed_signers" = { source = "~/dotfiles/files/.ssh/allowed_signers" }
 "~/.ssh/id_peter.pub"    = { source = "~/dotfiles/files/.ssh/id_peter.pub" }
+
+[bootstrap.hooks]
+# quickshell only generates its qmlls import config when .qmlls.ini already
+# exists, replacing it with a symlink into /run. qmlls resolves the dotfile
+# symlinks and looks next to the repo copy, so link it there too (gitignored).
+post-dotfiles = '''
+set -eu
+ini="$HOME/.config/quickshell/titan/.qmlls.ini"
+[ -L "$ini" ] || [ -e "$ini" ] || : > "$ini"
+ln -sfn "$ini" "$HOME/dotfiles/files/.config/quickshell/titan/.qmlls.ini"
+'''
+
+[tasks.git-key]
+description = "Create this host's git SSH key if missing, then print the public key"
+raw = true
+run = '''
+set -eu
+host=$(uname -n)
+host=${host%%.*}
+key="$HOME/.ssh/id_${host}_git"
+if [ ! -f "$key" ]; then
+  ssh-keygen -t ed25519 -C "$(id -un)@${host} git" -f "$key"
+  echo
+  echo "Add this key to GitHub and Gitea, for both authentication and signing:"
+fi
+git config --file "$HOME/.config/git/signing.config" user.signingKey "$key"
+cat "$key.pub"
+'''

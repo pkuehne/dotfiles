@@ -23,6 +23,24 @@ apply:
 full:
   {{justfile_directory()}}/bootstrap.sh full
 
+# Print this host's git SSH public key, creating the key first if it is missing
+git-key:
+  mise run git-key
+
+# Install the laptop desktop: Hyprland, titan's dependencies, services (Arch only)
+desktop:
+  {{justfile_directory()}}/desktop/install.sh
+
+# List missing desktop packages, and AUR packages no install script covers
+desktop-diff:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  dir={{justfile_directory()}}
+  echo "Missing desktop packages:"
+  comm -23 <(sort "$dir/desktop/packages.txt") <(pacman -Qq | sort)
+  echo "AUR packages not installed by any script:"
+  comm -13 <(grep -ho 'yay -S --needed [^ ]*' "$dir"/files/.config/quickshell/titan/launcher/install/*.sh | awk '{print $NF}' | sort) <(pacman -Qqm | sort)
+
 # Show what `just apply` would change, without changing anything
 plan:
   mise bootstrap --dry-run

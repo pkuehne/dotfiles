@@ -1,0 +1,16 @@
+hyprland
+xdg-desktop-portal-hyprland
+hyprlock
+hypridle
+quickshell
+kitty
+ttf-firacode-nerd
+networkmanager
+pipewire-pulse
+wireplumber
+bluez
+bluez-tools
+gnome-keyring
+seahorse
+kernel-modules-hook
+tailscale

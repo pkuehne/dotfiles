@@ -60,4 +60,7 @@ mise trust "$DOTFILES_DIR"
 cd "$HOME"
 mise bootstrap --yes
 
+echo "==> Git SSH key for this host:"
+mise run git-key
+
 echo "==> Done! Restart your shell to pick up all changes."

@@ -42,7 +42,6 @@
 	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
-	program = "/opt/1Password/op-ssh-sign"
 [init]
 	defaultBranch = main      # It's main now, don't care what DHH thinks
 [pull]
@@ -58,7 +57,10 @@
 [user]
 	name = Peter Kuehne
 	email = peter.kuehne@gmail.com
-	signingKey = ~/.ssh/id_peter.pub
+
+# This host's signing key, written by `just git-key`.
+[include]
+	path = ~/.config/git/signing.config
 
 # Machine-local overrides (work identity, signing), read after everything above
 # so they win. Git ignores a missing include, so a personal box needs nothing

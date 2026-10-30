@@ -11,36 +11,6 @@ shellcheck  = "0.11.0"
 tree-sitter = "0.27.0"
 1password   = "2.40.0"
 
-[bootstrap.hooks]
-# quickshell only generates its qmlls import config when .qmlls.ini already
-# exists, replacing it with a symlink into /run. qmlls resolves the dotfile
-# symlinks and looks next to the repo copy, so link it there too (gitignored).
-post-dotfiles = '''
-set -eu
-ini="$HOME/.config/quickshell/titan/.qmlls.ini"
-[ -L "$ini" ] || [ -e "$ini" ] || : > "$ini"
-ln -sfn "$ini" "$HOME/dotfiles/files/.config/quickshell/titan/.qmlls.ini"
-'''
-
 [dotfiles]
 # Preserve the full layer on later bare `mise bootstrap` runs.
 "~/.config/mise/conf.d/dotfiles-full.toml" = { source = "~/dotfiles/mise.full.toml" }
-
-[tasks.desktop-packages-arch]
-description = "Install desktop packages on Arch (pacman) systems"
-run = """
-  sudo pacman -S --needed \
-    kitty \
-    niri \
-    ttf-firacode-nerd \
-    xwayland-satellite \
-    quickshell \
-    bluez \
-    bluez-tools \
-    kernel-modules-hook \
-    gnome-keyring \
-    seahorse
-  sudo systemctl enable --now bluetooth
-  sudo systemctl enable linux-modules-cleanup
-  systemctl --user enable --now gnome-keyring-daemon.socket
-"""
