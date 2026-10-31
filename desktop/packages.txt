@@ -15,3 +15,4 @@ seahorse
 kernel-modules-hook
 tailscale
 brightnessctl
+hyprshot

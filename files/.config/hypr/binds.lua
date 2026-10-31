@@ -5,6 +5,7 @@ local keybinds = "qs -c titan ipc call keybinds toggle"
 local media    = "qs -c titan ipc call media"
 local brightness = "qs -c titan ipc call brightness"
 local locker   = "loginctl lock-session"
+local screenshot = "hyprshot -m region -o ~/Pictures/Screenshots"
 
 local mainMod = "SUPER"
 
@@ -18,6 +19,7 @@ hl.bind(mainMod .. " + D",             hl.dsp.exec_cmd(browser),    desc("Browse
 hl.bind(mainMod .. " + Space",         hl.dsp.exec_cmd(launcher),   desc("App launcher"))
 hl.bind(mainMod .. " + Q",             hl.dsp.window.close(),       desc("Close window"))
 hl.bind(mainMod .. " + ALT + L",       hl.dsp.exec_cmd(locker),     desc("Lock screen"))
+hl.bind(mainMod .. " + SHIFT + S",     hl.dsp.exec_cmd(screenshot), desc("Screenshot region"))
 hl.bind(mainMod .. " + SHIFT + E",     hl.dsp.exit(),               desc("Quit Hyprland"))
 hl.bind("CTRL + ALT + Delete",         hl.dsp.exit(),               desc("Quit Hyprland"))
 hl.bind(mainMod .. " + SHIFT + P", function()
