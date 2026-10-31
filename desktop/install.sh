@@ -11,4 +11,4 @@ sudo pacman -S --needed "${packages[@]}"
 
 sudo systemctl enable --now bluetooth NetworkManager tailscaled
 sudo systemctl enable linux-modules-cleanup
-systemctl --user enable --now gnome-keyring-daemon.socket
+systemctl --user enable --now gnome-keyring-daemon.socket tailscale-systray.service

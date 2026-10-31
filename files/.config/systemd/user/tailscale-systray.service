@@ -1,0 +1,14 @@
+[Unit]
+Description=Tailscale System Tray
+Documentation=https://tailscale.com/kb/1597/linux-systray
+Requires=dbus.service
+After=dbus.service
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/tailscale systray
+
+[Install]
+WantedBy=graphical-session.target
