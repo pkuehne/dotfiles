@@ -16,3 +16,4 @@ kernel-modules-hook
 tailscale
 brightnessctl
 hyprshot
+hyprpolkitagent
