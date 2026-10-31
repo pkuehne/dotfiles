@@ -17,3 +17,4 @@ tailscale
 brightnessctl
 hyprshot
 hyprpolkitagent
+cliphist
