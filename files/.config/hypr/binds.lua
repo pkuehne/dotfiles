@@ -2,6 +2,7 @@ local terminal = "kitty"
 local browser  = "firefox"
 local launcher = "qs -c titan ipc call launcher toggle"
 local clipboard = "qs -c titan ipc call clipboard toggle"
+local wallpaper = "qs -c titan ipc call wallpaper toggle"
 local keybinds = "qs -c titan ipc call keybinds toggle"
 local media    = "qs -c titan ipc call media"
 local brightness = "qs -c titan ipc call brightness"
@@ -19,6 +20,7 @@ hl.bind(mainMod .. " + T",             hl.dsp.exec_cmd(terminal),   desc("Termin
 hl.bind(mainMod .. " + D",             hl.dsp.exec_cmd(browser),    desc("Browser"))
 hl.bind(mainMod .. " + Space",         hl.dsp.exec_cmd(launcher),   desc("App launcher"))
 hl.bind(mainMod .. " + SHIFT + V",     hl.dsp.exec_cmd(clipboard),  desc("Clipboard history"))
+hl.bind(mainMod .. " + SHIFT + W",     hl.dsp.exec_cmd(wallpaper),  desc("Choose wallpaper"))
 hl.bind(mainMod .. " + Q",             hl.dsp.window.close(),       desc("Close window"))
 hl.bind(mainMod .. " + ALT + L",       hl.dsp.exec_cmd(locker),     desc("Lock screen"))
 hl.bind(mainMod .. " + SHIFT + S",     hl.dsp.exec_cmd(screenshot), desc("Screenshot region"))
