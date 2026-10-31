@@ -1,8 +1,8 @@
 # dotfiles
 
 Portable Linux workstation configuration managed entirely by
-[mise](https://mise.jdx.dev/). Supported targets are x86_64 Omarchy/Arch and
-Ubuntu/Debian under WSL.
+[mise](https://mise.jdx.dev/). Supported targets are x86_64 Arch (the laptop
+runs the Hyprland desktop described below) and Ubuntu/Debian under WSL.
 
 ## Bootstrap
 
@@ -45,6 +45,9 @@ just diff       # pending dotfile changes in detail
 just status     # state of every managed dotfile
 just link       # dotfiles only; also prunes links left by deleted files
 just up         # bump pinned tool versions, then refresh completions
+just git-key    # print this host's git SSH key, creating it if missing
+just desktop    # install the Arch laptop desktop packages and services
+just desktop-diff  # desktop packages missing, AUR packages no script covers
 ```
 
 `files/` maps onto `$HOME` using mise's `symlink-each` mode and a Git manifest:
@@ -84,34 +87,55 @@ the docker helpers. Each fragment returns cleanly when its tool is absent.
 ## Theme
 
 Tokyo Night Moon throughout: bat, delta, fzf, ghostty, kitty, lazygit, tmux,
-vivid, and the Neovim colorscheme.
+vivid, the Neovim colorscheme, and on the desktop Hyprland, hyprlock,
+hyprtoolkit and the titan shell. Hyprland's palette lives in
+`files/.config/hypr/colors.lua`.
 
 bat is the exception to "first-party everywhere": it ships no Tokyo Night, so
 `files/.config/bat/themes/tokyonight_moon.tmTheme` is vendored and compiled by
 `mise run bat-cache` (wired into bootstrap and `just up`). delta inherits it.
 
-## Omarchy ownership
+## Desktop (Arch laptop)
 
-This repository manages Kitty, ghostty, fontconfig, Neovim and the modified
-Hyprland monitor configuration. All other Hyprland files remain owned by
-Omarchy, and generated theme/state directories are not tracked. Omarchy
-migrations can write through managed symlinks — review `git diff` after an
-update.
+The laptop runs Hyprland with a Lua config in `files/.config/hypr/`, split by
+concern: `hyprland.lua` only `require`s the others (`env`, `input`, `layout`,
+`look`, `animations`, `binds`, and one file per app under `rules/`). The
+layout is Hyprland's scrolling layout. `hyprlock.conf` and `hypridle.conf`
+handle locking and idle; `hyprtoolkit.conf` themes Hyprland's own dialogs.
+
+The shell is titan, a custom Quickshell config in
+`files/.config/quickshell/titan/`: bar, workspaces, notifications, launcher,
+clipboard history, wallpaper picker, keybind popup, and the volume, brightness
+and media-key handling. Hyprland binds reach it over IPC
+(`qs -c titan ipc call <target> <function>`).
+
+Desktop packages come from pacman, not mise. `just desktop` installs
+`desktop/packages.txt`, 1Password from the AUR, and enables the services.
+Optional apps install on first use from titan's launcher
+(`launcher/install/*.sh`); `just desktop-diff` lists AUR packages that neither
+path covers.
+
+The niri config in `files/.config/niri/` is kept for switching back.
 
 ## SSH and signed commits
 
-The repository contains only the SSH public key, allowed-signers file and SSH
-client configuration. Private keys, credentials, known-hosts files, control
-sockets and agent sockets must never be committed.
+The repository contains only the `id_peter` public key and SSH client
+configuration. Private keys, credentials, known-hosts files, control sockets
+and agent sockets must never be committed.
 
-Provision `~/.ssh/id_peter` separately before creating signed commits or tags:
+Each host has its own git key. `just git-key` (also run at the end of
+`bootstrap.sh`) creates `~/.ssh/id_<host>_git` with the comment
+`<user>@<host> git` if it is missing, then prints the public key: add it to
+GitHub and Gitea for both authentication and signing. It also writes the
+untracked `~/.config/git/signing.config` (the signing key) and
+`~/.ssh/allowed_signers` (this host's key only). ssh selects the key with
+`IdentityFile ~/.ssh/id_%L_git`; commit and tag signing is always on.
 
-```bash
-chmod 700 ~/.ssh
-chmod 600 ~/.ssh/id_peter
-```
+`id_peter` is offered to every host as well. On the laptop its private key
+lives in 1Password, whose agent Hyprland exports as `SSH_AUTH_SOCK`; anywhere
+else, provision `~/.ssh/id_peter` (mode 600) separately if it is needed.
 
 ## Ubuntu/WSL notes
 
-GUI-only Omarchy configuration stays linked on WSL but is inert unless those
-applications are installed.
+Desktop configuration (Hyprland, titan, kitty and the like) stays linked on WSL
+but is inert unless those applications are installed.

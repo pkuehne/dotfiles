@@ -11,6 +11,10 @@ bootstrap.sh              # Only entry point: installs mise, seeds the conf.d li
                           # runs `mise bootstrap`. Must be run from a clone at ~/dotfiles.
 mise.toml                 # EVERYTHING: settings, tools, env, dotfiles, repos, hooks, tasks
 justfile                  # Thin wrappers around mise commands
+mise.personal.toml        # personal-only layer: ssh entries, git-key task, qmlls hook
+desktop/                  # Arch laptop only, pacman not mise
+  packages.txt            # repo packages for the Hyprland desktop and titan
+  install.sh              # `just desktop`: pacman, 1Password (AUR), services
 
 files/                    # Mirrored into $HOME by the single "~" [dotfiles] entry
   .zshenv                 # Sets ZDOTDIR; the one zsh file that cannot move
@@ -26,13 +30,23 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
     ghostty/config        # Tokyo Night Moon
     git/config            # ends with an optional `include local.config` for overlays
     git/ignore            # global gitignore (git's default XDG path)
-    hypr/monitors.lua     # only Hyprland file that differs from Omarchy's defaults
+    hypr/                 # Hyprland, Lua config split by concern
+      hyprland.lua        # only require()s the files below, in load order
+      colors.lua          # Tokyo Night Moon palette shared by the other files
+      binds.lua           # every keybind; described binds show in titan's popup
+      rules/              # one file per app (firefox, scratchpad, quickshell, ...)
+      hyprlock.conf       # hyprlang, not Lua; background follows the wallpaper symlink
+      hypridle.conf       # lock at 5 min, screen off, suspend; lock before sleep
+      hyprtoolkit.conf    # theme for Hyprland's own dialogs (polkit agent)
     kitty/                # kitty.conf + tokyonight-moon.conf
     lazydocker/config.yml
     lazygit/config.yml
+    niri/                 # previous compositor, kept for switching back
     nvim/                 # Full LazyVim config (starter + custom overrides)
       lua/plugins/        # colorscheme.lua sets Tokyo Night Moon
+    quickshell/titan/     # the desktop shell; Hyprland binds call it over IPC
     starship.toml         # bash fallback prompt
+    systemd/user/         # hyprland-session autostart drop-in, tailscale tray
     tmux/tmux.conf        # tmux config (Tokyo Night Moon, vi-mode, TPM plugins)
     zsh/
       .zshrc              # sources $ZDOTDIR/rc.d in strict numeric order
@@ -78,6 +92,9 @@ just plan                  # Show pending changes
 just diff                  # Show pending dotfile changes in detail
 just status                # State of every managed dotfile
 just up                    # Bump pinned versions + refresh completions
+just git-key               # Print this host's git SSH key, creating it if missing
+just desktop               # Arch laptop: desktop packages + services (pacman)
+just desktop-diff          # Missing desktop packages, AUR packages no script covers
 ```
 
 ## Overlay repos
@@ -118,6 +135,12 @@ workstation profile only.
 entry, so anything a work machine must not have has to live there rather than
 in `[tools]` here — claude in particular, because work installs its own build
 and a mise-managed copy shadows it on PATH.
+
+Desktop packages are not mise tools. The Arch laptop gets them from pacman via
+`desktop/install.sh` (`just desktop`): Hyprland, hyprlock, hypridle, quickshell
+and the services they rely on, plus 1Password through the AUR. Optional apps
+install on first use from titan's launcher (`launcher/install/*.sh`). Anything
+that must run on VMs, the control node or WSL stays in mise.
 
 ## Adding a new tool
 
@@ -216,9 +239,10 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   `~/.config/tmux/tmux.conf` and the `tmux` binary, so any earlier phase aborts the whole
   bootstrap on a fresh machine.
 - **Theming:** Tokyo Night Moon across bat, fzf, ghostty, kitty, lazygit, delta, tmux,
-  vivid and neovim. Dracula was dropped because it has only three greys; UI chrome needs
-  a mid-tone ramp, which is why the tabline and status badges kept coming out either
-  invisible or slabby. Tokyo Night Moon supplies one (`bg_dark`/`bg`/`bg_highlight`/
+  vivid, neovim, Hyprland (`hypr/colors.lua`), hyprlock, hyprtoolkit and titan. Dracula
+  was dropped because it has only three greys; UI chrome needs a mid-tone ramp, which is
+  why the tabline and status badges kept coming out either invisible or slabby. Tokyo
+  Night Moon supplies one (`bg_dark`/`bg`/`bg_highlight`/
   `fg_gutter`/`terminal_black`/`dark3`/`comment`/`dark5`/`fg_dark`/`fg`).
 - **bat is the one theme that isn't first-party.** vivid, ghostty and kitty all know
   Tokyo Night; bat ships only Catppuccin, so `files/.config/bat/themes/` vendors
@@ -228,6 +252,21 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   covers `git diff` and the fzf previews too. **The theme is registered under its
   filename stem, `tokyonight_moon`, not the `TokyoNight` name inside the file**; get it
   wrong and bat silently falls back to the default with a warning on stderr.
+- **Hyprland config is Lua (0.57+).** `hyprland.lua` only `require`s the split files;
+  a new rule file needs a `require` line plus `git add` and `just link`. Validate with
+  `Hyprland --verify-config -c <path>` — it checks dispatcher arguments too — then
+  `hyprctl reload`. `hl.get_windows({ class = ... })` matches the exact class, while
+  window-rule `match` values are regexes. hyprlock, hypridle and hyprtoolkit still use
+  hyprlang `.conf` files.
+- **titan owns the desktop shell.** Bar, notifications, launcher, clipboard history,
+  wallpaper picker, keybind popup, and volume, brightness and media keys. Hyprland binds
+  reach it with `qs -c titan ipc call <target> <function>`. The chosen wallpaper is the
+  symlink `~/.local/state/titan/wallpaper`, which hyprlock also reads.
+- **One git key per host.** `just git-key` creates `~/.ssh/id_<host>_git` if missing and
+  writes the untracked `~/.config/git/signing.config` and `~/.ssh/allowed_signers` (this
+  host's key only). ssh uses `IdentityFile ~/.ssh/id_%L_git`; signing stays on.
+  1Password is not referenced by the shared ssh or git config: on the laptop its agent
+  reaches ssh through `SSH_AUTH_SOCK`, exported by Hyprland's `env.lua`.
 
 ## Sensitive files
 
