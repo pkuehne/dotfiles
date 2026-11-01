@@ -5,9 +5,21 @@
       "Bash(git diff *)",
       "Bash(git log *)",
       "Bash(git status)",
-      "mcp__obsidian__*"
+      "mcp__obsidian__*",
+      "Bash(ansible *)",
+      "Bash(ansible-playbook *)",
+      "Bash(ipa *)"
     ],
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "additionalDirectories": [
+      "/home/peter/vault"
+    ]
+  },
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Single-user personal homelab: networks 192.168.1.0/24 and 192.168.40.0/24, domain homelab.peterkuehne.com, with pi-control-01 as the Ansible control node. The user owns every host in it. Writes to those hosts via ansible and ipa, including FreeIPA DNS record changes for that domain, are authorized. This covers that estate only and does not extend to any other host, domain, repository or environment."
+    ]
   },
   "statusLine": {
     "type": "command",
@@ -16,5 +28,7 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "theme": "dark",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "autoMemoryDirectory": "~/vault/Claude/memory",
+  "model": "opus"
 }

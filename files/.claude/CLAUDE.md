@@ -48,3 +48,10 @@
 - Default theme is Tokyo Night Moon; font is FiraCode Nerd Font.
 - Nerd Font glyphs (U+E000–U+F8FF) get stripped from Edit/Write. Write them
   via code points (e.g. `chr(0xe0b6)`) and verify with a code-point dump.
+
+## Homelab
+
+- Homelab knowledge lives in the Obsidian vault at
+  `~/Documents/Personal Vault/Homelab/`. Read `_Conventions.md` there before
+  doing homelab work, and record what you learn back into it afterwards.
+- Write only inside that folder, and never put secrets in it.
