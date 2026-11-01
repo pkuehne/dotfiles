@@ -11,4 +11,7 @@ sudo pacman -S --needed "${packages[@]}"
 
 sudo systemctl enable --now bluetooth NetworkManager tailscaled
 sudo systemctl enable linux-modules-cleanup
+sudo install -m 0644 "$here/90-platform-profile.rules" /etc/udev/rules.d/
+sudo udevadm control --reload
+sudo udevadm trigger --subsystem-match=platform-profile
 systemctl --user enable --now gnome-keyring-daemon.socket tailscale-systray.service

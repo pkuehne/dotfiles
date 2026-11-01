@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# fanctl — platform-profile control and fan telemetry for the peter.fan widget.
+# fanctl — platform-profile control and fan telemetry for titan's fan widget.
 #
 # The ACPI platform profile is the knob that actually drives the fan curve, so
 # that is the only thing this writes. Kept dependency-free and sysfs-only: no
-# power-profiles-daemon, no omarchy helpers, nothing that reinterprets the
-# request into a smaller set of profiles.
+# power-profiles-daemon, nothing that reinterprets the request into a smaller
+# set of profiles.
 #
 # Writing the profile needs group write on the sysfs attribute, granted by
-# /etc/udev/rules.d/90-platform-profile.rules — see README.md.
+# /etc/udev/rules.d/90-platform-profile.rules, installed by desktop/install.sh.
 
 set -uo pipefail
 
