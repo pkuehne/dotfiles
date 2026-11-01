@@ -86,7 +86,7 @@ run = ["mise run completions", "mise run bat-cache"]
 
 [tasks.apply]
 description = "Deploy everything (dotfiles, repos, tools, completions)"
-run = "mise bootstrap --yes"
+run = "mise bootstrap --yes --skip-dirty"
 
 # Step 15 of `mise bootstrap`, so ~/.config/tmux/tmux.conf (step 8) and tmux
 # (step 14) both exist. TPM needs them, which is why it can't be a post-repos hook.

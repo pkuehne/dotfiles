@@ -17,7 +17,7 @@ install:
 
 # Deploy the lightweight default: dotfiles, plugin repos, editor and CLI tools.
 apply:
-  mise bootstrap --yes
+  mise bootstrap --yes --skip-dirty
 
 # Install the full workstation layer, including language runtimes.
 full:
@@ -39,11 +39,11 @@ desktop-diff:
   echo "Missing desktop packages:"
   comm -23 <(sort "$dir/desktop/packages.txt") <(pacman -Qq | sort)
   echo "AUR packages not installed by any script:"
-  comm -13 <(grep -ho 'yay -S --needed [^ ]*' "$dir"/files/.config/quickshell/titan/launcher/install/*.sh | awk '{print $NF}' | sort) <(pacman -Qqm | sort)
+  comm -13 <(grep -ho 'yay -S --needed [^ ]*' "$HOME"/.config/quickshell/titan/launcher/install/*.sh | awk '{print $NF}' | sort) <(pacman -Qqm | sort)
 
 # Show what `just apply` would change, without changing anything
 plan:
-  mise bootstrap --dry-run
+  mise bootstrap --dry-run --skip-dirty
 
 # Symlink dotfiles only
 link:

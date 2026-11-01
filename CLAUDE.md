@@ -11,7 +11,7 @@ bootstrap.sh              # Only entry point: installs mise, seeds the conf.d li
                           # runs `mise bootstrap`. Must be run from a clone at ~/dotfiles.
 mise.toml                 # EVERYTHING: settings, tools, env, dotfiles, repos, hooks, tasks
 justfile                  # Thin wrappers around mise commands
-mise.personal.toml        # personal-only layer: ssh entries, git-key task, qmlls hook
+mise.personal.toml        # personal-only layer: ssh entries, titan + nostro clones, git-key
 desktop/                  # Arch laptop only, pacman not mise
   packages.txt            # repo packages for the Hyprland desktop and titan
   install.sh              # `just desktop`: pacman, 1Password (AUR), services
@@ -44,7 +44,6 @@ files/                    # Mirrored into $HOME by the single "~" [dotfiles] ent
     niri/                 # previous compositor, kept for switching back
     nvim/                 # Full LazyVim config (starter + custom overrides)
       lua/plugins/        # colorscheme.lua sets Tokyo Night Moon
-    quickshell/titan/     # the desktop shell; Hyprland binds call it over IPC
     starship.toml         # bash fallback prompt
     systemd/user/         # hyprland-session autostart drop-in, tailscale tray
     tmux/tmux.conf        # tmux config (Tokyo Night Moon, vi-mode, TPM plugins)
@@ -259,14 +258,23 @@ Shell fragments are ordinary dotfiles under that same rule: numbered `*.zsh` in
   window-rule `match` values are regexes. hyprlock, hypridle and hyprtoolkit still use
   hyprlang `.conf` files.
 - **titan owns the desktop shell.** Bar, notifications, launcher, clipboard history,
-  wallpaper picker, keybind popup, and volume, brightness and media keys. Hyprland binds
-  reach it with `qs -c titan ipc call <target> <function>`. The chosen wallpaper is the
+  wallpaper picker, keybind popup, and volume, brightness and media keys. It is its own
+  repo, github.com/pkuehne/titan, cloned to `~/.config/quickshell/titan` by
+  `[bootstrap.repos]` in `mise.personal.toml`; `apply` clones it once and never pulls, so
+  edit it in place there. Hyprland binds reach it with
+  `qs -c titan ipc call <target> <function>`. nostro is a second, new Quickshell profile
+  set up the same way (github.com/pkuehne/nostro → `~/.config/quickshell/nostro`).
+  Bootstrap runs with `--skip-dirty`, so work in progress in either repo is skipped
+  rather than failing the run. The chosen wallpaper is the
   symlink `~/.local/state/titan/wallpaper`, which hyprlock also reads.
 - **One git key per host.** `just git-key` creates `~/.ssh/id_<host>_git` if missing and
   writes the untracked `~/.config/git/signing.config` and `~/.ssh/allowed_signers` (this
   host's key only). ssh uses `IdentityFile ~/.ssh/id_%L_git`; signing stays on.
   1Password is not referenced by the shared ssh or git config: on the laptop its agent
-  reaches ssh through `SSH_AUTH_SOCK`, exported by Hyprland's `env.lua`.
+  reaches ssh through `SSH_AUTH_SOCK`, exported by Hyprland's `env.lua`. GitHub repos are
+  cloned over https and pushed over SSH (`url.pushInsteadOf` in the git config), so a fresh
+  machine can clone before its key is uploaded; `bootstrap.sh` then switches the dotfiles
+  `origin` to SSH.
 
 ## Sensitive files
 

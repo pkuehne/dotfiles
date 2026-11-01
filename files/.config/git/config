@@ -42,6 +42,8 @@
 	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = ~/.ssh/allowed_signers
+[url "git@github.com:"]
+	pushInsteadOf = https://github.com/   # Clone over https, push with the SSH key
 [init]
 	defaultBranch = main      # It's main now, don't care what DHH thinks
 [pull]

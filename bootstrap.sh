@@ -58,9 +58,10 @@ esac
 echo "==> Running mise bootstrap ($PROFILE profile)..."
 mise trust "$DOTFILES_DIR"
 cd "$HOME"
-mise bootstrap --yes
+mise bootstrap --yes --skip-dirty
 
 echo "==> Git SSH key for this host:"
 mise run git-key
+git -C "$DOTFILES_DIR" remote set-url origin git@github.com:pkuehne/dotfiles.git
 
 echo "==> Done! Restart your shell to pick up all changes."

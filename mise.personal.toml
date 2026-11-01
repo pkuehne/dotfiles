@@ -20,15 +20,18 @@ codex  = "latest"
 "~/.ssh/config.d"        = { source = "~/dotfiles/files/.ssh/config.d", mode = "symlink-each", manifest = "git" }
 "~/.ssh/id_peter.pub"    = { source = "~/dotfiles/files/.ssh/id_peter.pub" }
 
+[bootstrap.repos]
+"~/.config/quickshell/titan" = { url = "https://github.com/pkuehne/titan" }
+"~/.config/quickshell/nostro" = { url = "https://github.com/pkuehne/nostro" }
+
 [bootstrap.hooks]
 # quickshell only generates its qmlls import config when .qmlls.ini already
-# exists, replacing it with a symlink into /run. qmlls resolves the dotfile
-# symlinks and looks next to the repo copy, so link it there too (gitignored).
-post-dotfiles = '''
-set -eu
-ini="$HOME/.config/quickshell/titan/.qmlls.ini"
-[ -L "$ini" ] || [ -e "$ini" ] || : > "$ini"
-ln -sfn "$ini" "$HOME/dotfiles/files/.config/quickshell/titan/.qmlls.ini"
+# exists, replacing it with a symlink into /run (gitignored in each shell).
+post-repos = '''
+for shell in titan nostro; do
+  ini="$HOME/.config/quickshell/$shell/.qmlls.ini"
+  [ -L "$ini" ] || [ -e "$ini" ] || : > "$ini"
+done
 '''
 
 [tasks.git-key]

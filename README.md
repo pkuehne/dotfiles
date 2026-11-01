@@ -103,8 +103,9 @@ concern: `hyprland.lua` only `require`s the others (`env`, `input`, `layout`,
 layout is Hyprland's scrolling layout. `hyprlock.conf` and `hypridle.conf`
 handle locking and idle; `hyprtoolkit.conf` themes Hyprland's own dialogs.
 
-The shell is titan, a custom Quickshell config in
-`files/.config/quickshell/titan/`: bar, workspaces, notifications, launcher,
+The shell is titan, a custom Quickshell config in its own repo,
+[pkuehne/titan](https://github.com/pkuehne/titan), which `mise.personal.toml` clones
+to `~/.config/quickshell/titan`: bar, workspaces, notifications, launcher,
 clipboard history, wallpaper picker, keybind popup, and the volume, brightness
 and media-key handling. Hyprland binds reach it over IPC
 (`qs -c titan ipc call <target> <function>`).
@@ -114,6 +115,10 @@ Desktop packages come from pacman, not mise. `just desktop` installs
 Optional apps install on first use from titan's launcher
 (`launcher/install/*.sh`); `just desktop-diff` lists AUR packages that neither
 path covers.
+
+nostro ([pkuehne/nostro](https://github.com/pkuehne/nostro)) is a second Quickshell
+profile, cloned the same way to `~/.config/quickshell/nostro`. Bootstrap passes
+`--skip-dirty`, so uncommitted work in either shell is left alone.
 
 The niri config in `files/.config/niri/` is kept for switching back.
 
@@ -129,7 +134,9 @@ Each host has its own git key. `just git-key` (also run at the end of
 GitHub and Gitea for both authentication and signing. It also writes the
 untracked `~/.config/git/signing.config` (the signing key) and
 `~/.ssh/allowed_signers` (this host's key only). ssh selects the key with
-`IdentityFile ~/.ssh/id_%L_git`; commit and tag signing is always on.
+`IdentityFile ~/.ssh/id_%L_git`; commit and tag signing is always on. GitHub repos are
+cloned over https and pushed over SSH, and `bootstrap.sh` finishes by switching the
+dotfiles `origin` to SSH.
 
 `id_peter` is offered to every host as well. On the laptop its private key
 lives in 1Password, whose agent Hyprland exports as `SSH_AUTH_SOCK`; anywhere

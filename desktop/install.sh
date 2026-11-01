@@ -3,7 +3,7 @@
 set -euo pipefail
 
 here=$(dirname "$(readlink -f "$0")")
-launcher="$here/../files/.config/quickshell/titan/launcher/install"
+launcher="$HOME/.config/quickshell/titan/launcher/install"
 
 mapfile -t packages < "$here/packages.txt"
 sudo pacman -S --needed "${packages[@]}"
